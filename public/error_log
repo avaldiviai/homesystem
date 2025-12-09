@@ -1,0 +1,70 @@
+[10-Jun-2025 15:10:13 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:13 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:16 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:16 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:19 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:19 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:21 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:21 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:34 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:10:34 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:11:45 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:11:45 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:11:47 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:11:47 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:11:53 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:11:53 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:02 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:02 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:31 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:31 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:43 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:43 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:45 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:45 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:47 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:47 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:48 America/Santiago] PHP Warning:  require_once(/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php): Failed to open stream: No such file or directory in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47
+[10-Jun-2025 15:12:48 America/Santiago] PHP Fatal error:  Uncaught Error: Failed opening required '/home4/cze97462/public_html/home.zeialab.cl/../../homesystem/bootstrap/app.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home4/cze97462/public_html/home.zeialab.cl/index.php:47
+Stack trace:
+#0 {main}
+  thrown in /home4/cze97462/public_html/home.zeialab.cl/index.php on line 47

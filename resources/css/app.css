@@ -1,0 +1,22 @@
+
+        .preview {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .preview-item {
+            margin: 5px;
+            position: relative;
+        }
+        .preview-item img, .preview-item video {
+            max-width: 150px;
+            max-height: 150px;
+        }
+        .remove-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
