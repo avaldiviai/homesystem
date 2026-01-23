@@ -29,6 +29,7 @@ class Propiedad extends Model
         'empresa_agua',
         'empresa_gas',
         'tipo_vivienda',
+        'tipo_cocina',
         // Datos Arriendo
         'inicio_contrato',
         'mantenimiento',

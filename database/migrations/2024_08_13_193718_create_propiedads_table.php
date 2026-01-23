@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('empresa_agua');
             $table->string('empresa_gas');
             $table->string('tipo_vivienda')->nullable();
+            $table->string('tipo_cocina')->nullable();
             $table->string('ciudad')->nullable();
             $table->string('estado_venta')->nullable();
 
