@@ -44,9 +44,9 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox"
                                                 class="custom-control-input"
-                                                id="switchUF"
-                                                {{ $precios->tipo_moneda === 'UF' ? 'checked' : '' }}>
-                                            <label class="custom-control-label" for="switchUF">UF</label>
+                                                id="switchUF">
+                                            <label class="custom-control-label" for="switchUF"></label>
+                                            <span id="monedaTexto" class="ms-2 fw-bold">CLP</span>
                                         </div>
                                     </div>
                                     
@@ -821,7 +821,7 @@
                                 <label for="ano_construccion_edit">Año de Construcción</label>
                                 <select id="ano_construccion_edit" name="ano_construccion" class="form-control" required>
                                     <option value="">Seleccione año</option>
-                                    @for ($y = date('Y'); $y >= 2000; $y--)
+                                    @for ($y = date('Y'); $y >= 1970; $y--)
                                         <option value="{{ $y }}" {{ $detallespropiedad->ano_construccion == $y ? 'selected' : '' }}>
                                             {{ $y }}
                                         </option>
@@ -3956,6 +3956,22 @@ async function generarContratoWord() {
         // Asignar el valor formateado al campo
         input.value = valorFormateado;
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const switchUF = document.getElementById('switchUF');
+        const monedaTexto = document.getElementById('monedaTexto');
+
+        function actualizarMoneda() {
+            monedaTexto.innerText = switchUF.checked ? 'UF' : 'CLP';
+        }
+
+        // Estado inicial
+        actualizarMoneda();
+
+        // Al cambiar el switch
+        switchUF.addEventListener('change', actualizarMoneda);
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
 

@@ -444,7 +444,7 @@
                                             <label for="AñocoInput" class="form-label">Año de Construcción</label>
                                             <select id="AñocoInput" class="form-control" required>
                                                 <option value="">Seleccione año</option>
-                                                @for ($y = date('Y'); $y >= 2000; $y--)
+                                                @for ($y = date('Y'); $y >= 1970; $y--)
                                                     <option value="{{ $y }}">{{ $y }}</option>
                                                 @endfor
                                             </select>
