@@ -16,6 +16,7 @@ class Precios extends Model
         'año_corrido',
         'dia',
         'venta',
-        'tipo_propiedad'
+        'tipo_propiedad',
+        'tipo_moneda'
     ];
 }

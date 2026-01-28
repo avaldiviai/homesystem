@@ -129,6 +129,7 @@ class PropiedadController extends Controller
         $new_propiedad->save();
 
         $new_precios = new Precios;
+        $new_precios->tipo_moneda = $request->tipo_moneda;
         $new_precios->diciembre = $request->diciembre;
         $new_precios->ano_corrido = $request->ano_corrido;
         $new_precios->id_propiedad = $new_propiedad->id;
@@ -309,6 +310,7 @@ class PropiedadController extends Controller
 
         $new_precios = new Precios;
         $new_precios->diciembre = $request->diciembre;
+        $new_precios->tipo_moneda = $request->tipo_moneda;
         $new_precios->ano_corrido = $request->ano_corrido;
         $new_precios->id_propiedad = $new_propiedad->id;
         $new_precios->tipo_propiedad = 3;
@@ -706,6 +708,7 @@ class PropiedadController extends Controller
         $ciudad->direccion = $request->direccion;
         $ciudad->condominio = $request->condominio;
         $ciudad->tipo_vivienda = $request->tipo_vivienda;
+        $ciudad->tipo_cocina = $request->tipo_cocina;
         $ciudad->ciudad = $request->ciudad;
         $ciudad->torre = $request->torre;
         $ciudad->num_torre = $request->numero_torre;
@@ -747,6 +750,7 @@ class PropiedadController extends Controller
         $preciosEdit = Precios::where('id_propiedad',$id_propiedad)->first();
         $preciosEdit->diciembre = $request->diciembre;
         $preciosEdit->ano_corrido = $request->ano_corrido;
+        $preciosEdit->tipo_moneda = $request->tipo_moneda;
         // dd($preciosEdit);
         $preciosEdit->save();
         
@@ -1061,6 +1065,7 @@ class PropiedadController extends Controller
         //Guardar precios
         $new_precios = new Precios;
         $new_precios->venta = $request->precio;
+        $new_precios->tipo_moneda = $request->tipo_moneda;
         $new_precios->id_propiedad = $new_propiedad_venta->id;
         $new_precios->tipo_propiedad = 2;
         $new_precios->estado = 1;
@@ -1237,6 +1242,7 @@ class PropiedadController extends Controller
 
         $ciudad->condominio = $request->condominio;
         $ciudad->tipo_vivienda = $request->tipo_vivienda;
+        $ciudad->tipo_cocina = $request->tipo_cocina;
         // $ciudad->num_estacionamiento = $request->estacionamiento;
         $ciudad->torre = $request->torre;
         $ciudad->num_torre = $request->numero_torre;
@@ -1258,6 +1264,7 @@ class PropiedadController extends Controller
 
         $preciosEdit = Precios::where('id_propiedad', $id_propiedad)->first();
         $preciosEdit->venta = $request->precio;
+        $preciosEdit->tipo_moneda = $request->tipo_moneda;
         // $preciosEdit->ano_corrido = $request->ano_corrido;
         $preciosEdit->save();
         // dd($request->all());

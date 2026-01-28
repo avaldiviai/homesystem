@@ -160,7 +160,25 @@
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">
                                     <label for="AnoCorridoInput">Precio Año Corrido</label>
-                                    <input type="text" class="form-control" id="AnoCorridoInput" placeholder="Precio Año Corrido" oninput="formatearMiles(this)"  required>
+                                    <div class="input-group">
+                                        <input type="text"
+                                            class="form-control"
+                                            id="AnoCorridoInput"
+                                            placeholder="Precio Año Corrido"
+                                            oninput="formatearMiles(this)"
+                                            required>
+                                        <div class="input-group-text p-1">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                    class="custom-control-input"
+                                                    id="switchUF">
+                                                <label class="custom-control-label" for="switchUF"></label>
+                                                <span id="monedaTexto" class="ms-2 fw-bold">CLP</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <input type="hidden" id="tipo_moneda" value="CLP">
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">
                                     <label for="direccionInput">Dirección de Propiedad</label>
@@ -430,7 +448,12 @@
                                     <div class="row g-3 m-1 shadow" style="background-color: #FFE2B2; border-radius: .9rem;">
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="AnocoInput" class="form-label">Año de Construcción</label>
-                                            <input type="date" class="form-control" id="AnocoInput" placeholder="Ej: 1999" required>
+                                            <select id="AnocoInput" class="form-control" required>
+                                                <option value="">Seleccione año</option>
+                                                @for ($y = date('Y'); $y >= 1970; $y--)
+                                                    <option value="{{ $y }}">{{ $y }}</option>
+                                                @endfor
+                                            </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="piso" class="form-label">Piso</label>
@@ -454,33 +477,32 @@
                                             <label for="orientacionInput">Orientación</label>
                                             <select class="form-select" id="orientacionInput">
                                                 <option value="" disabled selected>Seleccione una opción</option>
-                                                <option value="O">Oriente (Este)</option>
-                                                <option value="P">Poniente (Oeste)</option>
                                                 <option value="N">Norte</option>
-                                                <option value="S">Sur</option>
                                                 <option value="NE">Noreste</option>
-                                                <option value="NO">Noroeste</option>
+                                                <option value="E">Oriente (Este)</option>
                                                 <option value="SE">Sureste</option>
+                                                <option value="S">Sur</option>
                                                 <option value="SO">Suroeste</option>
+                                                <option value="O">Poniente (Oeste)</option>
+                                                <option value="NO">Noroeste</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="cocina" class="form-label">Cocina</label>
                                             <select class="form-select" id="cocina">
                                                 <option value="" disabled selected>Seleccione una opción</option>
-                                                <option value="Eléctrica">Eléctrica</option>
-                                                <option value="Gas">Gas</option>
-                                                <option value="Conexión Gas">Conexión Gas</option>
+                                                <option value="Eléctrica">Conexión eléctrica</option>
+                                                <option value="Gas">Gas cilindro</option>
+                                                <option value="Conexión Gas">Conexión cañeria</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6 mb-3">
                                             <label for="logia" class="form-label">Logia</label>
                                             <select class="form-select" id="logiaInput">
                                                 <option value="" disabled selected>Seleccione una opción</option>
-                                                <option value="1">1</option>
-                                                <!-- <option value="1 1/2">1 1/2</option> -->
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
+                                                <option value="1">Si</option>
+                                                <option value="2">No</option>
+                                                <option value="3">Conexión para lavadora</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6 mb-3">
@@ -1143,6 +1165,13 @@
         alert('Por favor, selecciona un archivo antes de agregar.');
     }
 });
+
+        let tipoMoneda = 'CLP';
+        
+        $("#switchUF").on("change", function () {
+            tipoMoneda = this.checked ? 'UF' : 'CLP';
+        });
+
         $("#btn_agregar").on('click', function(event){
             event.preventDefault();
 
@@ -1166,6 +1195,7 @@
             var empresagas = $("#empresaGasInput").val();
             var numerogas = $("#numeroGasInput").val();
             var condominio = $("#condominioInput").val();
+            var tipo_moneda = tipoMoneda;
 
             var torre = $("#TorreInput").val();
             var num_torre = $("#TorrenumeroInput").val();
@@ -1278,7 +1308,8 @@
             formData.append('numerogas', numerogas);
             formData.append('condominio', condominio);
             formData.append('descripcionpro',descripcionpro);
-    
+            formData.append('tipo_moneda', tipo_moneda);
+            
             formData.append('ano_corrido', ano_corrido);
 
             // formData.append('propietario', propietario);
@@ -2129,7 +2160,21 @@ $("#close_success").click(function() {
                 // Asignar el valor formateado al campo
                 input.value = valorFormateado;
             }
+            document.addEventListener('DOMContentLoaded', function () {
 
+                const switchUF = document.getElementById('switchUF');
+                const monedaTexto = document.getElementById('monedaTexto');
+
+                function actualizarMoneda() {
+                    monedaTexto.innerText = switchUF.checked ? 'UF' : 'CLP';
+                }
+
+                // Estado inicial
+                actualizarMoneda();
+
+                // Al cambiar el switch
+                switchUF.addEventListener('change', actualizarMoneda);
+            });
 
 </script>
 @endsection

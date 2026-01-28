@@ -31,11 +31,26 @@
                             </div>
                             <div class="col-lg-4 mb-3">
                                 <label for="ventaedit">Precio Venta</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="ventaedit"  
-                                        value="{{ $precios->venta }}" 
-                                        oninput="this.value = '$' + this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
+                                  <div class="input-group">
+                                    <input type="text"
+                                        class="form-control"
+                                        id="ventaedit"
+                                        placeholder="Precio"
+                                        value="{{$precios->venta}}"
+                                        oninput="formatearMiles(this)"
+                                        required>
+                                    <div class="input-group-text p-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox"
+                                                class="custom-control-input"
+                                                id="switchUF">
+                                            <label class="custom-control-label" for="switchUF"></label>
+                                            <span id="monedaTexto" class="ms-2 fw-bold">CLP</span>
+                                        </div>
+                                    </div>
                                 </div>
+                                <input type="hidden" id="tipo_moneda" value="CLP">
+                            
                             </div>
                             <div class="col-lg-4 mb-3">
                                 <label for="direccionedit">Dirección</label>
@@ -49,9 +64,33 @@
                                 <label for="condominioedit">Condominio</label>
                                 <input type="text" id="condominioedit" class="form-control"  value="{{ $detalles->condominio }}">
                             </div>
-                            <div class="col-lg-4">
+                           <div class="col-lg-4">
                                 <label for="viviendaedit">Tipo de Vivienda</label>
-                                <input type="text" id="viviendaedit" class="form-control"  value="{{ $detalles->tipo_vivienda }}">
+                                <!-- <input type="text" id="viviendaedit" class="form-control"  value="{{$detalles->tipo_vivienda}}"> -->
+                                <select name="viviendaedit" id="viviendaedit" class="form-select" >
+                                    <option value="" {{ is_null($detalles->tipo_vivienda) ? 'selected' : '' }}>Seleccione una opción</option>
+                                    <option value="Casa" {{ $detalles->tipo_vivienda === 'Casa' ? 'selected' : '' }}>Casa</option>
+                                    <option value="Departamento" {{ $detalles->tipo_vivienda === 'Departamento' ? 'selected' : '' }}>Departamento</option>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group col-4 col-lg-4 d-none" id="wrap_tipo_cocina_depto_edit">
+                                <label for="tipo_cocina_depto_edit">Tipo de cocina</label>
+                                <select class="form-select" name="tipo_cocina_depto_edit" id="tipo_cocina_depto_edit">
+                                    <option value="" {{ is_null($detalles->tipo_cocina) ? 'selected' : '' }}>
+                                        Seleccione una opción
+                                    </option>
+                                    <option value="Encimera"
+                                        {{ $detalles->tipo_cocina === 'Encimera' ? 'selected' : '' }}>
+                                        Encimera
+                                    </option>
+                                    <option value="Vitroceramica"
+                                        {{ $detalles->tipo_cocina === 'Vitroceramica' ? 'selected' : '' }}>
+                                        Vitrocerámica
+                                    </option>
+                                </select>
+                                <input type="hidden" id="modal_tipo_vivienda" value="{{ $detallespropiedad->tipo_vivienda }}">
                             </div>
                             <div class="col-lg-4 mb-3">
                                 <label for="torreedit">Torre</label>
@@ -482,10 +521,16 @@
                                                 <h4 class="mb-2">Detalles Agregados</h4>
                                             </div>
                                         </div> 
-                                        <div class="col-lg-6 mb-3">
+                                        <div class="form-group col-12 col-lg-6">
                                             <label for="ano_construccion_edit">Año de Construcción</label>
-                                            <input type="date" id="ano_construccion_edit" class="form-control"
-                                                value="{{ $detallespropiedad->ano_construccion }}" >
+                                            <select id="ano_construccion_edit" class="form-control" required>
+                                                <option value="">Seleccione año</option>
+                                                @for ($y = date('Y'); $y >= 1970; $y--)
+                                                    <option value="{{ $y }}" {{ $detallespropiedad->ano_construccion == $y ? 'selected' : '' }}>
+                                                        {{ $y }}
+                                                    </option>
+                                                @endfor
+                                            </select>
                                         </div>
                                         <div class="col-lg-6 mb-3">
                                             <label for="piso_edit">Piso</label>
@@ -521,28 +566,32 @@
                                             <label for="orientacion_edit">Orientación</label>
                                             <select name="orientacion_edit" id="orientacion_edit" class="form-select" >
                                                 <option value="" {{ is_null($detallespropiedad->orientacion) ? 'selected' : '' }}>Seleccione una opción</option>
-                                                <option value="Oriente" {{ $detallespropiedad->orientacion === 'Oriente' ? 'selected' : '' }}>Oriente</option>
-                                                <option value="Poniente" {{ $detallespropiedad->orientacion === 'Poniente' ? 'selected' : '' }}>Poniente</option>
-                                                <option value="Norte" {{ $detallespropiedad->orientacion === 'Norte' ? 'selected' : '' }}>Norte</option>
+                                                <option value="N"  {{ $detallespropiedad->orientacion === 'N'  ? 'selected' : '' }}>Norte</option>
+                                                <option value="NE" {{ $detallespropiedad->orientacion === 'NE' ? 'selected' : '' }}>Noreste</option>
+                                                <option value="E"  {{ $detallespropiedad->orientacion === 'E'  ? 'selected' : '' }}>Oriente (Este)</option>
+                                                <option value="SE" {{ $detallespropiedad->orientacion === 'SE' ? 'selected' : '' }}>Sureste</option>
+                                                <option value="S"  {{ $detallespropiedad->orientacion === 'S'  ? 'selected' : '' }}>Sur</option>
+                                                <option value="SO" {{ $detallespropiedad->orientacion === 'SO' ? 'selected' : '' }}>Suroeste</option>
+                                                <option value="O"  {{ $detallespropiedad->orientacion === 'O'  ? 'selected' : '' }}>Poniente (Oeste)</option>
+                                                <option value="NO" {{ $detallespropiedad->orientacion === 'NO' ? 'selected' : '' }}>Noroeste</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-3 mb-3">
-                                            <label for="cocina_edit">Cocina</label>
+                                            <label for="cocina_edit">Tipo de conexión</label>
                                             <select name="cocina_edit" id="cocina_edit" class="form-select" >
                                                 <option value="" {{ is_null($detallespropiedad->cocina) ? 'selected' : '' }}>Seleccione una opción</option>
-                                                <option value="Eléctrica" {{ $detallespropiedad->cocina === 'Eléctrica' ? 'selected' : '' }}>Eléctrica</option>
-                                                <option value="Gas" {{ $detallespropiedad->cocina === 'Gas' ? 'selected' : '' }}>Gas</option>
-                                                <option value="Conexión Gas" {{ $detallespropiedad->cocina === 'Conexión Gas' ? 'selected' : '' }}>Conexión Gas</option>
+                                                <option value="Eléctrica" {{ $detallespropiedad->cocina === 'Eléctrica' ? 'selected' : '' }}>Conexión eléctrica</option>
+                                                <option value="Gas" {{ $detallespropiedad->cocina === 'Gas' ? 'selected' : '' }}>Gas cilindro</option>
+                                                <option value="Conexión Gas" {{ $detallespropiedad->cocina === 'Conexión Gas' ? 'selected' : '' }}>Conexión cañeria</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-3 mb-3">
                                             <label for="logia_edit">Logia</label>
                                             <select name="logia_edit" id="logia_edit" class="form-select" >
                                                 <option value="" {{ is_null($detallespropiedad->logia) ? 'selected' : '' }}>Seleccione una opción</option>
-                                                <option value="1" {{ $detallespropiedad->logia === '1' ? 'selected' : '' }}>1</option>
-                                                <!-- <option value="1 1/2" {{ $detallespropiedad->logia === '1 1/2' ? 'selected' : '' }}>1 1/2</option> -->
-                                                <option value="2" {{ $detallespropiedad->logia === '2' ? 'selected' : '' }}>2</option>
-                                                <option value="3" {{ $detallespropiedad->logia === '3' ? 'selected' : '' }}>3</option>
+                                                <option value="1" {{ $detallespropiedad->logia === '1' ? 'selected' : '' }}>Si</option>
+                                                <option value="2" {{ $detallespropiedad->logia === '2' ? 'selected' : '' }}>No</option>
+                                                <option value="3" {{ $detallespropiedad->logia === '3' ? 'selected' : '' }}>Conexión para lavadora</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-3 mb-3">
@@ -1025,7 +1074,11 @@ dropArea.addEventListener('drop', (e) => {
 
 
 
-
+        let tipoMoneda = "{{ $precios->tipo_moneda ?? 'CLP' }}";
+        
+        $("#switchUF").on("change", function () {
+            tipoMoneda = this.checked ? 'UF' : 'CLP';
+        });
 
         // Enviar datos al servidor
         $('#guardarCambios').off().on('click', function(event) {
@@ -1046,11 +1099,17 @@ dropArea.addEventListener('drop', (e) => {
             var tipo_vivienda = $("#viviendaedit").val();
             var ciudad = $("#ciudadedit").val();
 
+            var tipo_cocina = null;
+
+            if (tipo_vivienda === 'Departamento') {
+                tipo_cocina = $("#tipo_cocina_depto_edit").val();
+            }
             var torre = $("#torreedit").val();
             var numero_torre = $("#numero_torre").val();
             var rol = $("#roledit").val();
             var deuda_hipotecaria = $('#deuda_hipotecariaedit').val();
-            
+            var tipo_moneda = tipoMoneda;
+
             var monto = $("#montoestedit").val();
             var rol_est = $("#rolestedit").val();
             var estacionamiento = $("#estacionamientoedit").val();
@@ -1387,6 +1446,7 @@ dropArea.addEventListener('drop', (e) => {
             formData.append('mantenimiento', mantenimiento);
             formData.append('condominio', condominio);
             formData.append('tipo_vivienda', tipo_vivienda);
+            formData.append('tipo_cocina', tipo_cocina);
             formData.append('torre', torre);
             formData.append('numero_torre', numero_torre);
             formData.append('rol', rol);
@@ -1429,7 +1489,7 @@ dropArea.addEventListener('drop', (e) => {
             formData.append('ciclovia', ciclovia_final);
             formData.append('piscina', piscina_final);
             formData.append('verde', verde_final);
-
+            formData.append('tipo_moneda', tipo_moneda);
 
             formData.append('monto', monto);
             formData.append('rol_est', rol_est);
@@ -1861,6 +1921,56 @@ dropArea.addEventListener('drop', (e) => {
                     $row.find('.enviocorreoedit').val(fechaEnvioCorreo.toISOString().split('T')[0]);
                 }
             });
+        });
+        
+        $("#tipo_vivienda_edit").on("change", function () {
+            $("#modal_tipo_vivienda").val($(this).val());
+            toggleTipoCocinaDeptoEdit();
+        });
+        
+
+        function formatearMiles(input) {
+                // Obtener el valor actual sin caracteres no numéricos
+            let valor = input.value.replace(/\D/g, '');
+            
+            // Aplicar el formato de separador de miles
+            let valorFormateado = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            
+            // Asignar el valor formateado al campo
+            input.value = valorFormateado;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+
+                const switchUF = document.getElementById('switchUF');
+                const monedaTexto = document.getElementById('monedaTexto');
+
+                function actualizarMoneda() {
+                    monedaTexto.innerText = switchUF.checked ? 'UF' : 'CLP';
+                }
+
+                // Estado inicial
+                actualizarMoneda();
+
+                // Al cambiar el switch
+                switchUF.addEventListener('change', actualizarMoneda);
+            });
+            
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const vivienda = document.getElementById('viviendaedit');
+            const wrapCocina = document.getElementById('wrap_tipo_cocina_depto_edit');
+
+            function validarTipoVivienda() {
+                if (vivienda.value === 'Departamento') {
+                    wrapCocina.classList.remove('d-none');
+                } else {
+                    wrapCocina.classList.add('d-none');
+                }
+            }
+
+            validarTipoVivienda();
+            vivienda.addEventListener('change', validarTipoVivienda);
         });
     </script>
 @endsection
