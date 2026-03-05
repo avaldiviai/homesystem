@@ -13,7 +13,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-lg-12 text-center mb-3">
                             <h6 class="mb-3 text-black text-uppercase">Filtrar Gráficos</h4>
-                            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <di v class="d-flex justify-content-center gap-3 flex-wrap">
                                 <a href="#" 
                                     class="btn btn-primary px-4 py-2 shadow-lg rounded-pill d-flex align-items-center" 
                                     onclick="mostrarArriendo()">
@@ -26,6 +26,10 @@
                                 <a href="#" class="btn btn-warning px-4 py-2 shadow-lg rounded-pill d-flex align-items-center"
                                     onclick="mostrarVerano()">
                                     <i class="bi bi-sun-fill me-2"></i> Verano
+                                </a>
+                                <a href="#" class="btn btn-info px-4 py-2 shadow-lg rounded-pill d-flex align-items-center"
+                                    onclick="mostrarAnuales()">
+                                    <i class="bi bi-cash-coin me-2"></i> Anuales
                                 </a>
                             </div>
                         </div>
@@ -137,7 +141,19 @@
                                         </div>
                                     </div>
                                 </div>
+                               
                             </div>
+                             <div class="col-lg-12 mt-3" id="arriendopromeses" style="display: none;">
+                                <div class="card w-100">
+                                    <div class="card-body" style="overflow-x: auto;">
+                                        <div style="position: relative; height: 100%; width: 1200px;"> <!-- Aumenta el ancho del gráfico -->
+                                            <canvas id="propiedadesPorMesChart" style="width: 200px; min-height: 300px;"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                                
                         </div>
 
 
@@ -276,6 +292,40 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="scroll-anual" id="anualesgrafico"  style="display:none;">
+                            <!-- Gráfico 5: Anuales -->
+                            <div class="row d-flex" >
+
+                                <div class="col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3 class="text-center"><b>Arriendos anuales</b></h3>
+                                            <canvas id="arriendoAnualChart" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3 class="text-center"><b>Ventas anuales</b></h3>
+                                            <canvas id="ventasAnualChart" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3 class="text-center"><b>Verano anuales</b></h3>
+                                            <canvas id="veranoAnualChart" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -296,12 +346,23 @@
 @section('javascript')
 @parent
 <script>
+   
     // Convierte los datos de PHP a formato JavaScript
     const propiedadesPorMes = @json($propiedadesPorMes); //Propiedades por meses
 
     const arriendosPorMes = @json($arriendosPorMes); //Arriendos por meses
     const retiradosPorMes = @json($retiradosPorMes); //Arriendos Retirados
 
+    const labelsArriendosAnio = @json($labelsArriendosAnio ?? []);
+    const dataArriendosAnio   = @json($dataArriendosAnio ?? []);
+   
+    const labelsVentasAnio = @json($labelsVentasAnio ?? []);
+    const dataVentasAnio   = @json($dataVentasAnio ?? []);
+
+    const labelsFinal = labelsArriendosAnio.length ? labelsArriendosAnio : ['2023','2024'];
+    const dataFinal   = dataArriendosAnio.length ? dataArriendosAnio : [29,71];
+
+    console.log('cac', @json($labelsVentasAnio), @json($dataVentasAnio));
     const ventaPorMes = @json($ventaPorMes);//Ventas por meses
     const ventaretiradaPorMes = @json($ventaretiradaPorMes);//Ventas Retiradas
     const precioventa = @json($precioventa);//Precio de venta por meses
@@ -309,8 +370,6 @@
 
     const verano = @json($verano);//Propiedades de verano
     const veranoretirado = @json($veranoretirado);//Propiedades de verano retiradas
-
-
 
 
     const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -362,6 +421,63 @@
         return index !== -1 ? retiradoMesData[index] : 0;
     });
 
+    const ctx3 = document.getElementById('ventasAnualChart');
+
+    new Chart(ctx3, {
+        type: 'pie',
+        data: {
+            labels: labelsVentasAnio,
+            datasets: [{
+                label: 'Total Ventas por Año',
+                data: dataVentasAnio
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let valor = Number(context.raw).toLocaleString('es-CL');
+                            return context.label + ': $' + valor;
+                        }
+                    }
+                }
+            }
+        }
+    });
+                                                        
+    const ctx2 = document.getElementById('veranoAnualChart');
+
+    new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: labelsFinal,
+            datasets: [{
+                label: 'Total Arriendos por Año',
+                data: dataFinal
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let valor = Number(context.raw).toLocaleString('es-CL');
+                            return context.label + ': $' + valor;
+                        }
+                    }
+                }
+            }
+        }
+    });
 // Gráfico actualizado
 const ctx = document.getElementById('propiedadesPorMesChart').getContext('2d');
 
@@ -1120,6 +1236,35 @@ const veranoretiroData = allmesesveranoLabels.map(label => {
 // console.log(veranoPorMesData, veranoretiroData);
 
 // Gráfico actualizado
+const ctxanual = document.getElementById('arriendoAnualChart').getContext('2d');
+new Chart(ctxanual, {
+    type: 'pie',
+    data: {
+        labels: labelsFinal,
+        datasets: [{
+            label: 'Total Arriendos por Año',
+            data: dataFinal
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let valor = Number(context.raw).toLocaleString('es-CL');
+                        return context.label + ': $' + valor;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Gráfico actualizado
 const ctxverano = document.getElementById('veranocantidadChart').getContext('2d');
 
 new Chart(ctxverano, {
@@ -1259,8 +1404,9 @@ new Chart(ctxverano, {
         document.getElementById('ventaspormesgraf').style.display = 'none';
         document.getElementById('veranograficos').style.display = 'none';
         document.getElementById('veranocantidadagrafico').style.display = 'none';
-
+        document.getElementById('anualesgrafico').style.display = 'none';
     }
+
     function mostrarVentas() {
         document.getElementById('Ventasgrafico').style.display = 'block';
         document.getElementById('ventaspormesgraf').style.display = 'block';
@@ -1268,7 +1414,9 @@ new Chart(ctxverano, {
         document.getElementById('garficosArriendo').style.display = 'none';
         document.getElementById('veranograficos').style.display = 'none';
         document.getElementById('veranocantidadagrafico').style.display = 'none';
+        document.getElementById('anualesgrafico').style.display = 'none';
     }
+
     function mostrarVerano() {
         document.getElementById('veranograficos').style.display = 'block';
         document.getElementById('veranocantidadagrafico').style.display = 'block';
@@ -1276,12 +1424,19 @@ new Chart(ctxverano, {
         document.getElementById('ventaspormesgraf').style.display = 'none';
         document.getElementById('arriendopromeses').style.display = 'none';
         document.getElementById('garficosArriendo').style.display = 'none';
-        
+        document.getElementById('anualesgrafico').style.display = 'none';
+ 
     }
 
-
-
-
+    function mostrarAnuales() {
+        document.getElementById('veranograficos').style.display = 'none';
+        document.getElementById('veranocantidadagrafico').style.display = 'none';
+        document.getElementById('Ventasgrafico').style.display = 'none';
+        document.getElementById('ventaspormesgraf').style.display = 'none';
+        document.getElementById('arriendopromeses').style.display = 'none';
+        document.getElementById('garficosArriendo').style.display = 'none';
+        document.getElementById('anualesgrafico').style.display = 'block';
+    }
 
 </script>
 @endsection
