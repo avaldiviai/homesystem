@@ -77,10 +77,18 @@
                             <li class="nav-item"><a href="/comision" class="nav-link "><i class="fa-solid fa-percent me-2 text-warning"></i> Comisión</a></li>
                             <li class="nav-item"><a href="/pagos" class="nav-link "><i class="fa-solid fa-money-bill-wave me-2 text-warning"></i> Pagos</a></li>
                             <li class="nav-item"><a href="/contratos" class="nav-link "><i class="fa-solid fa-file-contract me-2 text-warning"></i> Contratos</a></li>
-                            <li class="nav-item"><a href="/servicios" class="nav-link "><i class="fa-solid fa-truck me-2 text-warning"></i> Servicios</a></li>
+                        <!--    <li class="nav-item"><a href="/servicios" class="nav-link "><i class="fa-solid fa-truck me-2 text-warning"></i> Servicios</a></li>-->
                             <li class="nav-item"><a href="/inventario" class="nav-link "><i class="fa-solid fa-cart-flatbed me-2 text-warning"></i> Inventario</a></li>
                         </ul>
                     </div>
+                </li>
+
+                <!-- Servicios -->
+                <li class="nav-item mb-3">
+                    <a href="/servicios" class="nav-link d-flex align-items-center ">
+                        <i class="fa-solid fa-truck me-2 text-warning"></i>
+                        <span>Servicios</span>
+                    </a>
                 </li>
 
                 <!-- Administración de Usuarios -->

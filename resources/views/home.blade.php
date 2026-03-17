@@ -9,16 +9,16 @@
             <div class="flex-grow-1 p-2">
                 <div class="container-fluid">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-lg-12 text-center mb-4">
-                            <h4 class="mb-3 text-dark fw-bold">Filtrar gráficos</h4>
-                            <div class="d-flex justify-content-center gap-3 flex-wrap">
-                                <a href="#" 
-                                    class="btn px-4 py-2 shadow-lg rounded-pill d-flex align-items-center" 
+                        <div class="col-lg-12 text-center mb-3">
+                            <h6 class="mb-3 text-black text-uppercase">Filtrar Gráficos</h4>
+                            <di v class="d-flex justify-content-center gap-3 flex-wrap">
+                                <a href="#"
+                                    class="btn px-4 py-2 shadow-lg rounded-pill d-flex align-items-center"
                                     style="background: linear-gradient(135deg, #D4AF37, #B89B35); color: white; border: none;"
                                     onclick="mostrarArriendo()">
                                     <i class="bi bi-house-fill me-2"></i> Arriendo
                                 </a>
-                                <a href="#" class="btn px-4 py-2 shadow-lg rounded-pill d-flex align-items-center" 
+                                <a href="#" class="btn px-4 py-2 shadow-lg rounded-pill d-flex align-items-center"
                                     style="background: linear-gradient(135deg, #C0C0C0, #A9A9A9); color: white; border: none;"
                                     onclick="mostrarVentas()">
                                     <i class="bi bi-bar-chart-line-fill me-2"></i> Ventas
@@ -27,6 +27,10 @@
                                     style="background: linear-gradient(135deg, #D4AF37, #B89B35); color: white; border: none;"
                                     onclick="mostrarVerano()">
                                     <i class="bi bi-sun-fill me-2"></i> Verano
+                                </a>
+                                <a href="#" class="btn btn-info px-4 py-2 shadow-lg rounded-pill d-flex align-items-center"
+                                    onclick="mostrarAnuales()">
+                                    <i class="bi bi-cash-coin me-2"></i> Anuales
                                 </a>
                             </div>
                         </div>
@@ -39,7 +43,7 @@
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-lg-12 d-flex justify-content-center mb-4">
-                                                    <h3 class="card-title text-center p-3 text-white fw-bold" 
+                                                    <h3 class="card-title text-center p-3 text-white fw-bold"
                                                         style="background: linear-gradient(135deg, #D4AF37, #B89B35); border-radius: 10px;">
                                                         <i class="bi bi-house-fill me-2"></i>Propiedades arrendadas y retiradas del sistema
                                                     </h3>
@@ -62,7 +66,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="card shadow-sm" style="border-left: 4px solid #20c997;">
                                                             <div class="card-body" style="background: linear-gradient(to right, #f8fff9, #ffffff);">
                                                                 <div class="d-flex align-items-center">
@@ -93,7 +97,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="card shadow-sm" style="border-left: 4px solid #e83e8c;">
                                                             <div class="card-body" style="background: linear-gradient(to right, #fff8f8, #ffffff);">
                                                                 <div class="d-flex align-items-center">
@@ -120,7 +124,7 @@
                                                     $gananciaColor = $gananciasTotales >= 0 ? '#28a745' : '#dc3545';
                                                     $gananciaGradient = $gananciasTotales >= 0 ? 'linear-gradient(135deg, #28a745, #20c997)' : 'linear-gradient(135deg, #dc3545, #e83e8c)';
                                                 @endphp
-                                                
+
                                                 <div class="row mb-4">
                                                     <div class="col-lg-6">
                                                         <div class="card shadow-sm" style="border-left: 4px solid {{ $gananciaColor }};">
@@ -218,7 +222,19 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
+                             <div class="col-lg-12 mt-3" id="arriendopromeses" style="display: none;">
+                                <div class="card w-100">
+                                    <div class="card-body" style="overflow-x: auto;">
+                                        <div style="position: relative; height: 100%; width: 1200px;"> <!-- Aumenta el ancho del gráfico -->
+                                            <canvas id="propiedadesPorMesChart" style="width: 200px; min-height: 300px;"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
 
                         <!-- CONTENEDOR DE VENTAS -->
@@ -229,7 +245,7 @@
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-lg-12 d-flex justify-content-center mb-4">
-                                                    <h3 class="card-title text-center p-3 text-white fw-bold" 
+                                                    <h3 class="card-title text-center p-3 text-white fw-bold"
                                                         style="background: linear-gradient(135deg, #C0C0C0, #A9A9A9); border-radius: 10px;">
                                                         <i class="bi bi-bar-chart-line-fill me-2"></i>Propiedades en ventas y retiradas del sistema
                                                     </h3>
@@ -251,7 +267,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="card shadow-sm" style="border-left: 4px solid #20c997;">
                                                             <div class="card-body" style="background: linear-gradient(to right, #f8fff9, #ffffff);">
                                                                 <div class="d-flex align-items-center">
@@ -281,7 +297,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="card shadow-sm" style="border-left: 4px solid #e83e8c;">
                                                             <div class="card-body" style="background: linear-gradient(to right, #fff8f8, #ffffff);">
                                                                 <div class="d-flex align-items-center">
@@ -378,7 +394,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Gráfico de ventas por mes -->
                             <div class="col-lg-12 mt-3" id="ventaspormesgraf" style="display: none;">
                                 <div class="card border-0 shadow-lg" style="background: rgba(255, 255, 255, 0.95);">
@@ -404,7 +420,7 @@
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-lg-12 d-flex justify-content-center mb-4">
-                                                    <h3 class="card-title text-center p-3 text-white fw-bold" 
+                                                    <h3 class="card-title text-center p-3 text-white fw-bold"
                                                         style="background: linear-gradient(135deg, #D4AF37, #B89B35); border-radius: 10px;">
                                                         <i class="bi bi-sun-fill me-2"></i>Propiedades de verano y retiradas del sistema
                                                     </h3>
@@ -426,7 +442,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="card shadow-sm" style="border-left: 4px solid #20c997;">
                                                             <div class="card-body" style="background: linear-gradient(to right, #f8fff9, #ffffff);">
                                                                 <div class="d-flex align-items-center">
@@ -456,7 +472,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="card shadow-sm" style="border-left: 4px solid #e83e8c;">
                                                             <div class="card-body" style="background: linear-gradient(to right, #fff8f8, #ffffff);">
                                                                 <div class="d-flex align-items-center">
@@ -553,7 +569,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Gráfico de verano por mes -->
                             <div class="col-lg-12 mt-3" id="veranocantidadagrafico" style="display:none ;">
                                 <div class="card border-0 shadow-lg" style="background: rgba(255, 255, 255, 0.95);">
@@ -568,6 +584,40 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="scroll-anual" id="anualesgrafico"  style="display:none;">
+                            <!-- Gráfico 5: Anuales -->
+                            <div class="row d-flex" >
+
+                                <div class="col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3 class="text-center"><b>Arriendos anuales</b></h3>
+                                            <canvas id="arriendoAnualChart" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3 class="text-center"><b>Ventas anuales</b></h3>
+                                            <canvas id="ventasAnualChart" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 mt-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3 class="text-center"><b>Verano anuales</b></h3>
+                                            <canvas id="veranoAnualChart" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -586,12 +636,12 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         border-radius: 10px;
     }
-    
+
     .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
-    
+
     .rounded-circle {
         width: 60px;
         height: 60px;
@@ -599,71 +649,71 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     .text-muted {
         font-size: 0.9rem;
         color: #6c757d !important;
     }
-    
+
     h4.text-dark {
         font-size: 1.5rem;
     }
-    
+
     h6 {
         font-size: 0.9rem;
     }
-    
+
     .scroll-graficos::-webkit-scrollbar,
     .scroll-venta::-webkit-scrollbar,
     .scroll-verano::-webkit-scrollbar {
         width: 8px;
     }
-    
+
     .scroll-graficos::-webkit-scrollbar-track,
     .scroll-venta::-webkit-scrollbar-track,
     .scroll-verano::-webkit-scrollbar-track {
         background: #f1f1f1;
         border-radius: 10px;
     }
-    
+
     .scroll-graficos::-webkit-scrollbar-thumb,
     .scroll-venta::-webkit-scrollbar-thumb,
     .scroll-verano::-webkit-scrollbar-thumb {
         background: linear-gradient(135deg, #D4AF37, #B89B35);
         border-radius: 10px;
     }
-    
+
     .scroll-graficos::-webkit-scrollbar-thumb:hover,
     .scroll-venta::-webkit-scrollbar-thumb:hover,
     .scroll-verano::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(135deg, #B89B35, #9A8230);
     }
-    
+
     /* Colores corporativos */
     .color-dorado {
         color: #D4AF37;
     }
-    
+
     .color-dorado-apagado {
         color: #B89B35;
     }
-    
+
     .color-plateado {
         color: #C0C0C0;
     }
-    
+
     .color-plateado-apagado {
         color: #A9A9A9;
     }
-    
+
     .bg-dorado {
         background: linear-gradient(135deg, #D4AF37, #B89B35) !important;
     }
-    
+
     .bg-plateado {
         background: linear-gradient(135deg, #C0C0C0, #A9A9A9) !important;
     }
-    
+
     /* Botones mejorados */
     .btn:hover {
         transform: translateY(-2px);
@@ -675,23 +725,38 @@
 @section('javascript')
 @parent
 <script>
+
     // Convierte los datos de PHP a formato JavaScript
-    const propiedadesPorMes = @json($propiedadesPorMes);
-    const arriendosPorMes = @json($arriendosPorMes);
-    const retiradosPorMes = @json($retiradosPorMes);
-    const ventaPorMes = @json($ventaPorMes);
-    const ventaretiradaPorMes = @json($ventaretiradaPorMes);
-    const precioventa = @json($precioventa);
-    const precioventaretirada = @json($precioventaretirada);
-    const verano = @json($verano);
-    const veranoretirado = @json($veranoretirado);
+    const propiedadesPorMes = @json($propiedadesPorMes); //Propiedades por meses
+
+    const arriendosPorMes = @json($arriendosPorMes); //Arriendos por meses
+    const retiradosPorMes = @json($retiradosPorMes); //Arriendos Retirados
+
+    const labelsArriendosAnio = @json($labelsArriendosAnio ?? []);
+    const dataArriendosAnio   = @json($dataArriendosAnio ?? []);
+
+    const labelsVentasAnio = @json($labelsVentasAnio ?? []);
+    const dataVentasAnio   = @json($dataVentasAnio ?? []);
+
+    const labelsFinal = labelsArriendosAnio.length ? labelsArriendosAnio : ['2023','2024'];
+    const dataFinal   = dataArriendosAnio.length ? dataArriendosAnio : [29,71];
+
+    console.log('cac', @json($labelsVentasAnio), @json($dataVentasAnio));
+    const ventaPorMes = @json($ventaPorMes);//Ventas por meses
+    const ventaretiradaPorMes = @json($ventaretiradaPorMes);//Ventas Retiradas
+    const precioventa = @json($precioventa);//Precio de venta por meses
+    const precioventaretirada = @json($precioventaretirada);//Precio de venta retiradas
+
+    const verano = @json($verano);//Propiedades de verano
+    const veranoretirado = @json($veranoretirado);//Propiedades de verano retiradas
+
 
     const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     const añoActual = new Date().getFullYear();
 
     const propiedadMesLabels = propiedadesPorMes.map(p => `${meses[p.mes - 1]} ${añoActual}`);
     const propiedadMesData = propiedadesPorMes.map(p => p.total);
-    
+
     const arriendoMesLabels = arriendosPorMes.map(a => `${meses[a.mes - 1]} ${añoActual}`);
     const arriendoMesData = arriendosPorMes.map(a => a.total);
     const arriendoMesvalorData = arriendosPorMes.map(a => a.total_retirado);
@@ -701,7 +766,7 @@
     const retiradoMesvalorData = retiradosPorMes.map(a => a.total_retirado);
 
     const ventaMesLabels = ventaPorMes.map(v => `${meses[v.mes - 1]} ${añoActual}`);
-    const ventaPorMesData = ventaPorMes.map(v => v.total); 
+    const ventaPorMesData = ventaPorMes.map(v => v.total);
     const ventarevalorPorMesData = precioventa.map(v => v.totalventa);
 
     const ventaretiradaPorMesLabels = ventaretiradaPorMes.map(v => `${meses[v.mes - 1]} ${añoActual}`);
@@ -709,7 +774,7 @@
     const retiradovalorPorMesData = precioventaretirada.map(v => v.totalventa);
 
     const veranoMesLabels = verano.map(ver => `${meses[ver.mes - 1]} ${añoActual}`);
-    const veranoPorMesData = verano.map(ver => ver.total_verano); 
+    const veranoPorMesData = verano.map(ver => ver.total_verano);
     const veranovalorPorMesData = verano.map(ver => ver.totalverano);
 
     const veranoretiradaPorMesLabels = veranoretirado.map(ver => `${meses[ver.mes - 1]} ${añoActual}`);
@@ -743,21 +808,104 @@
         return index !== -1 ? retiradoMesData[index] : 0;
     });
 
-    // Gráfico de arriendos por mes (cantidad)
-    const ctx = document.getElementById('propiedadesPorMesChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
+    const ctx3 = document.getElementById('ventasAnualChart');
+
+    new Chart(ctx3, {
+        type: 'pie',
         data: {
-            labels: allmesesLabels,
-            datasets: [
-                {
-                    label: 'Arriendos ingresados',
-                    data: arriendoData,
-                    backgroundColor: colorVerde,
-                    borderColor: colorVerde,
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    barThickness: 30,
+            labels: labelsVentasAnio,
+            datasets: [{
+                label: 'Total Ventas por Año',
+                data: dataVentasAnio
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let valor = Number(context.raw).toLocaleString('es-CL');
+                            return context.label + ': $' + valor;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const ctx2 = document.getElementById('veranoAnualChart');
+
+    new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: labelsFinal,
+            datasets: [{
+                label: 'Total Arriendos por Año',
+                data: dataFinal
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let valor = Number(context.raw).toLocaleString('es-CL');
+                            return context.label + ': $' + valor;
+                        }
+                    }
+                }
+            }
+        }
+    });
+// Gráfico actualizado
+const ctx = document.getElementById('propiedadesPorMesChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: allmesesLabels,
+        datasets: [
+            {
+                label: 'Arriendos Ingresados por Mes',
+                data: arriendoData,
+                backgroundColor: '#198754',
+                borderColor: '#198754',
+                borderWidth: 1,
+                borderRadius: 10,
+                barThickness: 30,
+            },
+            {
+                label: 'Arriendos Retirados por Mes',
+                data: retiroData,
+                backgroundColor: '#dc3545', // Color danger de Bootstrap
+                borderColor: '#dc3545', // Semitransparente para el borde
+                borderWidth: 1,
+                borderRadius: 10,
+                barThickness: 30,
+
+            },
+        ],
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Arriendos Por Cada Mes',
+                color: '#333',
+                font: {
+                    size: 24,
+                    weight: 'bold',
+                    family: 'Arial',
                 },
                 {
                     label: 'Arriendos retirados',
@@ -1078,7 +1226,7 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { 
+                legend: {
                     position: 'top',
                     labels: {
                         font: {
@@ -1449,21 +1597,76 @@
         return index !== -1 ? veranoretiradaPorMesPorMesData[index] : 0;
     });
 
-    // Gráfico de verano por mes (cantidad)
-    const ctxverano = document.getElementById('veranocantidadChart').getContext('2d');
-    new Chart(ctxverano, {
-        type: 'bar',
-        data: {
-            labels: allmesesveranoLabels,
-            datasets: [
-                {
-                    label: 'Arriendos ingresados',
-                    data: veranoData,
-                    backgroundColor: colorVerde,
-                    borderColor: colorVerde,
-                    borderWidth: 2,
-                    borderRadius: 5,
-                    barThickness: 30,
+// Gráfico actualizado
+const ctxanual = document.getElementById('arriendoAnualChart').getContext('2d');
+new Chart(ctxanual, {
+    type: 'pie',
+    data: {
+        labels: labelsFinal,
+        datasets: [{
+            label: 'Total Arriendos por Año',
+            data: dataFinal
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let valor = Number(context.raw).toLocaleString('es-CL');
+                        return context.label + ': $' + valor;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Gráfico actualizado
+const ctxverano = document.getElementById('veranocantidadChart').getContext('2d');
+
+new Chart(ctxverano, {
+    type: 'bar',
+    data: {
+        labels: allmesesveranoLabels,
+        datasets: [
+            {
+                label: 'Arriendos Ingresados por Mes',
+                data: veranoData,
+                backgroundColor: '#198754',
+                borderColor: '#198754',
+                borderWidth: 1,
+                borderRadius: 10,
+                barThickness: 30,
+            },
+            {
+                label: 'Arriendos Retirados por Mes',
+                data: veranoretiroData,
+                backgroundColor: '#dc3545', // Color danger de Bootstrap
+                borderColor: '#dc3545', // Semitransparente para el borde
+                borderWidth: 1,
+                borderRadius: 10,
+                barThickness: 30,
+
+            },
+
+        ],
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                color: '#333',
+                font: {
+                    size: 24,
+                    weight: 'bold',
+                    family: 'Arial',
                 },
                 {
                     label: 'Arriendos retirados',
@@ -1572,8 +1775,9 @@
         document.getElementById('ventaspormesgraf').style.display = 'none';
         document.getElementById('veranograficos').style.display = 'none';
         document.getElementById('veranocantidadagrafico').style.display = 'none';
+        document.getElementById('anualesgrafico').style.display = 'none';
     }
-    
+
     function mostrarVentas() {
         document.getElementById('Ventasgrafico').style.display = 'block';
         document.getElementById('ventaspormesgraf').style.display = 'block';
@@ -1581,8 +1785,8 @@
         document.getElementById('garficosArriendo').style.display = 'none';
         document.getElementById('veranograficos').style.display = 'none';
         document.getElementById('veranocantidadagrafico').style.display = 'none';
+        document.getElementById('anualesgrafico').style.display = 'none';
     }
-    
     function mostrarVerano() {
         document.getElementById('veranograficos').style.display = 'block';
         document.getElementById('veranocantidadagrafico').style.display = 'block';
@@ -1590,11 +1794,19 @@
         document.getElementById('ventaspormesgraf').style.display = 'none';
         document.getElementById('arriendopromeses').style.display = 'none';
         document.getElementById('garficosArriendo').style.display = 'none';
+        document.getElementById('anualesgrafico').style.display = 'none';
+
     }
 
-    // Mostrar arriendos por defecto al cargar la página
-    window.onload = function() {
-        mostrarArriendo();
-    };
+    function mostrarAnuales() {
+        document.getElementById('veranograficos').style.display = 'none';
+        document.getElementById('veranocantidadagrafico').style.display = 'none';
+        document.getElementById('Ventasgrafico').style.display = 'none';
+        document.getElementById('ventaspormesgraf').style.display = 'none';
+        document.getElementById('arriendopromeses').style.display = 'none';
+        document.getElementById('garficosArriendo').style.display = 'none';
+        document.getElementById('anualesgrafico').style.display = 'block';
+    }
+
 </script>
 @endsection
