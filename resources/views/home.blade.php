@@ -11,7 +11,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-lg-12 text-center mb-3">
                             <h6 class="mb-3 text-black text-uppercase">Filtrar Gráficos</h4>
-                            <di v class="d-flex justify-content-center gap-3 flex-wrap">
+                            <div class="d-flex justify-content-center gap-3 flex-wrap">
                                 <a href="#"
                                     class="btn px-4 py-2 shadow-lg rounded-pill d-flex align-items-center"
                                     style="background: linear-gradient(135deg, #D4AF37, #B89B35); color: white; border: none;"
@@ -865,145 +865,147 @@
             }
         }
     });
-// Gráfico actualizado
-const ctx = document.getElementById('propiedadesPorMesChart').getContext('2d');
+    // Gráfico actualizado
+    const ctx = document.getElementById('propiedadesPorMesChart').getContext('2d');
 
-new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: allmesesLabels,
-        datasets: [
-            {
-                label: 'Arriendos Ingresados por Mes',
-                data: arriendoData,
-                backgroundColor: '#198754',
-                borderColor: '#198754',
-                borderWidth: 1,
-                borderRadius: 10,
-                barThickness: 30,
-            },
-            {
-                label: 'Arriendos Retirados por Mes',
-                data: retiroData,
-                backgroundColor: '#dc3545', // Color danger de Bootstrap
-                borderColor: '#dc3545', // Semitransparente para el borde
-                borderWidth: 1,
-                borderRadius: 10,
-                barThickness: 30,
+    new Chart(ctx, {
+        type: 'bar',
+            data: {
+                labels: allmesesLabels,
+                datasets: [
+                    {
+                        label: 'Arriendos Ingresados por Mes',
+                        data: arriendoData,
+                        backgroundColor: '#198754',
+                        borderColor: '#198754',
+                        borderWidth: 1,
+                        borderRadius: 10,
+                        barThickness: 30,
+                    },
+                    {
+                        label: 'Arriendos Retirados por Mes',
+                        data: retiroData,
+                        backgroundColor: '#dc3545', // Color danger de Bootstrap
+                        borderColor: '#dc3545', // Semitransparente para el borde
+                        borderWidth: 1,
+                        borderRadius: 10,
+                        barThickness: 30,
 
-            },
-        ],
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            title: {
-                display: true,
-                text: 'Arriendos Por Cada Mes',
-                color: '#333',
-                font: {
-                    size: 24,
-                    weight: 'bold',
-                    family: 'Arial',
-                },
-                {
-                    label: 'Arriendos retirados',
-                    data: retiroData,
-                    backgroundColor: colorRojo,
-                    borderColor: colorRojo,
-                    borderWidth: 1,
-                    borderRadius: 5,
-                    barThickness: 30,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Arriendos por cada mes',
-                    color: '#333',
-                    font: {
-                        size: 20,
-                        weight: 'bold',
                     },
-                    padding: 20,
-                },
-                legend: {
-                    display: true,
-                    labels: {
-                        color: '#555',
-                        font: {
-                            size: 14,
+                                {
+                            label: 'Arriendos retirados',
+                            data: retiroData,
+                            backgroundColor: colorRojo,
+                            borderColor: colorRojo,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            barThickness: 30,
                         },
-                    },
-                },
-                tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: function (context) {
-                            return ` ${context.dataset.label}: ${context.raw.toLocaleString('es-CL')}`;
-                        },
-                    },
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                    titleFont: { size: 14 },
-                    bodyFont: { size: 12 },
-                    padding: 10,
-                },
+                ]
             },
-            scales: {
-                x: {
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
                     title: {
                         display: true,
-                        text: 'Meses',
-                        font: {
-                            size: 16,
-                            weight: '600',
-                        },
+                        text: 'Arriendos Por Cada Mes',
                         color: '#333',
-                    },
-                    ticks: {
-                        maxRotation: 45,
-                        minRotation: 45,
                         font: {
-                            size: 12,
+                            size: 24,
+                            weight: 'bold',
+                            family: 'Arial',
                         },
-                        color: '#333',
-                    },
-                    grid: {
-                        display: true,
-                        color: '#e9ecef',
-                        lineWidth: 1,
-                    },
+
+                    }
                 },
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Cantidad',
-                        font: {
-                            size: 16,
-                            weight: '600',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Arriendos por cada mes',
+                            color: '#333',
+                            font: {
+                                size: 20,
+                                weight: 'bold',
+                            },
+                            padding: 20,
                         },
-                        color: '#333',
-                    },
-                    ticks: {
-                        font: {
-                            size: 12,
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#555',
+                                font: {
+                                    size: 14,
+                                },
+                            },
                         },
-                        color: '#333',
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: function (context) {
+                                    return ` ${context.dataset.label}: ${context.raw.toLocaleString('es-CL')}`;
+                                },
+                            },
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                        },
                     },
-                    grid: {
-                        display: true,
-                        color: '#e9ecef',
-                        lineWidth: 1,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Meses',
+                                font: {
+                                    size: 16,
+                                    weight: '600',
+                                },
+                                color: '#333',
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: {
+                                    size: 12,
+                                },
+                                color: '#333',
+                            },
+                            grid: {
+                                display: true,
+                                color: '#e9ecef',
+                                lineWidth: 1,
+                            },
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cantidad',
+                                font: {
+                                    size: 16,
+                                    weight: '600',
+                                },
+                                color: '#333',
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                },
+                                color: '#333',
+                            },
+                            grid: {
+                                display: true,
+                                color: '#e9ecef',
+                                lineWidth: 1,
+                            },
+                        },
                     },
                 },
             },
-        },
     });
 
     // Combina y normaliza etiquetas para gráfico de valores
@@ -1597,86 +1599,61 @@ new Chart(ctx, {
         return index !== -1 ? veranoretiradaPorMesPorMesData[index] : 0;
     });
 
-// Gráfico actualizado
-const ctxanual = document.getElementById('arriendoAnualChart').getContext('2d');
-new Chart(ctxanual, {
-    type: 'pie',
-    data: {
-        labels: labelsFinal,
-        datasets: [{
-            label: 'Total Arriendos por Año',
-            data: dataFinal
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom'
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        let valor = Number(context.raw).toLocaleString('es-CL');
-                        return context.label + ': $' + valor;
+    // Gráfico actualizado
+    const ctxanual = document.getElementById('arriendoAnualChart').getContext('2d');
+    new Chart(ctxanual, {
+        type: 'pie',
+        data: {
+            labels: labelsFinal,
+            datasets: [{
+                label: 'Total Arriendos por Año',
+                data: dataFinal
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let valor = Number(context.raw).toLocaleString('es-CL');
+                            return context.label + ': $' + valor;
+                        }
                     }
                 }
             }
         }
-    }
-});
+    });
 
-// Gráfico actualizado
-const ctxverano = document.getElementById('veranocantidadChart').getContext('2d');
+    // Gráfico actualizado
+    const ctxverano = document.getElementById('veranocantidadChart').getContext('2d');
 
-new Chart(ctxverano, {
-    type: 'bar',
-    data: {
-        labels: allmesesveranoLabels,
-        datasets: [
-            {
-                label: 'Arriendos Ingresados por Mes',
-                data: veranoData,
-                backgroundColor: '#198754',
-                borderColor: '#198754',
-                borderWidth: 1,
-                borderRadius: 10,
-                barThickness: 30,
-            },
-            {
-                label: 'Arriendos Retirados por Mes',
-                data: veranoretiroData,
-                backgroundColor: '#dc3545', // Color danger de Bootstrap
-                borderColor: '#dc3545', // Semitransparente para el borde
-                borderWidth: 1,
-                borderRadius: 10,
-                barThickness: 30,
-
-            },
-
-        ],
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            title: {
-                display: true,
-                color: '#333',
-                font: {
-                    size: 24,
-                    weight: 'bold',
-                    family: 'Arial',
-                },
+    new Chart(ctxverano, {
+        type: 'bar',
+        data: {
+            labels: allmesesveranoLabels,
+            datasets: [
                 {
-                    label: 'Arriendos retirados',
-                    data: veranoretiroData,
-                    backgroundColor: colorRojo,
-                    borderColor: colorRojo,
-                    borderWidth: 2,
-                    borderRadius: 5,
+                    label: 'Arriendos Ingresados por Mes',
+                    data: veranoData,
+                    backgroundColor: '#198754',
+                    borderColor: '#198754',
+                    borderWidth: 1,
+                    borderRadius: 10,
                     barThickness: 30,
                 },
+                {
+                    label: 'Arriendos Retirados por Mes',
+                    data: veranoretiroData,
+                    backgroundColor: '#dc3545',
+                    borderColor: '#dc3545',
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    barThickness: 30,
+                }
             ],
         },
         options: {
@@ -1764,7 +1741,7 @@ new Chart(ctxverano, {
                     },
                 },
             },
-        },
+        }
     });
 
     // Funciones para mostrar/ocultar secciones
