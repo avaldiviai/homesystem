@@ -11,164 +11,189 @@ use App\Models\Arriendo;
 use App\Models\Event;
 
 
-
-
-
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         $propiedades = Propiedad::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total"))
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('tipo_propiedad',1)
-            ->where('estado_venta',1)
+            ->where('tipo_propiedad', 1)
+            ->where('estado', 1)          // ← solo activas
+            ->where('estado_venta', 1)
             ->get();
+
         $propiedadesC = Propiedad::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total"))
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('tipo_propiedad',3)
-            ->where('estado_venta',1)
+            ->where('tipo_propiedad', 3)
+            ->where('estado', 1)          // ← solo activas
+            ->where('estado_venta', 1)
             ->get();
-        //Propiedades mes de marzo a diciembre
+
         $propiedadesPorMes = Arriendo::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total"))
             ->groupBy('mes')
             ->orderBy('mes')
-            // ->where('tipo_propiedad',1)
-            ->where('estado',1)
+            ->where('estado', 1)
             ->get();
-            // dd($propiedadesPorMes);
 
-        //propiedades a�0�9o corrido
         $propiedadescorridoPorMes = Arriendo::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total"))
             ->groupBy('mes')
             ->orderBy('mes')
-            // ->where('tipo_propiedad',3)
-            ->where('estado',1)
+            ->where('estado', 1)
             ->get();
-            // dd($propiedadesPorMes);
 
         $arriendosPorMes = Arriendo::select(
-            DB::raw("MONTH(created_at) as mes"), 
-            DB::raw("COUNT(*) as total"), 
-            DB::raw("SUM(CAST(REPLACE(valor_real, '.', '') AS UNSIGNED)) as total_retirado") // Ignorar el punto
+            DB::raw("MONTH(created_at) as mes"),
+            DB::raw("COUNT(*) as total"),
+            DB::raw("SUM(CAST(REPLACE(valor_real, '.', '') AS UNSIGNED)) as total_retirado")
         )
-        ->where('estado', 1) // Estado disponible
-        ->groupBy(DB::raw("MONTH(created_at)")) // Asegura la agrupaci��n por mes
-        ->orderBy('mes')
-        ->get();
-        
+            ->where('estado', 1)
+            ->groupBy(DB::raw("MONTH(created_at)"))
+            ->orderBy('mes')
+            ->get();
+
         $retiradosPorMes = Arriendo::select(
-            DB::raw("MONTH(created_at) as mes"), 
-            DB::raw("COUNT(*) as total"), 
-            DB::raw("SUM(CAST(REPLACE(valor_arriendo, '.', '') AS UNSIGNED)) as total_retirado")) // Ignorar el punto
-            ->where('estado', 0) // Estado retirado
-        ->groupBy(DB::raw("MONTH(created_at)")) // Asegura la agrupaci��n correcta
-        ->orderBy('mes')
-        ->get();
-    
-        //propiedades en venta disponible
+            DB::raw("MONTH(created_at) as mes"),
+            DB::raw("COUNT(*) as total"),
+            DB::raw("SUM(CAST(REPLACE(valor_arriendo, '.', '') AS UNSIGNED)) as total_retirado")
+        )
+            ->where('estado', 0)
+            ->groupBy(DB::raw("MONTH(created_at)"))
+            ->orderBy('mes')
+            ->get();
+
+        // ─── VENTAS ────────────────────────────────────────────────────────────
+        // Propiedades disponibles para la venta (activas Y aún no vendidas)
         $ventaPorMes = Propiedad::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total"))
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('tipo_propiedad',2)
-            ->where('estado_venta',1)
+            ->where('tipo_propiedad', 2)
+            ->where('estado', 1)          // ← solo propiedades NO eliminadas
+            ->where('estado_venta', 1)    // ← disponibles
             ->get();
-        //propiedades ventas realizadas
+
+        // Propiedades vendidas (estado_venta=0) que siguen en el sistema (estado=1)
+        // O bien propiedades que fueron eliminadas del sistema (estado=0) — ambas
+        // se consideran "retiradas". Para ser consistente con el modelo de negocio:
+        // "retiradas del sistema" = estado=0 (borradas lógicamente, cualquier estado_venta)
         $ventaretiradaPorMes = Propiedad::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total"))
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('tipo_propiedad',2)
-            ->where('estado_venta',0)
+            ->where('tipo_propiedad', 2)
+            ->where(function ($q) {
+                $q->where('estado', 0)           // eliminadas del sistema
+                  ->orWhere('estado_venta', 0);  // o marcadas como vendidas
+            })
             ->get();
 
-     
-        $precioventa = Precios::select(DB::raw("MONTH(created_at) as mes"),DB::raw("COUNT(*) as total"),DB::raw("SUM(CAST(REPLACE(venta, '.', '') AS UNSIGNED)) as totalventa"))
+        // Precio de propiedades disponibles para la venta
+        $precioventa = Precios::select(
+            DB::raw("MONTH(created_at) as mes"),
+            DB::raw("COUNT(*) as total"),
+            DB::raw("SUM(CAST(REPLACE(venta, '.', '') AS UNSIGNED)) as totalventa")
+        )
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('tipo_propiedad',2)
-            ->where('estado',1)
+            ->where('tipo_propiedad', 2)
+            ->where('estado', 1)
+            ->whereHas('propiedad', function ($q) {
+                $q->where('estado', 1)->where('estado_venta', 1);
+            })
             ->get();
-            
-        $precioventaretirada = Precios::select(DB::raw("MONTH(created_at) as mes"),DB::raw("COUNT(*) as total"),DB::raw("SUM(CAST(REPLACE(venta, '.', '') AS UNSIGNED)) as totalventa"))
+
+        // Precio de propiedades retiradas/vendidas
+        $precioventaretirada = Precios::select(
+            DB::raw("MONTH(created_at) as mes"),
+            DB::raw("COUNT(*) as total"),
+            DB::raw("SUM(CAST(REPLACE(venta, '.', '') AS UNSIGNED)) as totalventa")
+        )
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('tipo_propiedad',2)
-            ->where('estado',0)
+            ->where('tipo_propiedad', 2)
+            ->whereHas('propiedad', function ($q) {
+                $q->where(function ($inner) {
+                    $inner->where('estado', 0)
+                          ->orWhere('estado_venta', 0);
+                });
+            })
             ->get();
-        
-        //propiedades verano disponible
+        // ───────────────────────────────────────────────────────────────────────
+
         $veranoPropiedad = Verano::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total"))
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('estado',1)
+            ->where('estado', 1)
             ->get();
-        //propiedades verano disponible
-        $verano = Event::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total_verano"),DB::raw("SUM(CAST(REPLACE(total, '.', '') AS UNSIGNED)) as totalverano"))
+
+        $verano = Event::select(
+            DB::raw("MONTH(created_at) as mes"),
+            DB::raw("COUNT(*) as total_verano"),
+            DB::raw("SUM(CAST(REPLACE(total, '.', '') AS UNSIGNED)) as totalverano")
+        )
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('estado',1)
+            ->where('estado', 1)
             ->get();
-    
-        //propiedades verano disponible
-        $veranoretirado = Event::select(DB::raw("MONTH(created_at) as mes"), DB::raw("COUNT(*) as total_verano"),DB::raw("SUM(CAST(REPLACE(total, '.', '') AS UNSIGNED)) as totalverano"))
+
+        $veranoretirado = Event::select(
+            DB::raw("MONTH(created_at) as mes"),
+            DB::raw("COUNT(*) as total_verano"),
+            DB::raw("SUM(CAST(REPLACE(total, '.', '') AS UNSIGNED)) as totalverano")
+        )
             ->groupBy('mes')
             ->orderBy('mes')
-            ->where('estado',0)
+            ->where('estado', 0)
             ->get();
-        
+
         $arriendosPorAnio = Arriendo::select(
             DB::raw("YEAR(created_at) as anio"),
             DB::raw("COUNT(*) as total"),
             DB::raw("SUM(CAST(REPLACE(valor_real, '.', '') AS UNSIGNED)) as total_arriendo")
         )
-        ->where('estado', 1)
-        ->groupBy(DB::raw("YEAR(created_at)"))
-        ->orderBy('anio')
-        ->get();
+            ->where('estado', 1)
+            ->groupBy(DB::raw("YEAR(created_at)"))
+            ->orderBy('anio')
+            ->get();
 
-        //no se ocupa
-        $retiradosPorAnio = Arriendo::select( 
+        $retiradosPorAnio = Arriendo::select(
             DB::raw("YEAR(created_at) as anio"),
             DB::raw("COUNT(*) as total"),
             DB::raw("SUM(CAST(REPLACE(valor_arriendo, '.', '') AS UNSIGNED)) as total_retirado")
         )
-        ->where('estado', 0)
-        ->groupBy(DB::raw("YEAR(created_at)"))
-        ->orderBy('anio')
-        ->get();
+            ->where('estado', 0)
+            ->groupBy(DB::raw("YEAR(created_at)"))
+            ->orderBy('anio')
+            ->get();
 
-       $propiedadesVentas = Propiedad::select(
-        DB::raw("YEAR(created_at) as anio"),
-        DB::raw("COUNT(*) as total")
+        $propiedadesVentas = Propiedad::select(
+            DB::raw("YEAR(created_at) as anio"),
+            DB::raw("COUNT(*) as total")
         )
-        ->groupBy(DB::raw("YEAR(created_at)"))
-        ->orderBy('anio')
-        ->get();
-            
+            ->where('tipo_propiedad', 2)
+            ->where('estado', 1)          // ← solo activas para el gráfico anual
+            ->groupBy(DB::raw("YEAR(created_at)"))
+            ->orderBy('anio')
+            ->get();
+
         $labelsArriendosAnio = $arriendosPorAnio->pluck('anio');
         $dataArriendosAnio   = $arriendosPorAnio->pluck('total_arriendo');
-        $labelsVentasAnio = $propiedadesVentas->pluck('anio');
-        $dataVentasAnio = $propiedadesVentas->pluck('total');
-     
+        $labelsVentasAnio    = $propiedadesVentas->pluck('anio');
+        $dataVentasAnio      = $propiedadesVentas->pluck('total');
 
-
-
-        return view('home', compact('labelsVentasAnio','dataVentasAnio','dataArriendosAnio','labelsArriendosAnio','veranoPropiedad','propiedadesC','propiedades','veranoretirado','precioventaretirada','precioventa','propiedadescorridoPorMes','ventaretiradaPorMes','propiedadesPorMes', 'arriendosPorMes','ventaPorMes','verano','retiradosPorMes'));
+        return view('home', compact(
+            'labelsVentasAnio', 'dataVentasAnio',
+            'dataArriendosAnio', 'labelsArriendosAnio',
+            'veranoPropiedad', 'propiedadesC', 'propiedades',
+            'veranoretirado', 'precioventaretirada', 'precioventa',
+            'propiedadescorridoPorMes', 'ventaretiradaPorMes',
+            'propiedadesPorMes', 'arriendosPorMes',
+            'ventaPorMes', 'verano', 'retiradosPorMes'
+        ));
     }
 }

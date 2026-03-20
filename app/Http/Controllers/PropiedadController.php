@@ -440,32 +440,39 @@ class PropiedadController extends Controller
     public function guardarMantenciones(Request $request)
     {
         $rutaArchivo = null;
-    
+
         if ($request->hasFile('doc')) {
             $archivo = $request->file('doc');
             $nombreArchivo = time().'_'.$archivo->getClientOriginalName();
-            $rutaArchivo = $archivo->storeAs('mantenciones', $nombreArchivo, 'public'); // Guarda en storage/app/public/mantenciones
+            $rutaArchivo = $archivo->storeAs('mantenciones', $nombreArchivo, 'public');
         }
-    
-        // Crear la mantención en la base de datos
+
+        $proxima = $request->proxima ?? null;
+        $envioCorreo = null;
+        if ($proxima) {
+            try {
+                $envioCorreo = Carbon::parse($proxima)->subMonth();
+            } catch (\Exception $e) {
+                $envioCorreo = null;
+            }
+        }
+
         $mantenimiento = Mantenimiento::create([
-            'id_propiedad' => $request->id_propiedad,
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
+            'id_propiedad'   => $request->id_propiedad,
+            'nombre'         => $request->nombre,
+            'descripcion'    => $request->descripcion,
             'fecha_mantencion' => $request->fecha,
-            'meses' => $request->meses,
-            'fecha_prox_man' => $request->proxima,
-            'envio_correo' => Carbon::parse($request->proxima)->subMonth(), // Restamos un mes a la fecha de la próxima mantención
-            'doc' => $rutaArchivo, // Guarda la ruta si existe
+            'meses'          => $request->meses,
+            'fecha_prox_man' => $proxima,
+            'envio_correo'   => $envioCorreo,
+            'doc'            => $rutaArchivo,
         ]);
-    
-        // Obtener los datos del mantenimiento guardado
+
         $mantenimientoGuardado = Mantenimiento::with('propiedad')->find($mantenimiento->id);
-    
-        // Devolver los datos en la respuesta JSON
+
         return response()->json([
-            'message' => 'Mantención guardada correctamente',
-            'data' => $mantenimientoGuardado
+            'message' => 'Mantenimiento guardado correctamente',
+            'data'    => $mantenimientoGuardado
         ]);
     }
     
@@ -754,12 +761,8 @@ class PropiedadController extends Controller
         // dd($preciosEdit);
         $preciosEdit->save();
         
-        function valorValido($valor) {
-            return $valor !== null && $valor !== 'undefined';
-        }
-        
         $mantenimientoEdit = Mantenimiento::where('id_propiedad', $id_propiedad)->first();
-        
+
         if ($mantenimientoEdit) {
             $nombre = $request->input('nombre');
             $descripcion = $request->input('descripcion_man');
@@ -767,23 +770,23 @@ class PropiedadController extends Controller
             $meses = $request->input('meses');
             $proximaFecha = $request->input('proxima_fecha');
             $envioCorreo = $request->input('envio_correo');
-        
-            if (valorValido($nombre)) {
+
+            if ($this->valorValido($nombre)) {
                 $mantenimientoEdit->nombre = $nombre;
             }
-            if (valorValido($descripcion)) {
+            if ($this->valorValido($descripcion)) {
                 $mantenimientoEdit->descripcion = $descripcion;
             }
-            if (valorValido($fecha)) {
+            if ($this->valorValido($fecha)) {
                 $mantenimientoEdit->fecha_mantencion = $fecha;
             }
-            if (valorValido($meses)) {
+            if ($this->valorValido($meses)) {
                 $mantenimientoEdit->meses = $meses;
             }
-            if (valorValido($proximaFecha)) {
+            if ($this->valorValido($proximaFecha)) {
                 $mantenimientoEdit->fecha_prox_man = $proximaFecha;
             }
-            if (valorValido($envioCorreo)) {
+            if ($this->valorValido($envioCorreo)) {
                 $mantenimientoEdit->envio_correo = $envioCorreo;
             }
         
@@ -1289,12 +1292,8 @@ class PropiedadController extends Controller
 
         $new_sub_detalles_dos_edit->save();
 
-        function valorValido($valor) {
-            return $valor !== null && $valor !== 'undefined';
-        }
-        
         $mantenimientoEdit = Mantenimiento::where('id_propiedad', $id_propiedad)->first();
-        
+
         if ($mantenimientoEdit) {
             $nombre = $request->input('nombre');
             $descripcion = $request->input('descripcion_man');
@@ -1302,23 +1301,23 @@ class PropiedadController extends Controller
             $meses = $request->input('meses');
             $proximaFecha = $request->input('proxima_fecha');
             $envioCorreo = $request->input('envio_correo');
-        
-            if (valorValido($nombre)) {
+
+            if ($this->valorValido($nombre)) {
                 $mantenimientoEdit->nombre = $nombre;
             }
-            if (valorValido($descripcion)) {
+            if ($this->valorValido($descripcion)) {
                 $mantenimientoEdit->descripcion = $descripcion;
             }
-            if (valorValido($fecha)) {
+            if ($this->valorValido($fecha)) {
                 $mantenimientoEdit->fecha_mantencion = $fecha;
             }
-            if (valorValido($meses)) {
+            if ($this->valorValido($meses)) {
                 $mantenimientoEdit->meses = $meses;
             }
-            if (valorValido($proximaFecha)) {
+            if ($this->valorValido($proximaFecha)) {
                 $mantenimientoEdit->fecha_prox_man = $proximaFecha;
             }
-            if (valorValido($envioCorreo)) {
+            if ($this->valorValido($envioCorreo)) {
                 $mantenimientoEdit->envio_correo = $envioCorreo;
             }
         
@@ -1344,7 +1343,9 @@ class PropiedadController extends Controller
             $detallesEdit->mt2_terraza = $request->mt2_terraza ?? $detallesEdit->mt2_terraza;
             $detallesEdit->mt2_total = $request->mt2_total ?? $detallesEdit->mt2_total;
             $detallesEdit->estacionamiento_visitas = $request->estacionamiento_visita ?? $detallesEdit->estacionamiento_visitas;
-            $detallesEdit->gasto_comun = $request->gasto_comun ?? $detallesEdit->gasto_comun;
+            $detallesEdit->gasto_comun = $request->gasto_comun 
+                ? (int) preg_replace('/[^0-9]/', '', $request->gasto_comun) 
+                : $detallesEdit->gasto_comun;
             $detallesEdit->descripcion = $request->descripcion ?? $detallesEdit->descripcion;
             $detallesEdit->ascensor = $request->ascensor ?? $detallesEdit->ascensor;
             $detallesEdit->juegos_infantiles = $request->juegos_infantiles ?? $detallesEdit->juegos_infantiles;
@@ -1943,7 +1944,10 @@ public function PropietarioDeleteObrero($idPropietario){
 
     return Response()->json(['success' => 'Propiedad vendidad correctamente']);
  }
-
+private function valorValido($valor): bool
+{
+    return $valor !== null && $valor !== 'undefined';
+}
 
 }
 
