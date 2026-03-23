@@ -160,24 +160,19 @@
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">
                                     <label for="AnoCorridoInput">Precio Año Corrido</label>
-                                    <div class="input-group">
-                                        <input type="text"
-                                            class="form-control"
-                                            id="AnoCorridoInput"
-                                            placeholder="Precio Año Corrido"
-                                            oninput="formatearMiles(this)"
-                                            required>
-                                        <div class="input-group-text p-1">
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox"
-                                                    class="custom-control-input"
-                                                    id="switchUF">
-                                                <label class="custom-control-label" for="switchUF"></label>
-                                                <span id="monedaTexto" class="ms-2 fw-bold">CLP</span>
-                                            </div>
+                                        <label for="AnoCorridoInput" class="form-label">Precio Año Corrido</label>
+                                        <div class="input-group">
+                                            <input type="text" 
+                                                class="form-control" 
+                                                id="AnoCorridoInput" 
+                                                placeholder="Precio Año Corrido" 
+                                                oninput="formatearMiles(this)" 
+                                                required>
+                                            
+                                            <span class="input-group-text fw-bold text-dark bg-light">
+                                                CLP
+                                            </span>
                                         </div>
-
-                                    </div>
                                     <input type="hidden" id="tipo_moneda" value="CLP">
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">

@@ -28,7 +28,7 @@ class ArrendatarioController extends Controller
             return response()->json([
                 'mensaje' => 'Ya existe un arrendatario registrado con este RUT o EMAIL.',
                 'existe' => true
-            ], 409); // C¨®digo 409: Conflicto
+            ], 409); // Cï¿½ï¿½digo 409: Conflicto
         }
 
         // Crear nuevo arrendatario
@@ -39,7 +39,7 @@ class ArrendatarioController extends Controller
         $new_arrendatario->correo = $request->correo;
         $new_arrendatario->direccion = $request->direccion;
         $new_arrendatario->ciudad = $request->ciudad;
-        $new_arrendatario->profesion = $request->profesion;
+        //$new_arrendatario->profesion = $request->profesion;
         $new_arrendatario->estado = 1;
         $new_arrendatario->save();
 

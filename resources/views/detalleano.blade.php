@@ -10,7 +10,7 @@
                     <div class="col-lg-12" style="text-align: start; margin-top: 40px; margin-bottom: 20px; margin-start: 30px; color: white;">
                         <h1 class="text-uppercase text-black text-center">Detalles año Corrido</h1>
                     </div>
-                    <!-- <div class="col-lg-4">
+                    <div class="col-lg-4">
                         <div class="form-check form-switch bg-black d-flex align-items-center container p-2 shadow" 
                             style="margin-top: 40px; margin-bottom: 30px; color: white; border-radius: .9rem;">
                             <div class="col-lg-10">
@@ -21,7 +21,7 @@
                                 style="transform: scale(1.5); width: 40px; height: 17px;"> 
                             </div>
                         </div>
-                    </div> -->
+                    </div> 
                     <div class="col-lg-12 text-white  mb-3 p-4" >
                         <div class="row shadow p-2"style="background-color:#E67E22; border-radius: .9rem;">
                             <div class="col-lg-12 mb-1">
@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-lg-4 mb-3">
                                 <label for="ano_corridoedit">Precio Año Corrido</label>
-                                <div class="input-group">
+                                    <div class="input-group">
                                         <input type="text"
                                             class="form-control"
                                             id="ano_corridoedit"
@@ -39,19 +39,12 @@
                                             oninput="formatearMiles(this)"
                                             required>
 
-                                        <div class="input-group-text p-1">
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox"
-                                                    class="custom-control-input"
-                                                    id="switchUF">
-                                                <label class="custom-control-label" for="switchUF"></label>
-                                                <span id="monedaTexto" class="ms-2 fw-bold">CLP</span>
-                                            </div>
+                                        <div class="input-group-text">
+                                            <span class="fw-bold text-dark">CLP</span>
                                         </div>
-                                     
                                     </div>
-                                    <input type="hidden" id="tipo_moneda" value="CLP">
-                                </div>  
+                                <input type="hidden" id="tipo_moneda" value="CLP">
+                             </div>  
                             <div class="col-lg-4 mb-3">
                                     <label for="direccionedit">Direccion de la propiedad</label>
                                     <input type="text" id="direccionedit" class="form-control"  value="{{$detalles->direccion}}">
@@ -226,21 +219,6 @@
                                     </div>
 
                                     <!-- Campo 2 -->
-                                    <div class="form-group mb-3 col-4 text-center">
-                                        <label class="d-block mb-2"><b>¿Incluye Mes de Garantía?</b></label>
-                                        
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="mes_garantia" id="mesGarantiaSi" value="1" required>
-                                            <label class="form-check-label" for="mesGarantiaSi">Sí</label>
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="mes_garantia" id="mesGarantiaNo" value="0">
-                                            <label class="form-check-label" for="mesGarantiaNo">No</label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Campo 3 -->
                                     <div class="form-group mb-3 col-4">
                                         <label for="gastosComunesInput"><b>Gastos Comunes</b></label>
                                         <div class="input-group">
@@ -1336,19 +1314,6 @@
                                 <label for="correoInput"><b>Correo</b></label>
                                 <input type="mail" class="form-control mt-2" id="correoInput" placeholder="Ej: example@gmail.com" required>
                                 <small id="errorCorreo" class="text-danger"></small>
-
-                            </div>
-
-                            <div class="form-group mb-3 col-6">
-                                <label for="direccionInput"><b>Direccion</b></label>
-                                <input type="text" class="form-control mt-2" id="direccionInput" placeholder="Ej: av.libertades" required>
-                                <small id="errorDireccion" class="text-danger"></small>
-
-                            </div>
-                            <div class="form-group mb-3 col-6">
-                                <label for="ciudadInput"><b>Ciudad</b></label>
-                                <input type="text" class="form-control mt-2" id="ciudadInput" placeholder="Ciudad" required>
-                                <small id="errorCiudad" class="text-danger"></small>
 
                             </div>
                         </div>
