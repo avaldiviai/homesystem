@@ -39,6 +39,11 @@ class ArriendoController extends Controller
   
     public function addArriendo(Request $request)
     {
+       $request->validate([
+        'fecha_pago' => 'required|numeric|min:1|max:31',
+        'id_propiedad' => 'required',
+        // ... otras validaciones
+        ]);
         // Crear un nuevo registro de arriendo
         $new_arriendo = new Arriendo();
         // $new_arriendo->fecha_devolucion = $request->fecha_devolucion;

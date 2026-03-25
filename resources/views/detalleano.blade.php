@@ -10,18 +10,6 @@
                     <div class="col-lg-12" style="text-align: start; margin-top: 40px; margin-bottom: 20px; margin-start: 30px; color: white;">
                         <h1 class="text-uppercase text-black text-center">Detalles año Corrido</h1>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="form-check form-switch bg-black d-flex align-items-center container p-2 shadow" 
-                            style="margin-top: 40px; margin-bottom: 30px; color: white; border-radius: .9rem;">
-                            <div class="col-lg-10">
-                                <div id="estado" class="text-uppercase m-0 ">Deshabilitado para editar</div>
-                            </div>
-                            <div class="col-lg-2 d-flex align-items-center justify-content-end">
-                                <input class="form-check-input m-2" type="checkbox" id="interruptor" 
-                                style="transform: scale(1.5); width: 40px; height: 17px;"> 
-                            </div>
-                        </div>
-                    </div> 
                     <div class="col-lg-12 text-white  mb-3 p-4" >
                         <div class="row shadow p-2"style="background-color:#E67E22; border-radius: .9rem;">
                             <div class="col-lg-12 mb-1">
@@ -227,10 +215,15 @@
                                                 placeholder="Ej: 450.000" maxlength="20" required>
                                         </div>
                                     </div>
-                                
                                     <div class="form-group mb-3 col-lg-4"> 
                                         <label for="fechaPagoInput"><b>Fecha de Pago</b></label>
-                                        <input type="date" class="form-control" id="fechaPagoInput" required>
+                                        <select name="fecha_pago" class="form-control" id="fechaPagoInput" required>
+                                            <option value="" selected disabled>Elija el día de cobro (1-31)</option>
+                                            
+                                            @for ($i = 1; $i <= 31; $i++)
+                                                <option value="{{ $i }}">Día {{ $i }} de cada mes</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                     <div class="form-group mb-3 col-lg-4">
                                         <label for="estado" class=""><b>Estado del pago</b></label>
