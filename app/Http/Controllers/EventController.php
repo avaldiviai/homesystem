@@ -25,41 +25,30 @@ class EventController extends Controller
 
 public function getEvents(Request $request)
 {
-    // Construimos la consulta base
     $query = Event::where('estado', 1);
 
-    // Filtrar por fecha si se envía
-    if ($request->has('date') && $request->date != '') {
-        $query->whereDate('inicio', '<=', $request->date)
-              ->whereDate('fin', '>=', $request->date);
-    }
-
-    // Filtrar por id_verano usando la relación verano
     if ($request->has('id_verano') && $request->id_verano != '') {
-        $query->whereHas('verano', function($q) use ($request) {
-            $q->where('id', $request->id_verano);
-        });
+        // CAMBIA esto:
+        $query->where('id_verano', $request->id_verano);
+        // En lugar de whereHas que puede fallar
     }
 
-    // Obtener eventos
     $events = $query->get()->map(function ($event) {
         return [
-            'id' => $event->id,
-            'direccion' => ($event->verano->direccion ?? 'Sin dirección'),
-            'title' =>
-                ($event->verano->torre ?? 'Sin torre') . ' - ' . ($event->verano->num_apartamento ?? 'Sin número') . "\n" .
-                'Total: $' . number_format($event->total, 0, ',', '.') . "\n" .
-                'Día: $' . number_format($event->precio_dia, 0, ',', '.') . "\n" .
-                'Aseo: $' . number_format($event->monto, 0, ',', '.') . "\n",
-            'start' => \Carbon\Carbon::parse($event->inicio)->toDateString(),
-            'end' => \Carbon\Carbon::parse($event->fin)->toDateString(),
-            'total' => $event->total,
-            'color' => $event->color,
-            'diario' => $event->precio_dia,
-            'dia' => $event->dia,
-            'monto' => $event->monto,
-            'condominio' => $event->verano->num_apartamento ?? 'Sin número',
-            'torre' => $event->verano->torre ?? 'Sin torre',
+            'id'        => $event->id,
+            'direccion' => $event->verano->direccion ?? 'Sin dirección',
+            'title'     =>
+                ($event->verano->torre ?? '') . ' - #' . ($event->verano->num_apartamento ?? '') . "\n" .
+                'Total: $' . number_format($event->total, 0, ',', '.'),
+            'start'     => \Carbon\Carbon::parse($event->inicio)->toDateString(),
+            'end'       => \Carbon\Carbon::parse($event->fin)->addDay()->toDateString(), // +1 día para que FullCalendar muestre bien el rango
+            'color'     => $event->color,
+            'total'     => $event->total,
+            'diario'    => $event->precio_dia,
+            'dia'       => $event->dia,
+            'monto'     => $event->monto,
+            'condominio' => $event->verano->num_apartamento ?? '',
+            'torre'     => $event->verano->torre ?? '',
         ];
     });
 
@@ -69,28 +58,28 @@ public function getEvents(Request $request)
 
     
 
-public function validarFecha(Request $request)
-{
-    $existingEvent = Event::where('id_verano', $request->id_verano)
-        ->where(function ($query) use ($request) {
-            // Validar si hay un evento que tenga las mismas fechas
-            $query->whereBetween('inicio', [$request->inicio, $request->fin])
-                ->orWhereBetween('fin', [$request->inicio, $request->fin])
-                ->orWhere(function ($query) use ($request) {
-                    $query->where('inicio', '<=', $request->inicio)
-                        ->where('fin', '>=', $request->fin);
-                });
-        })
-        ->first(); // Obtén solo el primer evento que coincide
+    public function validarFecha(Request $request)
+    {
+        $inicio = \Carbon\Carbon::parse($request->inicio);
+        $fin    = \Carbon\Carbon::parse($request->fin);
+        
+        $inicioConBuffer = $inicio->copy()->subHour();
+        $finConBuffer    = $fin->copy()->addHour();
 
-    // Si se encuentra un evento y ambos tienen el mismo estado 1
-    if ($existingEvent && $existingEvent->estado == 1 && $request->estado == 1) {
-        return response()->json(['message' => 'Las fechas seleccionadas están ocupadas.'], 400);
+        $existingEvent = Event::where('id_verano', $request->id_verano)
+            ->where('estado', 1)
+            ->where(function ($query) use ($inicioConBuffer, $finConBuffer) {
+                $query->where('inicio', '<', $finConBuffer)
+                    ->where('fin',    '>', $inicioConBuffer);
+            })
+            ->first();
+
+        if ($existingEvent) {
+            return response()->json(['message' => 'Las fechas están ocupadas.'], 400);
+        }
+
+        return response()->json(['message' => 'Fechas disponibles.'], 200);
     }
-
-    // Si no hay conflicto de fechas o si las fechas están ocupadas pero con estados diferentes
-    return response()->json(['message' => 'Fechas disponibles.'], 200);
-}
 
     
     
@@ -99,6 +88,7 @@ public function validarFecha(Request $request)
     // Crear un nuevo evento
     public function store(Request $request)
     {
+        \Log::info('=== STORE EVENTS ===', $request->all());
         // Validación de los datos
         $request->validate([
             'id_verano' => 'required|string|max:255',
@@ -112,18 +102,26 @@ public function validarFecha(Request $request)
 
         // Verificar si la fecha de inicio y fin ya están ocupadas para la propiedad seleccionada
         $existingEvent = Event::where('id_verano', $request->id_verano)
+            ->where('estado', 1)
             ->where(function ($query) use ($request) {
-                $query->whereBetween('inicio', [$request->inicio, $request->fin])
-                      ->orWhereBetween('fin', [$request->inicio, $request->fin])
-                      ->orWhere(function ($query) use ($request) {
-                          $query->where('inicio', '<=', $request->inicio)
-                                ->where('fin', '>=', $request->fin);
-                      });
+                $inicio = \Carbon\Carbon::parse($request->inicio);
+                $fin    = \Carbon\Carbon::parse($request->fin);
+                
+                // Agregar 1 hora de buffer
+                $inicioConBuffer = $inicio->copy()->subHour();
+                $finConBuffer    = $fin->copy()->addHour();
+                
+                $query->where(function($q) use ($inicioConBuffer, $finConBuffer) {
+                    $q->where('inicio', '<', $finConBuffer)
+                    ->where('fin',    '>', $inicioConBuffer);
+                });
             })
             ->exists();
 
         if ($existingEvent) {
-            return response()->json(['message' => 'Las fechas seleccionadas están ocupadas.'], 400);
+            return response()->json([
+                'message' => 'Las fechas seleccionadas están ocupadas. Debe haber al menos 1 hora de diferencia entre arriendos.'
+            ], 400);
         }
 
         // Crear el nuevo evento en la base de datos
@@ -155,6 +153,8 @@ public function validarFecha(Request $request)
 
             'precio_dia' => $event->precio_dia,
         ]);
+
+        
     }
 
     // Eliminar un evento

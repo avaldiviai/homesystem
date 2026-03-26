@@ -222,10 +222,56 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/imagenes/{id}', [VeranoController::class, 'destroy'])->name('imagenes.eliminar');
     Route::patch('/propiedadVeranoestado/{id}', [VeranoController::class,'deletePropiedadVera']);
     Route::get('/obtenerVe/propietarioVeNombre', [VeranoController::class, 'PropietariosAgregadosVe']);
-   Route::delete('/propiedadverano/{idPropiedad}',[VeranoController::class,'deletepropiedad'])->name('admin.propiedadverano'); 
-   Route::delete('/propietarioVeranoDelete/{idPropietario}', [VeranoController::class, 'PropietarioVeraDelete']);
-   Route::post('/portadaVera/cambiar_imgen/{id}', [VeranoController::class, 'cambiarImg'])->name('admin.propiedadesVeranoDetalles');
-
+    Route::delete('/propiedadverano/{idPropiedad}',[VeranoController::class,'deletepropiedad'])->name('admin.propiedadverano'); 
+    Route::delete('/propietarioVeranoDelete/{idPropietario}', [VeranoController::class, 'PropietarioVeraDelete']);
+    Route::post('/portadaVera/cambiar_imgen/{id}', [VeranoController::class, 'cambiarImg'])->name('admin.propiedadesVeranoDetalles');
+    
+    ////////////////////////////////Videos Verano/////////////////////////////
+    Route::post('/propiedades_verano_video', [VeranoController::class, 'guardarVideoVerano']);
+    Route::delete('/video-verano/{id}', [VeranoController::class, 'eliminarVideoVerano']);
+    Route::get('/stream-video/{path}', function($path) {
+        $filePath = storage_path('app/public/' . $path);
+        
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+        
+        $fileSize = filesize($filePath);
+        $mimeType = mime_content_type($filePath);
+        
+        $start = 0;
+        $end = $fileSize - 1;
+        
+        if (isset($_SERVER['HTTP_RANGE'])) {
+            preg_match('/bytes=(\d+)-(\d*)/', $_SERVER['HTTP_RANGE'], $matches);
+            $start = intval($matches[1]);
+            $end = isset($matches[2]) && $matches[2] !== '' ? intval($matches[2]) : $fileSize - 1;
+        }
+        
+        $length = $end - $start + 1;
+        
+        $headers = [
+            'Content-Type'   => $mimeType,
+            'Content-Length' => $length,
+            'Accept-Ranges'  => 'bytes',
+            'Content-Range'  => "bytes $start-$end/$fileSize",
+        ];
+        
+        $statusCode = isset($_SERVER['HTTP_RANGE']) ? 206 : 200;
+        
+        return response()->stream(function() use ($filePath, $start, $length) {
+            $handle = fopen($filePath, 'rb');
+            fseek($handle, $start);
+            $remaining = $length;
+            while (!feof($handle) && $remaining > 0) {
+                $chunk = min(8192, $remaining);
+                echo fread($handle, $chunk);
+                $remaining -= $chunk;
+                flush();
+            }
+            fclose($handle);
+        }, $statusCode, $headers);
+    })->where('path', '.*');
 
     ////////////////////////////////SERVICIOS/////////////////////////////
     Route::get('/servicios', [ServtecLineaBlancaController::class, 'index']);

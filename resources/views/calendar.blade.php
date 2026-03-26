@@ -50,14 +50,25 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3 row">
-                                                    <div class="col-6">
-                                                        <label for="inicio" class="form-label">Fecha de Inicio</label>
-                                                        <input type="datetime-local" class="form-control" id="inicio" name="inicio" required>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Fecha Inicio</label>
+                                                        <input type="date" class="form-control" id="inicio_fecha" required>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <label for="fin" class="form-label">Fecha de Fin</label>
-                                                        <input type="datetime-local" class="form-control" id="fin" name="fin">
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Hora Inicio</label>
+                                                        <input type="time" class="form-control" id="inicio_hora" value="14:00" required>
                                                     </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Fecha Fin</label>
+                                                        <input type="date" class="form-control" id="fin_fecha" required>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Hora Fin</label>
+                                                        <input type="time" class="form-control" id="fin_hora" value="12:00" required>
+                                                    </div>
+                                                    {{-- Campos ocultos que se llenan automáticamente --}}
+                                                    <input type="hidden" id="inicio">
+                                                    <input type="hidden" id="fin">
                                                 </div>
                                                 <div class="mb-3 row">
                                                     <!-- Campo Cantidad de Días -->
@@ -236,6 +247,8 @@
                 week: 'Semana',
                 day: 'Día',
             },
+            eventDisplay: 'block',
+            dayMaxEvents: false,
             events: '/calendar/events',
             editable: true,
 
@@ -293,8 +306,49 @@
 
         // Ver los eventos en la fecha actual
         document.getElementById('verFechasBtn').addEventListener('click', function() {
-            showEventsOnDate(new Date().toISOString().slice(0, 10)); // Fecha actual
+            showAllEvents();
         });
+
+        function showAllEvents() {
+            var idVerano = getIdVeranoFromURL();
+            
+            axios.get('/calendar/events', {
+                params: { id_verano: idVerano }
+            })
+            .then(function(response) {
+                eventsOnDate.innerHTML = '';
+                if (response.data.length === 0) {
+                    eventsOnDate.innerHTML = '<tr><td colspan="9" class="text-center">No hay arriendos registrados.</td></tr>';
+                } else {
+                    response.data.forEach(function(event) {
+                        var row = `
+                        <tr>
+                            <td>${event.torre} - #${event.condominio}</td>
+                            <td>${new Date(event.start).toLocaleDateString('es-CL')}</td>
+                            <td>${new Date(event.end).toLocaleDateString('es-CL')}</td>
+                            <td>${event.dia}</td>
+                            <td>$${new Intl.NumberFormat('es-CL').format(event.diario)}</td>
+                            <td>$${new Intl.NumberFormat('es-CL').format(event.monto || 0)}</td>
+                            <td>$${new Intl.NumberFormat('es-CL').format(event.total)}</td>
+                            <td>$${new Intl.NumberFormat('es-CL').format(event.total * 0.10)}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm editarEvento" data-id="${event.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm eliminarEvento" data-id="${event.id}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                        eventsOnDate.innerHTML += row;
+                    });
+                }
+                eventDateModal.show();
+            })
+            .catch(function(error) {
+                console.error('Error cargando eventos:', error);
+            });
+        }
 
         // Función para mostrar los eventos de una fecha específica
         function showEventsOnDate(date) {
@@ -374,6 +428,25 @@
                 document.getElementById('porcentaje').value = '';
             }
         }
+    });
+
+    // Combinar fecha y hora al cambiar cualquiera de los 4 campos
+    ['inicio_fecha', 'inicio_hora', 'fin_fecha', 'fin_hora'].forEach(function(id) {
+        document.getElementById(id).addEventListener('change', function() {
+            var fechaInicio = document.getElementById('inicio_fecha').value;
+            var horaInicio  = document.getElementById('inicio_hora').value;
+            var fechaFin    = document.getElementById('fin_fecha').value;
+            var horaFin     = document.getElementById('fin_hora').value;
+
+            if (fechaInicio && horaInicio) {
+                document.getElementById('inicio').value = fechaInicio + 'T' + horaInicio;
+            }
+            if (fechaFin && horaFin) {
+                document.getElementById('fin').value = fechaFin + 'T' + horaFin;
+            }
+            // Recalcular días
+            calcularDias();
+        });
     });
 </script>
 

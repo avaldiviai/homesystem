@@ -127,8 +127,9 @@
                                 <label for="tipo_cocina">Tipo de Cocina</label>
                                   <select class="form-select" id="tipo_cocina" disabled  name="tipo_cocina">
                                     <option selected disabled>Seleccione un tipo de cocina</option>
-                                    <option value="America" {{ $propiedadVe->tipo_cocina == 'America' ? 'selected' : '' }}>America</option>
+                                    <option value="Americana" {{ $propiedadVe->tipo_cocina == 'Americana' ? 'selected' : '' }}>Americana</option>
                                     <option value="semi Americana" {{ $propiedadVe->tipo_cocina == 'semi Americana' ? 'selected' : '' }}>Semi Americana</option>
+                                    <option value="independiente"  {{ $propiedadVe->tipo_cocina == 'independiente'  ? 'selected' : '' }}>Independiente</option>
                                    </select>
                             </div>
                             <hr class="mb-2" style="border: 1px solid #000;">
