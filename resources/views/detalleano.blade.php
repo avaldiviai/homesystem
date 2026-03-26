@@ -17,7 +17,7 @@
                                     <h4 class="mb-2">Detalles de la Propiedad</h4>
                                 </div>
                             </div>
-                            <div class="col-lg-4 mb-3">
+                            <div class="col-lg-4 mb-4">
                                 <label for="ano_corridoedit">Precio Año Corrido</label>
                                     <div class="input-group">
                                         <input type="text"
