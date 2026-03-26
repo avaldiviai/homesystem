@@ -708,16 +708,17 @@
                                                     @csrf
                                                     <div class="mb-3 row">
                                                         <div class="col-md-6">
-                                                            <label for="id_verano" class="form-label">Propiedad de
-                                                                Verano</label>
-                                                            <select class="form-select" id="id_verano" name="id_verano"
-                                                                required>
-                                                                
+                                                            <label for="id_verano" class="form-label">Propiedad de Verano</label>
+                                                            <select class="form-select" id="id_verano" name="id_verano" required disabled>
                                                                 @foreach ($proverano as $verano)
-                                                                    <option value="{{ $verano->id }}">
-                                                                        {{ $verano->torre }} - #{{$verano->num_apartamento}}</option>
+                                                                    <option value="{{ $verano->id }}"
+                                                                        {{ $verano->id == $propiedadVe->id ? 'selected' : '' }}>
+                                                                        {{ $verano->torre }} - #{{ $verano->num_apartamento }}
+                                                                    </option>
                                                                 @endforeach
                                                             </select>
+                                                            {{-- Campo hidden para que el valor se envíe igual aunque el select esté disabled --}}
+                                                            <input type="hidden" name="id_verano" value="{{ $propiedadVe->id }}">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="color" class="form-label">Seleccione un
@@ -914,122 +915,131 @@
 
                             <div class="modal fade" id="modalEditarEventoedit" tabindex="-1" role="dialog"
                                 aria-labelledby="modalEditarEventoeditLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="modalEditarEventoeditLabel">Editar Evento</h4>
-                                            <!-- Botón de cerrar modal con "X" -->
-                                            <button type="button" class="Close" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"></span>
-                                            </button>
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content"
+                                        style="background-color:rgb(250, 184, 97); border-radius: .9rem; margin-bottom: 20px;">
+                                        <div class="modal-header border-0">
+                                            <h4 class="modal-title fw-bold" id="modalEditarEventoeditLabel">Editar Evento</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                         </div>
+
                                         <div class="modal-body">
                                             <form id="formEditarEvento">
-                                            <div class="mb-3 row">
-                                                        <div class="col-md-6">
-                                                            <label for="id_veranoedit" class="form-label">Propiedad de
-                                                                Verano</label>
-                                                            <select class="form-select" id="id_veranoedit" name="id_veranoedit"
-                                                                required>
-                                                                @foreach ($proverano as $verano)
-                                                                    <option value="{{ $verano->id }}">
-                                                                        {{ $verano->torre }} - #{{$verano->num_apartamento}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <!-- <div class="col-md-6">
-                                                            <label for="colorPickeredit" class="form-label">Seleccione un
-                                                                Color</label>
-                                                            <input type="coloredit" id="colorPickeredit" name="colorPickeredit"
-                                                                class="form-control form-control-color" value="#ff0000" />
-                                                        </div> -->
+                                                {{-- Fila 1: Propiedad --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-6">
+                                                        <label for="id_veranoedit" class="form-label fw-bold">Propiedad de Verano</label>
+                                                        <select class="form-select" id="id_veranoedit" name="id_veranoedit" required disabled>
+                                                            @foreach ($proverano as $verano)
+                                                                <option value="{{ $verano->id }}"
+                                                                    {{ $verano->id == $propiedadVe->id ? 'selected' : '' }}>
+                                                                    {{ $verano->torre }} - #{{ $verano->num_apartamento }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <input type="hidden" name="id_veranoedit" value="{{ $propiedadVe->id }}">
                                                     </div>
-                                                    <div class="mb-3 row">
-                                                        <div class="col-md-6">
-                                                            <label for="inicioedit" class="form-label">Fecha de
-                                                                Inicio</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="inicioedit" name="inicioedit" required>
-                                                                
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="finedit" class="form-label">Fecha de Fin</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="finedit" name="finedit">
+                                                    <!---<div class="col-md-6">
+                                                        <label for="colorPickeredit" class="form-label fw-bold">Seleccione un Color</label>
+                                                        <input type="color" id="colorPickeredit" name="colorPickeredit"
+                                                            class="form-control form-control-color" value="#ff0000" />
+                                                    </div> --->
+                                                </div>
+
+                                                {{-- Fila 2: Fechas y Horas --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Fecha Inicio</label>
+                                                        <input type="date" class="form-control" id="inicioedit_fecha" required>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Hora Inicio</label>
+                                                        <input type="time" class="form-control" id="inicioedit_hora" value="14:00">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Fecha Fin</label>
+                                                        <input type="date" class="form-control" id="finedit_fecha" required>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Hora Fin</label>
+                                                        <input type="time" class="form-control" id="finedit_hora" value="12:00">
+                                                    </div>
+                                                    <input type="hidden" id="inicioedit">
+                                                    <input type="hidden" id="finedit">
+                                                </div>
+
+                                                {{-- Fila 3: Días y Monto diario --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-6">
+                                                        <label for="diaedit" class="form-label fw-bold">Cantidad de Días</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">
+                                                                <i class="fa-solid fa-calendar-days"></i>
+                                                            </span>
+                                                            <input type="number" class="form-control" id="diaedit"
+                                                                name="diaedit" min="1" max="1000000" required readonly>
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3 row">
-                                                        <!-- Campo Cantidad de Días -->
-                                                        <div class="col-md-6">
-                                                            <label for="diaedit" class="form-label">Cantidad de
-                                                                Días</label>
+                                                    <div class="col-md-6">
+                                                        <label for="diarioedit" class="form-label fw-bold">Monto diario</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                            <input type="number" class="form-control" id="diarioedit"
+                                                                name="diarioedit" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Fila 4: Total, Aseo, 10% --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-4">
+                                                        <label for="totaledit" class="form-label fw-bold">Monto del Arriendo</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                            <input type="number" class="form-control" id="totaledit" name="totaledit" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 text-center">
+                                                        <label class="form-label fw-bold d-block">¿Tiene Aseo?</label>
+                                                        <div class="mt-1">
+                                                            <input type="radio" name="aseoCheckedit" id="aseoSiedit" value="si">
+                                                            <label for="aseoSiedit">Sí</label>
+                                                            &nbsp;
+                                                            <input type="radio" name="aseoCheckedit" id="aseoNoedit" value="no">
+                                                            <label for="aseoNoedit">No</label>
+                                                        </div>
+                                                        <div id="camposAseoedit" class="mt-2" style="display: none;">
+                                                            <label class="form-label fw-bold">Detalles del Aseo</label>
                                                             <div class="input-group">
-                                                                <span class="input-group-text">
-                                                                    <i class="fa-solid fa-calendar-days"></i>
-                                                                </span>
-                                                                <input type="number" class="form-control" id="diaedit"
-                                                                    name="diaedit" min="1" max="1000000" required
-                                                                    readonly>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Campo Monto del Arriendo -->
-                                                        <div class="col-md-6">
-                                                            <label for="diarioedit" class="form-label">Monto diario</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text">$</span>
-                                                                <input type="number" class="form-control" id="diarioedit"
-                                                                    name="diarioedit" required>
+                                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                                <input type="text" class="form-control" id="montoInputedit"
+                                                                    placeholder="Ingrese monto" name="montoInputedit">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        <div class="mb-3 row">
-                                                            <!-- Campo Monto del Arriendo -->
-                                                            <div class="col-md-4">
-                                                                <label for="totaledit" class="form-label">Monto del Arriendo</label>
-                                                                <div class="input-group">
-                                                                    <span class="input-group-text">$</span>
-                                                                    <input type="number" class="form-control" id="totaledit" name="totaledit" required>
-                                                                </div>
-                                                            </div>
 
-                                                            <!-- Campo ¿Tiene Aseo? en el medio -->
-                                                            <div class="col-md-4 text-center">
-                                                                <label for="aseoCheckedit">¿Tiene Aseo?</label>
-                                                                <div class="mt-2">
-                                                                    <input type="radio" name="aseoCheckedit" id="aseoSiedit" value="si">
-                                                                    <label for="aseoSi">Sí</label>
-                                                                    <input type="radio" name="aseoCheckedit" id="aseoNoedit" value="no">
-                                                                    <label for="aseoNoedit">No</label>
-                                                                </div>
-                                                                <div id="camposAseoedit" class="form-group mt-2" style="display: none;">
-                                                                    <label class="mt-2">Detalles del Aseo</label>
-                                                                    <div class="input-group">
-                                                                        <span class="input-group-text">$</span>
-                                                                        <input type="text" class="form-control" id="montoInputedit" placeholder="Ingrese monto" name="montoInputedit">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Campo 10% del Monto -->
-                                                            <div class="col-md-4">
-                                                                <label for="porcentajeedit" class="form-label">10% del Monto</label>
-                                                                <div class="input-group">
-                                                                    <span class="input-group-text">$</span>
-                                                                    <input type="text" class="form-control" id="porcentajeedit" name="porcentajeedit" readonly>
-                                                                </div>
+                                                    <div class="col-md-4">
+                                                        <label for="porcentajeedit" class="form-label fw-bold">10% del Monto</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                            <input type="text" class="form-control" id="porcentajeedit"
+                                                                name="porcentajeedit" readonly>
                                                         </div>
+                                                    </div>
+                                                </div>
+
                                             </form>
                                         </div>
-                                        <div class="modal-footer">
-                                            <!-- Botón de cancelar que cierra el modal -->
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal" id="cerrar_modaledit">Cancelar</button>
-                                            <!-- Botón de guardar cambios -->
-                                            <button class="btn btn-primary" id="guardarCambiosedit">Guardar
-                                                Cambios</button>
+
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-danger px-4" id="cerrar_modaledit"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <button class="btn btn-success px-4" id="guardarCambiosedit">
+                                                <i class="fas fa-save me-1"></i> Guardar Cambios
+                                            </button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -1726,9 +1736,9 @@
                         });
                     },
                     error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        $("#loadingOverlay").fadeOut(); // Ocultar overlay en caso de error
-                        alert('Error al procesar la solicitud');
+                        $("#loadingOverlay").fadeOut();
+                        var msg = xhr.responseJSON ? xhr.responseJSON.error + ' — línea ' + xhr.responseJSON.line : error;
+                        alert('Error: ' + msg);
                     }
                 });
 
@@ -1822,6 +1832,12 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+            eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+        displayEventTime: false, // No mostrar hora en vista mensual
         locale: 'es',
         firstDay: 1,
         buttonText: { today: 'Hoy', month: 'Mes', week: 'Semana', day: 'Día' },
@@ -1943,8 +1959,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             var row = `
                             <tr>
                                 <td>${event.torre} - #${event.condominio}</td>
-                                <td>${new Date(event.start).toLocaleDateString('es-CL')}</td>
-                                <td>${new Date(event.end).toLocaleDateString('es-CL')}</td>
+                                <td>${event.start}</td>
+                                <td>${event.end}</td>
                                 <td>${event.dia}</td>
                                 <td>$${new Intl.NumberFormat('es-CL').format(event.diario)}</td>
                                 <td>$${new Intl.NumberFormat('es-CL').format(event.monto || 0)}</td>
@@ -2041,12 +2057,30 @@ document.addEventListener('DOMContentLoaded', function() {
                             modalEditar.show();
 
                             $('#guardarCambiosedit').data('id', idevento);
-                            $("#inicioedit").val(respuesta.inicio);
-                            $("#finedit").val(respuesta.fin);
+                            // Separar fecha y hora del inicio
+                            var inicioDate = respuesta.inicio ? respuesta.inicio.split('T') : ['', ''];
+                            var finDate    = respuesta.fin    ? respuesta.fin.split('T')    : ['', ''];
+
+                            // Si viene con espacio en lugar de T (formato de MySQL)
+                            if (respuesta.inicio && respuesta.inicio.includes(' ')) {
+                                inicioDate = respuesta.inicio.split(' ');
+                                finDate    = respuesta.fin.split(' ');
+                            }
+
+                            $('#inicioedit_fecha').val(inicioDate[0]);
+                            $('#inicioedit_hora').val(inicioDate[1] ? inicioDate[1].substring(0, 5) : '14:00');
+                            $('#finedit_fecha').val(finDate[0]);
+                            $('#finedit_hora').val(finDate[1] ? finDate[1].substring(0, 5) : '12:00');
+
+                            // Actualizar hidden
+                            $('#inicioedit').val(respuesta.inicio);
+                            $('#finedit').val(respuesta.fin);
                             $("#diaedit").val(respuesta.dia);
                             $("#diarioedit").val(respuesta.precio_dia);
                             $("#montoInputedit").val(respuesta.monto);
                             $("#id_veranoedit").val(respuesta.id_verano);
+                            // Después de cargar los demás campos
+                            
 
                             // Verificar si el monto es null
                             if (respuesta.monto === null) {
@@ -2083,8 +2117,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 });
             });
+            // Combinar fecha+hora en edit
+            function actualizarCamposHiddenEdit() {
+                var fi = $('#inicioedit_fecha').val();
+                var hi = $('#inicioedit_hora').val() || '14:00';
+                var ff = $('#finedit_fecha').val();
+                var hf = $('#finedit_hora').val() || '12:00';
+                if (fi) $('#inicioedit').val(fi + 'T' + hi);
+                if (ff) $('#finedit').val(ff + 'T' + hf);
+            }
+
+            ['inicioedit_fecha','inicioedit_hora','finedit_fecha','finedit_hora'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.addEventListener('change', actualizarCamposHiddenEdit);
+            });
+
             $('#guardarCambiosedit').on('click', function() {
 
+                actualizarCamposHiddenEdit();
+    
                 var idevento = $(this).data('id');
 
                 var inicio = $("#inicioedit").val();
@@ -2094,6 +2145,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var total = $("#totaledit").val();
                 var monto = $("#montoInputedit").val();
                 var id_verano = $("#id_veranoedit").val();
+                
 
                 var arg = {
                     id: idevento,
@@ -2104,6 +2156,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     monto: monto,
                     id_verano: id_verano,
                     total: total,
+                
                 }
                 console.log('argumentos',arg);
                 
@@ -2609,6 +2662,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         .btn:hover {
             opacity: 0.8;
+        }
+        /* Quitar flechas de inputs type number */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
         }
     </style>
 @endsection

@@ -40,8 +40,11 @@ public function getEvents(Request $request)
             'title'     =>
                 ($event->verano->torre ?? '') . ' - #' . ($event->verano->num_apartamento ?? '') . "\n" .
                 'Total: $' . number_format($event->total, 0, ',', '.'),
-            'start'     => \Carbon\Carbon::parse($event->inicio)->toDateString(),
-            'end'       => \Carbon\Carbon::parse($event->fin)->addDay()->toDateString(), // +1 día para que FullCalendar muestre bien el rango
+            
+            //aquiiiii revisar
+            'start' => \Carbon\Carbon::parse($event->inicio)->toDateTimeString(),
+            'end'   => \Carbon\Carbon::parse($event->fin)->toDateTimeString(), // +1 día para que FullCalendar muestre bien el rango
+            
             'color'     => $event->color,
             'total'     => $event->total,
             'diario'    => $event->precio_dia,

@@ -34,16 +34,13 @@
                                             <form id="eventForm">
                                                 @csrf
                                                 <div class="mb-3 row">
-                                                    <div class="col-6">
-                                                        <label for="id_verano" class="form-label">Propiedad de Verano</label>
-                                                        <select class="form-select" id="id_verano" name="id_verano" required>
-                                                            <option value="" disabled selected>Seleccione una propiedad</option>
-                                                           @foreach ($proverano as $verano)
-                                                                    <option value="{{ $verano->id }}">
-                                                                        {{ $verano->direccion }}</option>
-                                                                @endforeach
-                                                        </select>
-                                                    </div>
+                                                    <div class="col-md-6">
+                                                    <label class="form-label fw-bold">Propiedad</label>
+                                                    <input type="text" class="form-control" 
+                                                        value="{{ $propiedadVe->torre }} - #{{ $propiedadVe->num_apartamento }}" 
+                                                        readonly style="background:#f8f9fa;">
+                                                    <input type="hidden" id="id_verano" name="id_verano" value="{{ $propiedadVe->id }}">
+                                                </div>
                                                     <div class="col-4">
                                                         <label for="color" class="form-label">Seleccione un Color</label>
                                                         <input type="color" id="colorPicker" name="colorPicker" class="form-control form-control-color" value="#ff0000"/>
@@ -240,6 +237,12 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
+            displayEventTime: false, // No mostrar hora en vista mensual
             locale: 'es',
             buttonText: {
                 today: 'Hoy',
@@ -290,7 +293,6 @@
                     fin: fin,
                     total: total,
                     porcentaje: porcentaje,
-                    color: color,
                     dia: dia,
                     precio_dia: precio_dia,
                 })
@@ -324,8 +326,8 @@
                         var row = `
                         <tr>
                             <td>${event.torre} - #${event.condominio}</td>
-                            <td>${new Date(event.start).toLocaleDateString('es-CL')}</td>
-                            <td>${new Date(event.end).toLocaleDateString('es-CL')}</td>
+                            <td>${event.start}</td>
+                            <td>${event.end}</td>
                             <td>${event.dia}</td>
                             <td>$${new Intl.NumberFormat('es-CL').format(event.diario)}</td>
                             <td>$${new Intl.NumberFormat('es-CL').format(event.monto || 0)}</td>
