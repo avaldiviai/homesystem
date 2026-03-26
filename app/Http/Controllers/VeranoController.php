@@ -289,11 +289,7 @@ class VeranoController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'message' => 'Error al actualizar la propiedad',
-                'error'   => $e->getMessage(),
-                'line'    => $e->getLine()
-            ], 500);
+            return response()->json(['message' => 'Error al actualizar la propiedad', 'error' => $e->getMessage()], 500);
         }
     }
 

@@ -1726,9 +1726,9 @@
                         });
                     },
                     error: function(xhr, status, error) {
-                        $("#loadingOverlay").fadeOut();
-                        var msg = xhr.responseJSON ? xhr.responseJSON.error + ' — línea ' + xhr.responseJSON.line : error;
-                        alert('Error: ' + msg);
+                        console.error('Error:', error);
+                        $("#loadingOverlay").fadeOut(); // Ocultar overlay en caso de error
+                        alert('Error al procesar la solicitud');
                     }
                 });
 
