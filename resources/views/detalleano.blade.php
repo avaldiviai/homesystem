@@ -1775,17 +1775,51 @@
                 },
                 success: function(respuesta) {
                     console.log("respuesta", respuesta);
+                    
                     $("#modalNuevoArrendatario").modal('hide');
                     $("#successModal").modal('show');
-                    $("#texto_success").html("El Arrendatario se ha creado exitosamente");
-                },
-                error: function(jqXHR) {
-                    if (jqXHR.responseJSON && jqXHR.responseJSON.mensaje) {
-                        alert(jqXHR.responseJSON.mensaje);
-                    } else {
-                        alert('Ocurrió un error inesperado.');
+                    $("#texto_success").html("El Arriendo se ha creado exitosamente");
+
+                    // 2. Extraer los datos de la respuesta (Asegúrate que tu controlador los envíe así)
+                    var arriendo = respuesta.nueva_arriendo;
+                    var nombreArrendatario = arriendo.arrendatario ? arriendo.arrendatario.nombre : 'N/A';
+                    
+                    // Formatear el valor del arriendo (ej: $ 500.000)
+                    var valorFormateado = new Intl.NumberFormat('es-CL').format(arriendo.valor_real);
+                    
+                    // Obtener el porcentaje de comisión
+                    var porcentajeComision = arriendo.comision ? arriendo.comision.porcentaje : '0';
+
+                    // 3. Crear el HTML de la nueva fila
+                    // Usamos 'table-success' para que resalte que es nueva
+                    var nuevaFila = `
+                        <tr class="table-success" style="border-left: 5px solid #28a745;">
+                            <td>#</td>
+                            <td>${nombreArrendatario}</td>
+                            <td>${arriendo.fecha_entrega}</td>
+                            <td>${arriendo.fecha_pago}</td>
+                            <td>$ ${valorFormateado}</td>
+                            <td>${porcentajeComision}</td> 
+                            <td class="text-center">
+                                <a href="#" class="btn btn-primary rounded-circle btn-sm m-1"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="btn btn-danger rounded-circle btn-sm m-1"><i class="fas fa-trash-alt"></i></a>
+                                <a href="#" class="btn btn-success rounded-circle btn-sm m-1"><i class="fa-regular fa-folder"></i></a>
+                            </td>
+                        </tr>
+                    `;
+
+                    // 4. Inyectar la fila al principio de la tabla
+                    // Usamos prepend para que aparezca arriba del todo
+                    $("table tbody").prepend(nuevaFila);
+
+                    // 5. Cerrar el modal y limpiar el formulario
+                    $("#modalAgregarArriendo").modal('hide'); 
+                    if ($("#formArriendo").length > 0) {
+                        $("#formArriendo")[0].reset();
                     }
-                }
+                    archivosSeleccionados = []; // Limpiar array de archivos
+                    $('#lista-Datos').empty(); // Limpiar lista visual de archivos
+                },
             });
         });
     

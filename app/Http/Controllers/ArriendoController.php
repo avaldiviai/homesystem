@@ -96,7 +96,9 @@ class ArriendoController extends Controller
         // $nuevoContrato->save(); // Guardar el contrato después de agregar las rutas de los archivos
     
         // Retornar una respuesta JSON sin incluir los archivos
-        return response()->json(['nueva_arriendo' => $new_arriendo]);
+        return response()->json([
+            'nueva_arriendo' => $new_arriendo->load('arrendatario', 'comision')
+        ]);
     }
 
     
