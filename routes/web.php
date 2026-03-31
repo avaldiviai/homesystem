@@ -138,6 +138,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     Route::post('/venderpropiedad{idPropiedad}', [PropiedadController::class, 'vender']);
 
+
+    // Videos y archivos - Propiedades Venta
+    Route::post('/propiedad_venta_video',                    [PropiedadController::class, 'guardarVideoVenta']);
+    Route::post('/propiedad_venta_inventario/{idPropiedad}', [PropiedadController::class, 'guardarInventarioVenta']);
+    Route::post('/propiedad_venta_documento/{idPropiedad}',  [PropiedadController::class, 'guardarDocumentoVenta']);
+    Route::delete('/video_venta/{id}',                       [PropiedadController::class, 'videoDelete']);
+
     ////////// RUTAS CONTRATOS //////////
     Route::get('/contratos', [ContratoController::class, 'index'])->name('contratos.index');
     Route::get('arriendos', [ContratoController::class, 'create'])->name('contratos.create');

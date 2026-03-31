@@ -1235,23 +1235,28 @@ class PropiedadController extends Controller
         return view('propiedadesVentaDetalles', compact('sub_est','sub_bodega','detalles', 'new_Propietarios' ,'imagen', 'detallespropiedad','propietarios','precios','mantenimiento'));
     }
 
-    //Ediciond de datos 
+    // =====================================================================
+    // FIX APLICADO: edicionDetallesVenta
+    // Cambios:
+    //   1. Video: nombre sanitizado (sin caracteres especiales) + ruta corregida
+    //   2. Documentos: se procesan inventario_archivo, acta, contrato y poder
+    //      usando ArchivoPropiedad (igual que edicionDetalles)
+    // =====================================================================
     public function edicionDetallesVenta(Request $request){
         $id_propiedad = $request->id_propiedad;
 
         $ciudad = Propiedad::where('id', $id_propiedad)->first();
         $ciudad->direccion = $request->direccion;
         $ciudad->ciudad = $request->ciudad;
-
         $ciudad->condominio = $request->condominio;
         $ciudad->tipo_vivienda = $request->tipo_vivienda;
-        $ciudad->tipo_cocina = $request->tipo_cocina;
-        // $ciudad->num_estacionamiento = $request->estacionamiento;
+        $ciudad->tipo_cocina = null;
         $ciudad->torre = $request->torre;
         $ciudad->num_torre = $request->numero_torre;
-        // $ciudad->bodega = $request->bodega;
         $ciudad->rol = $request->rol;
         $ciudad->deuda_hipotecaria = $request->deuda_hipotecaria;
+        $ciudad->tipo_moneda_deuda = $request->tipo_moneda_deuda ?? $ciudad->tipo_moneda_deuda;
+        $ciudad->institucion = $request->institucion ?? $ciudad->institucion;
         $ciudad->contribuciones = $request->contribuciones ?? $ciudad->contribuciones;
         $ciudad->derechos_aseo = $request->derechos_aseo ?? $ciudad->derechos_aseo;
         $ciudad->exclusividad = $request->exclusividad ?? $ciudad->exclusividad;
@@ -1268,32 +1273,30 @@ class PropiedadController extends Controller
         $preciosEdit = Precios::where('id_propiedad', $id_propiedad)->first();
         $preciosEdit->venta = $request->precio;
         $preciosEdit->tipo_moneda = $request->tipo_moneda;
-        // $preciosEdit->ano_corrido = $request->ano_corrido;
         $preciosEdit->save();
-        // dd($request->all());
-        $new_sub_detalles_edit = SubDetalles::where('id_propiedad',$id_propiedad)->where('tipo_detalle',1)->first();
+
+        $new_sub_detalles_edit = SubDetalles::where('id_propiedad', $id_propiedad)->where('tipo_detalle', 1)->first();
         $new_sub_detalles_edit->monto = $request->monto;
         $new_sub_detalles_edit->rol = $request->rol_est;
         $new_sub_detalles_edit->estacionamiento = $request->estacionamiento;
         $new_sub_detalles_edit->techado = $request->techado;
+        $new_sub_detalles_edit->moneda = $request->moneda_est ?? $new_sub_detalles_edit->moneda;
         $new_sub_detalles_edit->id_propiedad = $ciudad->id;
         $new_sub_detalles_edit->tipo_detalle = 1;
         $new_sub_detalles_edit->tipo_propiedad = 2;
-
         $new_sub_detalles_edit->save();
-        
-        $new_sub_detalles_dos_edit = SubDetalles::where('id_propiedad',$id_propiedad)->where('tipo_detalle',2)->first();
+
+        $new_sub_detalles_dos_edit = SubDetalles::where('id_propiedad', $id_propiedad)->where('tipo_detalle', 2)->first();
         $new_sub_detalles_dos_edit->monto = $request->monto_b;
         $new_sub_detalles_dos_edit->rol = $request->rol_b;
         $new_sub_detalles_dos_edit->bodega = $request->bodega;
+        $new_sub_detalles_dos_edit->moneda = $request->moneda_bo ?? $new_sub_detalles_dos_edit->moneda;
         $new_sub_detalles_dos_edit->id_propiedad = $ciudad->id;
         $new_sub_detalles_dos_edit->tipo_detalle = 2;
         $new_sub_detalles_dos_edit->tipo_propiedad = 2;
-
         $new_sub_detalles_dos_edit->save();
 
         $mantenimientoEdit = Mantenimiento::where('id_propiedad', $id_propiedad)->first();
-
         if ($mantenimientoEdit) {
             $nombre = $request->input('nombre');
             $descripcion = $request->input('descripcion_man');
@@ -1320,14 +1323,12 @@ class PropiedadController extends Controller
             if ($this->valorValido($envioCorreo)) {
                 $mantenimientoEdit->envio_correo = $envioCorreo;
             }
-        
+
             $mantenimientoEdit->save();
         }
-        
 
-        $detallesEdit = Detallepropiedad::where('id_propiedad', $id_propiedad)->first();
+        $detallesEdit = DetallePropiedad::where('id_propiedad', $id_propiedad)->first();
         if ($detallesEdit) {
-            // Recorremos cada campo a actualizar y verificamos si el valor no es null
             $detallesEdit->ano_construccion = $request->ano_construccion ?? $detallesEdit->ano_construccion;
             $detallesEdit->piso = $request->piso ?? $detallesEdit->piso;
             $detallesEdit->dormitorios = $request->dormitorios ?? $detallesEdit->dormitorios;
@@ -1336,15 +1337,12 @@ class PropiedadController extends Controller
             $detallesEdit->cocina = $request->cocina ?? $detallesEdit->cocina;
             $detallesEdit->logia = $request->logia ?? $detallesEdit->logia;
             $detallesEdit->agua_caliente = $request->agua_caliente ?? $detallesEdit->agua_caliente;
-            $detallesEdit->espacio_lavadora = $request->espacio_lavadora ?? $detallesEdit->espacio_lavadora;
-            $detallesEdit->lavadora = $request->lavadora ?? $detallesEdit->lavadora;
             $detallesEdit->inventario = $request->inventario ?? $detallesEdit->inventario;
             $detallesEdit->mt2_construido = $request->mt2_construido ?? $detallesEdit->mt2_construido;
             $detallesEdit->mt2_terraza = $request->mt2_terraza ?? $detallesEdit->mt2_terraza;
             $detallesEdit->mt2_total = $request->mt2_total ?? $detallesEdit->mt2_total;
-            $detallesEdit->estacionamiento_visitas = $request->estacionamiento_visita ?? $detallesEdit->estacionamiento_visitas;
-            $detallesEdit->gasto_comun = $request->gasto_comun 
-                ? (int) preg_replace('/[^0-9]/', '', $request->gasto_comun) 
+            $detallesEdit->gasto_comun = $request->gasto_comun
+                ? (int) preg_replace('/[^0-9]/', '', $request->gasto_comun)
                 : $detallesEdit->gasto_comun;
             $detallesEdit->descripcion = $request->descripcion ?? $detallesEdit->descripcion;
             $detallesEdit->ascensor = $request->ascensor ?? $detallesEdit->ascensor;
@@ -1356,49 +1354,94 @@ class PropiedadController extends Controller
             $detallesEdit->ciclovia = $request->ciclovia ?? $detallesEdit->ciclovia;
             $detallesEdit->piscina = $request->piscina ?? $detallesEdit->piscina;
             $detallesEdit->area_verde = $request->verde ?? $detallesEdit->area_verde;
+            $detallesEdit->conserjeria = $request->conserjeria ?? $detallesEdit->conserjeria;
 
-
-            // Guardamos los cambios
             $detallesEdit->save();
         }
 
-
+        // Guardar imágenes
         if ($request->file('imagenes') != null) {
-            // Guardar las imágenes en la carpeta pública y la información en la base de datos
             foreach ($request->file('imagenes') as $imagenFile) {
-                // Guardar la imagen en la carpeta pública
                 $imageName = time() . '_' . $imagenFile->getClientOriginalName();
                 $imagenPath = $imagenFile->storeAs('images', $imageName, 'public');
 
-                // Guardar la información de la imagen en la base de datos
                 $imagen = new ImgPropiedad();
                 $imagen->nombre = $request->rol;
-                $imagen->link = '/storage/public/' . $imagenPath; // Guardamos solo la ruta de la imagen
-                $imagen->id_propiedad = $ciudad->id; // Asignar el ID del detalle de venta
+                $imagen->link = '/storage/public/' . $imagenPath;
+                $imagen->id_propiedad = $ciudad->id;
                 $imagen->save();
             }
         }
-        // Decodificar la cadena JSON a un array asociativo
-        $PropietariosAgregados = json_decode($request->PropietariosAgregados, true);
-        // dd($request->all());
 
-        // Verificar si hay propietario agregados en la solicitud y procesarlos
+        // FIX 1: Guardar video con nombre sanitizado y ruta correcta (sin /public/ extra)
+        if ($request->hasFile('videos')) {
+            $videoFile = $request->file('videos');
+            $ext = $videoFile->getClientOriginalExtension() ?: 'mp4';
+            $videoName = time() . '_video.' . $ext;
+            $videoPath = $videoFile->storeAs('videos', $videoName, 'public');
+
+            $video = new VidArriendo;
+            $video->video = '/storage/' . $videoPath;
+            $video->id_propiedad = $ciudad->id;
+            $video->estado = 1;
+            $video->save();
+        }
+
+        // FIX 2: Guardar documentos (inventario, acta, contrato, poder) en ArchivoPropiedad
+        $archivo = ArchivoPropiedad::where('id_propiedad', $ciudad->id)->first();
+        if (!$archivo) {
+            $archivo = new ArchivoPropiedad();
+            $archivo->id_propiedad = $ciudad->id;
+        }
+
+        if ($request->hasFile('inventario_archivo')) {
+            $invFile = $request->file('inventario_archivo');
+            $ext = $invFile->getClientOriginalExtension() ?: 'pdf';
+            $invName = time() . '_inventario.' . $ext;
+            $invPath = $invFile->storeAs('inventario', $invName, 'public');
+            $archivo->inventario = '/storage/' . $invPath;
+        }
+
+        if ($request->hasFile('acta')) {
+            $actaFile = $request->file('acta');
+            $ext = $actaFile->getClientOriginalExtension() ?: 'pdf';
+            $actaName = time() . '_acta.' . $ext;
+            $actaPath = $actaFile->storeAs('acta', $actaName, 'public');
+            $archivo->acta_entrega = '/storage/' . $actaPath;
+        }
+
+        if ($request->hasFile('contrato')) {
+            $contratoFile = $request->file('contrato');
+            $ext = $contratoFile->getClientOriginalExtension() ?: 'pdf';
+            $contratoName = time() . '_contrato.' . $ext;
+            $contratoPath = $contratoFile->storeAs('contrato', $contratoName, 'public');
+            $archivo->contrato = '/storage/' . $contratoPath;
+        }
+
+        if ($request->hasFile('poder')) {
+            $poderFile = $request->file('poder');
+            $ext = $poderFile->getClientOriginalExtension() ?: 'pdf';
+            $poderName = time() . '_poder.' . $ext;
+            $poderPath = $poderFile->storeAs('poder', $poderName, 'public');
+            $archivo->poder_adm = '/storage/' . $poderPath;
+        }
+
+        $archivo->save();
+
+        // Guardar propietarios nuevos
+        $PropietariosAgregados = json_decode($request->PropietariosAgregados, true);
         if (!empty($PropietariosAgregados)) {
             foreach ($PropietariosAgregados as $propietario) {
-                // Crear una nueva instancia de CategoriaVenta para cada propietario agregado
                 $new_Propietario = new Propietario_propiedades;
-                // Asignar los valores del propietario desde la solicitud
                 $new_Propietario->id_propiedad = $ciudad->id;
-                $new_Propietario->id_propietario = $propietario['id']; // Acceder a 'id' del propietario
-                // Guardar el propietario
+                $new_Propietario->id_propietario = $propietario['id'];
                 $new_Propietario->save();
             }
         }
 
-
         return Response()->json([
             'propiedad_editada' => $ciudad,
-            'precios_editados' => $preciosEdit,
+            'precios_editados'  => $preciosEdit,
             'detalles_editados' => $detallesEdit
         ]);
     }
@@ -1510,11 +1553,6 @@ class PropiedadController extends Controller
         })->get();
 
 
-        // Si $detallespropiedad es null, no pasa datos inválidos
-        // if (!$detallespropiedad) {
-        //     $detallespropiedad = null;
-        // }
-
         return view('propiedadesDetalles', compact('doc','comision','arrendatario','estados','mantenimiento','arriendos','sub_techado','sub_bodega','sub_est','videos', 'new_Propietarios', 'detalles', 'imagen', 'propietarios', 'detallespropiedad', 'precios'));
     }
         /////////////////// PROPIEDAD DETALLES ///////////////////////////////////////
@@ -1543,20 +1581,6 @@ class PropiedadController extends Controller
 
             $arriendos = Arriendo::where('id_propiedad', $id)->where('estado',1)->orderBy('fecha_entrega', 'desc')->get();
             $arrendatario = Arrendatario::where('estado', 1)->get();
-            // $arriendo = Arriendo::where('id_propiedad', $id)->first();
-    
-            // if ($arriendo) {
-            //     // Se puede acceder a $arriendo->fecha_entrega sin errores, aunque sea null
-            //     if (is_null($arriendo->fecha_entrega)) {
-            //         // Si fecha_entrega es null, hacer algo
-            //     } else {
-            //         // Si fecha_entrega tiene un valor, hacer algo diferente
-            //     }
-            // } else {
-            //     // Si no se encuentra el arriendo
-            // }
-            
-            
     
             $detallespropiedad = DetallePropiedad::where('id_propiedad', $id)->first();
     
@@ -1565,12 +1589,6 @@ class PropiedadController extends Controller
                     ->from('propietario_propiedades')
                     ->where('id_propiedad', $id); // Filtrar según la ID específica
             })->get();
-    
-    
-            // Si $detallespropiedad es null, no pasa datos inválidos
-            // if (!$detallespropiedad) {
-            //     $detallespropiedad = null;
-            // }
     
             return view('detalleano', compact('doc','comision','estados','arrendatario','mantenimiento','arriendos','sub_bodega','sub_est','videos', 'new_Propietarios', 'detalles', 'imagen', 'propietarios', 'detallespropiedad', 'precios'));
         }
@@ -1610,12 +1628,6 @@ class PropiedadController extends Controller
                     ->where('id_propiedad', $id); // Filtrar según la ID específica
             })->get();
     
-    
-            // Si $detallespropiedad es null, no pasa datos inválidos
-            // if (!$detallespropiedad) {
-            //     $detallespropiedad = null;
-            // }
-    
             return view('trabajador.detalleano', compact('arriendos','comision','estados','doc','arrendatario','mantenimiento','sub_bodega','sub_est','videos', 'new_Propietarios', 'detalles', 'imagen', 'propietarios', 'detallespropiedad', 'precios'));
         }
     public function trabajadorpropiedadesDetalles($id)
@@ -1649,11 +1661,6 @@ class PropiedadController extends Controller
         ->where('tipo_detalle',2)
         ->first();
 
-    
-        // Si $detallespropiedad es null, no pasa datos inválidos
-        // if (!$detallespropiedad) {
-        //     $detallespropiedad = null;
-        // }
     
         return view('trabajador/propiedadesDetallestrabajador', compact('arriendos','comision','estados','doc','arrendatario','mantenimiento','sub_bodega','sub_est','videos','new_Propietarios','detalles', 'imagen', 'propietarios', 'detallespropiedad','precios'));
     }
@@ -1716,11 +1723,6 @@ class PropiedadController extends Controller
     $arriendos = Arriendo::where('id_propiedad', $id)->where('estado',1)->orderBy('fecha_entrega', 'desc')->get();
     
  
-     // Si $detallespropiedad es null, no pasa datos inválidos
-     // if (!$detallespropiedad) {
-     //     $detallespropiedad = null;
-     // }
- 
      return view('obrero/propiedadesDetallesObrero', compact('arriendos','comision','estados','doc','arrendatario','mantenimiento','sub_bodega','sub_est','videos','new_Propietarios','detalles', 'imagen', 'propietarios', 'detallespropiedad','precios'));
  }
     /////////////////// PROPIEDAD DETALLES ///////////////////////////////////////
@@ -1753,8 +1755,6 @@ class PropiedadController extends Controller
 
                 $arriendos = Arriendo::where('id_propiedad', $id)->where('estado',1)->orderBy('fecha_entrega', 'desc')->get();
                 
-                
-                
         
                 $detallespropiedad = DetallePropiedad::where('id_propiedad', $id)->first();
         
@@ -1763,12 +1763,6 @@ class PropiedadController extends Controller
                         ->from('propietario_propiedades')
                         ->where('id_propiedad', $id); // Filtrar según la ID específica
                 })->get();
-        
-        
-                // Si $detallespropiedad es null, no pasa datos inválidos
-                // if (!$detallespropiedad) {
-                //     $detallespropiedad = null;
-                // }
         
                 return view('obrero.detalleano', compact('arriendos','comision','estados','doc','arrendatario','mantenimiento','sub_bodega','sub_est','videos', 'new_Propietarios', 'detalles', 'imagen', 'propietarios', 'detallespropiedad', 'precios'));
             }
@@ -1944,10 +1938,83 @@ public function PropietarioDeleteObrero($idPropietario){
 
     return Response()->json(['success' => 'Propiedad vendidad correctamente']);
  }
+
+ // Guardar video de propiedad venta (AJAX inmediato)
+    public function guardarVideoVenta(Request $request)
+    {
+        $videoFile = $request->file('videos');
+        $ext       = $videoFile->getClientOriginalExtension() ?: 'mp4';
+        $videoName = time() . '_video.' . $ext;
+        $videoPath = $videoFile->storeAs('videos', $videoName, 'public');
+ 
+        $video = new VidArriendo();
+        $video->video        = '/storage/' . $videoPath;
+        $video->id_propiedad = $request->Id;
+        $video->estado       = 1;
+        $video->save();
+ 
+        return response()->json([
+            'success' => true,
+            'id'      => $video->id,
+            'url'     => asset('storage/' . $videoPath),
+            'message' => 'Video guardado correctamente',
+        ]);
+    }
+ 
+    // Guardar inventario de propiedad venta (AJAX inmediato)
+    public function guardarInventarioVenta(Request $request, $idPropiedad)
+    {
+        if (!$request->hasFile('inventario')) {
+            return response()->json(['success' => false, 'message' => 'No se recibió archivo'], 400);
+        }
+ 
+        $file     = $request->file('inventario');
+        $ext      = $file->getClientOriginalExtension() ?: 'pdf';
+        $fileName = time() . '_inventario.' . $ext;
+        $filePath = $file->storeAs('inventario', $fileName, 'public');
+ 
+        $archivo = ArchivoPropiedad::firstOrNew(['id_propiedad' => $idPropiedad]);
+        $archivo->id_propiedad = $idPropiedad;
+        $archivo->inventario   = '/storage/' . $filePath;
+        $archivo->save();
+ 
+        return response()->json([
+            'success' => true,
+            'url'     => asset('storage/' . $filePath),
+            'nombre'  => $file->getClientOriginalName(),
+            'message' => 'Inventario guardado correctamente',
+        ]);
+    }
+ 
+    // Guardar documento adicional de propiedad venta (AJAX inmediato)
+    public function guardarDocumentoVenta(Request $request, $idPropiedad)
+    {
+        if (!$request->hasFile('documento')) {
+            return response()->json(['success' => false, 'message' => 'No se recibió archivo'], 400);
+        }
+ 
+        $file     = $request->file('documento');
+        $ext      = $file->getClientOriginalExtension() ?: 'pdf';
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('archivospro', $fileName, 'public');
+ 
+        $nuevo = new ArchivoPropiedad();
+        $nuevo->id_propiedad = $idPropiedad;
+        $nuevo->archivo      = '/storage/' . $filePath;
+        $nuevo->save();
+ 
+        return response()->json([
+            'success' => true,
+            'id'      => $nuevo->id,
+            'url'     => asset('storage/' . $filePath),
+            'nombre'  => $file->getClientOriginalName(),
+            'message' => 'Documento guardado correctamente',
+        ]);
+    }
+    
 private function valorValido($valor): bool
 {
     return $valor !== null && $valor !== 'undefined';
 }
 
 }
-
