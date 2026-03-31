@@ -40,19 +40,13 @@
                                         value="{{$precios->diciembre}}"
                                         oninput="formatearMiles(this)"
                                         required>
-                                    <div class="input-group-text p-1">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox"
-                                                class="custom-control-input"
-                                                id="switchUF">
-                                            <label class="custom-control-label" for="switchUF"></label>
-                                            <span id="monedaTexto" class="ms-2 fw-bold">CLP</span>
-                                        </div>
+                                        
+                                    <div class="input-group-text">
+                                        <span class="fw-bold text-dark">CLP</span>
                                     </div>
-                                    
                                 </div>
                                 <input type="hidden" id="tipo_moneda" value="CLP">
-                            </div>  
+                            </div>
                             <div class="col-lg-4 mb-3">
                                     <label for="direccionedit">Direccion de la propiedad</label>
                                     <input type="text" id="direccionedit" class="form-control"  value="{{$detalles->direccion}}">
@@ -233,23 +227,8 @@
                                                 placeholder="Ej: 480.000" maxlength="20" required>
                                         </div>
                                     </div>
-
+                                
                                     <!-- Campo 2 -->
-                                    <div class="form-group mb-3 col-4 text-center">
-                                        <label class="d-block mb-2"><b>¿Incluye Mes de Garantía?</b></label>
-                                        
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="mes_garantia" id="mesGarantiaSi" value="1" required>
-                                            <label class="form-check-label" for="mesGarantiaSi">Sí</label>
-                                        </div>
-
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="mes_garantia" id="mesGarantiaNo" value="0">
-                                            <label class="form-check-label" for="mesGarantiaNo">No</label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Campo 3 -->
                                     <div class="form-group mb-3 col-4">
                                         <label for="gastosComunesInput"><b>Gastos Comunes</b></label>
                                         <div class="input-group">
@@ -258,10 +237,15 @@
                                                 placeholder="Ej: 450.000" maxlength="20" required>
                                         </div>
                                     </div>
-                                
-                                    <div class="form-group mb-3 col-lg-4">
+                                    <div class="form-group mb-3 col-lg-4"> 
                                         <label for="fechaPagoInput"><b>Fecha de Pago</b></label>
-                                        <input type="date" class="form-control" id="fechaPagoInput" required>
+                                        <select name="fecha_pago" class="form-control" id="fechaPagoInput" required>
+                                            <option value="" selected disabled>Elija el día de cobro (1-31)</option>
+                                            
+                                            @for ($i = 1; $i <= 31; $i++)
+                                                <option value="{{ $i }}">Día {{ $i }} de cada mes</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                     <div class="form-group mb-3 col-lg-4">
                                         <label for="estado" class=""><b>Estado del pago</b></label>
@@ -1633,7 +1617,7 @@
             // var fecha_devolucion = $("#fechaDevolucionInput").val();
             var fecha_entrega = $("#fechaEntregaInput").val();
             var valor_arriendo = $("#valorArriendoInput").val();
-            var mes_garantia = $('input[name="mes_garantia"]:checked').val(); // obtiene el valor 1 o 0
+            //var mes_garantia = $('input[name="mes_garantia"]:checked').val(); // obtiene el valor 1 o 0
             var gastos_comunes = $("#gastosComunesInput").val();
             var fecha_pago = $("#fechaPagoInput").val();
             var propiedades = $("#propiedadesInput").val();
@@ -1651,7 +1635,7 @@
             formData.append('id_propiedad', id_propiedad);
             formData.append('fecha_entrega', fecha_entrega);
             formData.append('valor_arriendo', valor_arriendo);
-            formData.append('mes_garantia', mes_garantia);
+            //formData.append('mes_garantia', mes_garantia);
             formData.append('gastos_comunes', gastos_comunes);
             formData.append('fecha_pago', fecha_pago);
             formData.append('propiedades', propiedades);
