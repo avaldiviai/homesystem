@@ -3532,7 +3532,7 @@ async function generarContratoWord() {
         { field: numero, name: 'Número del departamento' },
         { field: valorArriendo, name: 'Valor del arriendo' },
         { field: gastosComunes, name: 'Gastos comunes' },
-        { field: mesesGarantia, name: 'Meses de garantía' },
+        //{ field: mesesGarantia, name: 'Meses de garantía' },
         { field: cgeCliente, name: 'Número de cliente CGE' },
         { field: aguasCliente, name: 'Número de cliente Aguas del Valle' }
     ];
