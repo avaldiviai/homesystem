@@ -1348,19 +1348,6 @@
                                 <small id="errorCorreo" class="text-danger"></small>
 
                             </div>
-
-                            <div class="form-group mb-3 col-6">
-                                <label for="direccionInput"><b>Direccion</b></label>
-                                <input type="text" class="form-control mt-2" id="direccionInput" placeholder="Ej: av.libertades" required>
-                                <small id="errorDireccion" class="text-danger"></small>
-
-                            </div>
-                            <div class="form-group mb-3 col-6">
-                                <label for="ciudadInput"><b>Ciudad</b></label>
-                                <input type="text" class="form-control mt-2" id="ciudadInput" placeholder="Ciudad" required>
-                                <small id="errorCiudad" class="text-danger"></small>
-
-                            </div>
                         </div>
                     </div>
                 </form>
