@@ -2017,4 +2017,59 @@ private function valorValido($valor): bool
     return $valor !== null && $valor !== 'undefined';
 }
 
+public function editarMantenimiento(Request $request, $id)
+{
+    $mante = Mantenimiento::findOrFail($id);
+    $mante->nombre = $request->nombre;
+    $mante->descripcion = $request->descripcion;
+    $mante->fecha_mantencion = $request->fecha;
+    $mante->meses = $request->meses;
+    $mante->fecha_prox_man = $request->proxima_fecha;
+
+    $docUrl = null;
+    if ($request->hasFile('doc')) {
+        $archivo = $request->file('doc');
+        $nombre = time() . '_' . $archivo->getClientOriginalName();
+        $ruta = $archivo->storeAs('mantenciones', $nombre, 'public');
+        $mante->doc = $ruta;
+        $docUrl = '/storage/' . $ruta;
+    }
+
+    $mante->save();
+
+    return response()->json([
+        'message' => 'Mantenimiento actualizado',
+        'doc_url' => $docUrl
+    ]);
+}
+
+public function eliminarDocumentoPropiedad(Request $request, $id)
+{
+    $archivo = ArchivoPropiedad::findOrFail($id);
+    $tipo = $request->tipo;
+
+    $campo = match($tipo) {
+        'inventario' => 'inventario',
+        'acta'       => 'acta_entrega',
+        'contrato'   => 'contrato',
+        'poder'      => 'poder_adm',
+        default      => null,
+    };
+
+    if (!$campo) {
+        return response()->json(['error' => 'Tipo inválido'], 400);
+    }
+
+    // Eliminar archivo físico si existe
+    if ($archivo->$campo) {
+        $path = str_replace('/storage/public/', '', $archivo->$campo);
+        Storage::disk('public')->delete($path);
+    }
+
+    $archivo->$campo = null;
+    $archivo->save();
+
+    return response()->json(['message' => 'Documento eliminado correctamente']);
+}
+
 }
