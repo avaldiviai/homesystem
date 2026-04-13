@@ -372,6 +372,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     Route::delete('/mantencion/{idImg}', [PropiedadController::class, 'mantenciondelete']);
     Route::post('/guardar/mantenciones', [PropiedadController::class, 'guardarMantenciones']);
+
+    // Editar mantenimiento
+    Route::post('/guardar/mantenimiento-editar/{id}', [PropiedadController::class, 'editarMantenimiento']);
+
+    // Eliminar documento de propiedad
+    Route::post('/eliminar-documento-propiedad/{id}', [PropiedadController::class, 'eliminarDocumentoPropiedad']);
 });
 
 Route::middleware(['auth', 'trabajador'])->group(function () {

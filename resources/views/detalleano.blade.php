@@ -547,6 +547,7 @@
                                             <th>Fecha de Mantención</th>
                                             <th>Descripción</th>
                                             <th>Documento</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -569,31 +570,70 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nombre</th>
-                                        <th>Descripcion</th>
-                                        <th>Fecha de la Mantencion</th>
-                                        <th>Cada Cuantos Meses</th>
-                                        <th>Proxima Mantencion</th>
-                                        <th>Accion</th>
+                                        <th>Fecha Mantención</th>
+                                        <th>Descripción</th>
+                                        <th>Meses</th>
+                                        <th>Próxima Fecha</th>
+                                        <th>Documento</th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($mantenimiento as $mante)
                                         <tr>
-                                                <td>{{$loop->iteration}}</td>
-                                                <td><input type="text" class="form-control nombreedit" value="{{$mante->nombre}}" id="nombreedit" ></td>
-                                                <td><textarea type="text" class="form-control descripcioneditman" id="descripcioneditman" >{{$mante->descripcion}}</textarea></td>
-                                                <td><input type="date" class="form-control fechamanedit" value="{{$mante->fecha_mantencion}}" id="fechamanedit" ></td>
-                                                <td><input type="number" class="form-control mesesedit" value="{{$mante->meses}}" id="mesesedit" ></td>
-                                                <td><input type="date" class="form-control proximasfechaedit" value="{{$mante->fecha_prox_man}}" id="proximasfechaedit" readonly></td>
-                                                <td style="display: none;"><input type="date" class="form-control enviocorreoedit" value="{{$mante->envio_correo}}" id="enviocorreoedit" ></td>
-                                                <td>
-                                                    <a class="btn btn-danger btn_man_delete" data-id="{{$mante->id}}">
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>
+                                                <input type="text" class="form-control form-control-sm nombreedit" 
+                                                    value="{{$mante->nombre}}" data-id="{{$mante->id}}">
+                                            </td>
+                                            <td>
+                                                <input type="date" class="form-control form-control-sm fechamanedit" 
+                                                    value="{{$mante->fecha_mantencion}}" data-id="{{$mante->id}}">
+                                            </td>
+                                            <td>
+                                                <textarea class="form-control form-control-sm descripcioneditman" 
+                                                    rows="2" data-id="{{$mante->id}}">{{$mante->descripcion}}</textarea>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control form-control-sm mesesedit" 
+                                                    value="{{$mante->meses}}" data-id="{{$mante->id}}" style="width:70px;">
+                                            </td>
+                                            <td>
+                                                <input type="date" class="form-control form-control-sm proximasfechaedit" 
+                                                    value="{{$mante->fecha_prox_man}}" data-id="{{$mante->id}}" readonly>
+                                            </td>
+                                            <td>
+                                                {{-- Documento actual --}}
+                                                @if($mante->doc)
+                                                    <div class="d-flex align-items-center gap-1 mb-1">
+                                                        <a href="{{ asset('storage/' . $mante->doc) }}" target="_blank" 
+                                                            class="btn btn-sm btn-primary py-0">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        <a href="{{ asset('storage/' . $mante->doc) }}" download
+                                                            class="btn btn-sm btn-success py-0">
+                                                            <i class="fas fa-download"></i>
+                                                        </a>
+                                                    </div>
+                                                @else
+                                                    <span class="text-muted small">Sin doc</span>
+                                                @endif
+                                                {{-- Input para reemplazar doc --}}
+                                                <input type="file" class="form-control form-control-sm doc-man-input" 
+                                                    data-id="{{$mante->id}}" accept=".pdf,.doc,.docx,.jpg,.png">
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <button class="btn btn-sm btn-warning btn-guardar-man" 
+                                                        data-id="{{$mante->id}}" title="Guardar cambios">
+                                                        <i class="fas fa-save"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger btn_man_delete" 
+                                                        data-id="{{$mante->id}}" title="Eliminar">
                                                         <i class="fa-solid fa-trash-can"></i>
-                                                    </a>
-                                                    <a href="{{ asset('storage/' . $mante->doc) }}" target="_blank" download class="btn btn-primary ms-2">
-                                                        <i class="fas fa-download"></i>
-                                                    </a>
-                                                </td>
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -808,13 +848,13 @@
                                 <select name="orientacion_edit" id="orientacion_edit" class="form-select" >
                                     <option value="" {{ is_null($detallespropiedad->orientacion) ? 'selected' : '' }}>Seleccione una opción</option>
                                     <option value="N"  {{ $detallespropiedad->orientacion === 'N'  ? 'selected' : '' }}>Norte</option>
-                                    <option value="NE" {{ $detallespropiedad->orientacion === 'NE' ? 'selected' : '' }}>Noreste</option>
-                                    <option value="E"  {{ $detallespropiedad->orientacion === 'E'  ? 'selected' : '' }}>Oriente (Este)</option>
-                                    <option value="SE" {{ $detallespropiedad->orientacion === 'SE' ? 'selected' : '' }}>Sureste</option>
                                     <option value="S"  {{ $detallespropiedad->orientacion === 'S'  ? 'selected' : '' }}>Sur</option>
-                                    <option value="SO" {{ $detallespropiedad->orientacion === 'SO' ? 'selected' : '' }}>Suroeste</option>
-                                    <option value="O"  {{ $detallespropiedad->orientacion === 'O'  ? 'selected' : '' }}>Poniente (Oeste)</option>
-                                    <option value="NO" {{ $detallespropiedad->orientacion === 'NO' ? 'selected' : '' }}>Noroeste</option>
+                                    <option value="E"  {{ $detallespropiedad->orientacion === 'E'  ? 'selected' : '' }}>Oriente</option>
+                                    <option value="O"  {{ $detallespropiedad->orientacion === 'O'  ? 'selected' : '' }}>Poniente</option>
+                                    <option value="NO" {{ $detallespropiedad->orientacion === 'NO' ? 'selected' : '' }}>Norponiente</option>
+                                    <option value="NE" {{ $detallespropiedad->orientacion === 'NE' ? 'selected' : '' }}>Nororiente</option>
+                                    <option value="SO" {{ $detallespropiedad->orientacion === 'SO' ? 'selected' : '' }}>Surponiente</option>
+                                    <option value="SE" {{ $detallespropiedad->orientacion === 'SE' ? 'selected' : '' }}>Suroriente</option>
                                 </select>
 
                                 <!-- <input type="text" id="orientacion_edit" class="form-control" value="{{$detallespropiedad->orientacion}}" > -->
@@ -878,93 +918,146 @@
                                 <label for="estacionamiento_visita_edit">Estacionamiento de Visita</label>
                                 <input type="text" id="estacionamiento_visita_edit"placeholder="Estacionamientos de visitas" class="form-control" value="{{$detallespropiedad->estacionamiento_visitas}}" >
                             </div>
+                            <!-- Inventario -->
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
                                     <label for="inventariodoc" class="">Inventario</label>
                                     <input type="file" id="inventariodoc" class="form-control mb-2">
-
                                     @if(isset($doc->inventario) && $doc->inventario != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->inventario) }}</span>
+                                        <div class="card shadow-sm border rounded p-2">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width:100px;">
+                                                        {{ basename($doc->inventario) }}
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->inventario) }}" target="_blank" 
+                                                        class="btn btn-sm btn-outline-primary rounded-pill py-0">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger rounded-pill py-0 btn-eliminar-doc"
+                                                        data-tipo="inventario" data-id="{{ $doc->id }}"
+                                                        title="Eliminar documento">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <a href="{{ asset($doc->inventario) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i> <span class="text-white">Sin documento</span>
+                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                            <span class="text-white">Sin documento</span>
                                         </div>
                                     @endif
                                 </div>
                             </div>
-
+                            <!-- Acta de Entrega -->
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
                                     <label for="actadoc" class="">Acta de Entrega</label>
                                     <input type="file" id="actadoc" class="form-control mb-2">
-
                                     @if(isset($doc->acta_entrega) && $doc->acta_entrega != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->acta_entrega) }}</span>
+                                        <div class="card shadow-sm border rounded p-2">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width:100px;">
+                                                        {{ basename($doc->acta_entrega) }}
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->acta_entrega) }}" target="_blank" 
+                                                        class="btn btn-sm btn-outline-primary rounded-pill py-0">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger rounded-pill py-0 btn-eliminar-doc"
+                                                        data-tipo="acta" data-id="{{ $doc->id }}"
+                                                        title="Eliminar documento">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <a href="{{ asset($doc->acta_entrega) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i> <span class="text-white">Sin documento</span>
+                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                            <span class="text-white">Sin documento</span>
                                         </div>
                                     @endif
                                 </div>
                             </div>
-
+                            <!-- Contrato -->
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
                                     <label for="contratodoc" class="">Contrato</label>
                                     <input type="file" id="contratodoc" class="form-control mb-2">
-
                                     @if(isset($doc->contrato) && $doc->contrato != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->contrato) }}</span>
+                                        <div class="card shadow-sm border rounded p-2">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width:100px;">
+                                                        {{ basename($doc->contrato) }}
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->contrato) }}" target="_blank" 
+                                                        class="btn btn-sm btn-outline-primary rounded-pill py-0">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger rounded-pill py-0 btn-eliminar-doc"
+                                                        data-tipo="contrato" data-id="{{ $doc->id }}"
+                                                        title="Eliminar documento">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <a href="{{ asset($doc->contrato) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i> <span class="text-white">Sin documento</span>
+                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                            <span class="text-white">Sin documento</span>
                                         </div>
                                     @endif
                                 </div>
                             </div>
-
+                            <!--- Poder --->
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
                                     <label for="poderdoc" class="">Poder de Administración</label>
                                     <input type="file" id="poderdoc" class="form-control mb-2">
-
                                     @if(isset($doc->poder_adm) && $doc->poder_adm != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->poder_adm) }}</span>
+                                        <div class="card shadow-sm border rounded p-2">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width:100px;">
+                                                        {{ basename($doc->poder_adm) }}
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->poder_adm) }}" target="_blank" 
+                                                        class="btn btn-sm btn-outline-primary rounded-pill py-0">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger rounded-pill py-0 btn-eliminar-doc"
+                                                        data-tipo="poder" data-id="{{ $doc->id }}"
+                                                        title="Eliminar documento">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <a href="{{ asset($doc->poder_adm) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i> <span class="text-white">Sin documento</span>
+                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                            <span class="text-white">Sin documento</span>
                                         </div>
                                     @endif
                                 </div>
@@ -1320,114 +1413,98 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="editarArriendo" tabindex="-1" data-bs-backdrop="static" tabindex="-1"
+<div class="modal fade" id="editarArriendo" tabindex="-1" data-bs-backdrop="static"
     aria-labelledby="editarArriendoLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content modal-xl">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editarArriendoLabel">Editar Arriendo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" style="background-color:#E67E22; justify-content:center; position:relative;">
+                <h5 class="modal-title text-white text-uppercase fw-bold" id="editarArriendoLabel">Editar Arriendo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                    style="position:absolute; right:10px; top:10px;"></button>
             </div>
-
-            <div class="modal-body ">
-                <form>
-                    <div class="container">
-                        <!-- Campos de entrada -->
-                        <div class="row">
-                            <div class="form-group mb-3 col-lg-4">
-                                <label for="valorArriendoEditInput"><b>Valor Arriendo</b></label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text mt-2">$</span>
-                                    </div>
-                                    <input type="text" class="form-control mt-2" id="valorArriendoEditInput"
-                                        placeholder="Ej:$460.000" maxlength="20" required>
-                                </div>
-                            </div>
-                        
-                            <div class="form-group mb-3 col-4 text-center">
-                                <label class="d-block mb-2"><b>¿Incluye Mes de Garantía?</b></label>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="mes_garantiaedit" id="mesGarantiaSi" value="1">
-                                    <label class="form-check-label text-black" for="mesGarantiaSi">Sí</label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="mes_garantiaedit" id="mesGarantiaNo" value="0">
-                                    <label class="form-check-label text-black" for="mesGarantiaNo">No</label>
-                                </div>
-                            </div>
-
-                            <div class="form-group mb-3 col-lg-4">
-                                <label for="gastosComunesEditInput"><b>Gatos Comunes</b></label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text mt-2">$</span>
-                                    </div>
-                                    
-                                    <input type="text" class="form-control mt-2" id="gastosComunesEditInput"
-                                        placeholder="Ej: $450.000" maxlength="20" required>
-                                </div>
-                            </div>
-                        
-                            <div class="form-group mb-3 col-lg-4">
-                                <label for="fechaPagoEditInput"><b>Fecha de Pago</b></label>
-                                <input type="date" class="form-control mt-2" id="fechaPagoEditInput" required>
-                            </div>
-                            <div class="form-group mb-3 col-lg-4">
-                                <label for="estadoedit" class="mb-3"><b>Estado del pago</b></label>
-                                <select name="estadoedit" class="form-select" id="estadoedit">
-                                    <option value="">Seleccione un estado del pago</option>
-                                    @foreach($estados as $es)
-                                        <option value="{{$es->id}}">{{$es->estado}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group mb-3 col-lg-4">
-                                <label for="fechaEntregaEditInput"><b>Fecha Inicio de Arriendo</b></label>
-                                <input type="date" class="form-control mt-2" id="fechaEntregaEditInput" required>
-                            </div>
-                        
-                            <div class="form-group mb-3 col-4">
-                                <label for="arrendatarioEditInput"><b>Arrendatario</b></label>
-                                <select class="form-select mt-2" id="arrendatarioEditInput">
-                                    <option disabled selected value="">Seleccione un Arrendatario</option>
-                                    @foreach ($arrendatario as $arren)
-                                        <option value="{{ $arren->id }}">{{ $arren->nombre }}</option>
-                                    @endforeach
-                                    {{-- <option value="otros">Otros</option> --}}
-                                </select>
-                            </div>
-                            <div class="form-group mb-3 col-4">
-                                <label for="comisionesEditInput"><b>Comisiones</b></label>
-                                <select class="form-select mt-2" id="comisionesEditInput">
-                                    <option disabled selected value="">Seleccione una Comision</option>
-                                    @foreach ($comision as $com)
-                                        <option value="{{ $com->id }}">{{ $com->porcentaje }}
-                                        </option>
-                                    @endforeach
-                                    {{-- <option value="otros">Otros</option> --}}
-                                </select>
-                            </div>
-                            <div class="form-group mb-3 col-lg-4">
-                                <label for="reajusteInputedit"><b>Reajuste IPC</b></label>
-                                <input type="text" class="form-control mt-2" placeholder="Reajuste IPC" id="reajusteInputedit" required>
-                            </div>
-                        
-                            <div class="form-group mb-3 col-lg-4">
-                                <label for="fechaDevolucionEditInput"><b>Fecha de Devolucion</b></label>
-                                <input type="date" class="form-control mt-2" id="fechaDevolucionEditInput"
-                                    required>
+            <div class="modal-body" style="background-color:#FFF3E0;">
+                <div class="container">
+                    <div class="row g-3">
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Valor Arriendo</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background:#E67E22; color:white; border:none;">$</span>
+                                <input type="text" class="form-control border-0 shadow-sm" id="valorArriendoEditInput"
+                                    placeholder="Ej: 460.000" maxlength="20" required
+                                    style="background:#fff8f0;">
                             </div>
                         </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Gastos Comunes</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background:#E67E22; color:white; border:none;">$</span>
+                                <input type="text" class="form-control border-0 shadow-sm" id="gastosComunesEditInput"
+                                    placeholder="Ej: 450.000" maxlength="20" required
+                                    style="background:#fff8f0;">
+                            </div>
+                        </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Fecha de Pago</label>
+                            <select class="form-select border-0 shadow-sm" id="fechaPagoEditInput" style="background:#fff8f0;">
+                                <option value="" selected disabled>Elija el día (1-31)</option>
+                                @for ($i = 1; $i <= 31; $i++)
+                                    <option value="{{ $i }}">Día {{ $i }} de cada mes</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Estado del pago</label>
+                            <select name="estadoedit" class="form-select border-0 shadow-sm" id="estadoedit"
+                                style="background:#fff8f0;">
+                                <option value="">Seleccione un estado</option>
+                                @foreach($estados as $es)
+                                    <option value="{{$es->id}}">{{$es->estado}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Fecha Inicio de Arriendo</label>
+                            <input type="date" class="form-control border-0 shadow-sm" id="fechaEntregaEditInput"
+                                style="background:#fff8f0;" required>
+                        </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Arrendatario</label>
+                            <select class="form-select border-0 shadow-sm" id="arrendatarioEditInput"
+                                style="background:#fff8f0;">
+                                <option disabled selected value="">Seleccione un Arrendatario</option>
+                                @foreach ($arrendatario as $arren)
+                                    <option value="{{ $arren->id }}">{{ $arren->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Comisiones</label>
+                            <select class="form-select border-0 shadow-sm" id="comisionesEditInput"
+                                style="background:#fff8f0;">
+                                <option disabled selected value="">Seleccione una Comisión</option>
+                                @foreach ($comision as $com)
+                                    <option value="{{ $com->id }}">{{ $com->porcentaje }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Reajuste IPC</label>
+                            <input type="text" class="form-control border-0 shadow-sm" placeholder="Reajuste IPC"
+                                id="reajusteInputedit" style="background:#fff8f0;" required>
+                        </div>
+                        <div class="form-group mb-3 col-lg-4">
+                            <label class="fw-bold text-dark">Fecha de Devolución</label>
+                            <input type="date" class="form-control border-0 shadow-sm" id="fechaDevolucionEditInput"
+                                style="background:#fff8f0;" required>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
-            <!-- Botones de cambios -->
-            <div class="modal-footer d-flex justify-content-end">
-                <button type="button" id="btn_cerrar_agregar" class="btn btn-danger m-1" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" id="btn_agregar_editar" class="btn btn-primary m-1" >Guardar</button>
+            <div class="modal-footer" style="background-color:#E67E22;">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold"
+                    data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id="btn_agregar_editar" class="btn rounded-pill px-4 fw-bold"
+                    style="background:#fff; color:#E67E22; border:2px solid #fff;">Guardar</button>
             </div>
         </div>
     </div>
@@ -1690,6 +1767,47 @@
                 console.log("respuesta", respuesta);
                 $("#successModal").modal('show');
                 $("#texto_success").html("El Arriendo se ha creado exitosamente");
+
+                // Agregar fila al historial de arriendos
+                var arriendo = respuesta.nueva_arriendo;
+                var arrendatarioNombre = arriendo.arrendatario ? arriendo.arrendatario.nombre : 'N/A';
+                var comisionPorc = arriendo.comision ? arriendo.comision.porcentaje : '-';
+                var valorFormateado = new Intl.NumberFormat('es-CL').format(arriendo.valor_real);
+
+                var contadorActual = $("table tbody tr").length + 1;
+
+                var nuevaFila = `
+                    <tr class="table-success">
+                        <td>${contadorActual}</td>
+                        <td>${arrendatarioNombre}</td>
+                        <td>${arriendo.fecha_entrega}</td>
+                        <td>${arriendo.fecha_pago}</td>
+                        <td>$ ${valorFormateado}</td>
+                        <td>${comisionPorc}</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-primary rounded-circle btn-sm btn-editar m-1" data-id="${arriendo.id}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="btn btn-danger rounded-circle btn-sm borrar-arriendo m-1" data-id="${arriendo.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                            <a href="#" class="btn btn-success rounded-circle btn-sm btn-Contrato m-1" data-id="${arriendo.id}">
+                                <i class="fa-regular fa-folder"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+
+                $("table tbody").append(nuevaFila);
+
+                // Limpiar formulario
+                $("#arrendatarioInput").val('');
+                $("#gastosComunesInput").val('');
+                $("#fechaPagoInput").val('');
+                $("#fechaEntregaInput").val('');
+                $("#comisionesInput").val('');
+                $("#reajusteInput").val('');
+                $("#valorreal").val('');
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", errorThrown);
@@ -3950,6 +4068,73 @@ async function generarContratoWord() {
 
         // Al cambiar el switch
         switchUF.addEventListener('change', actualizarMoneda);
+    });
+
+    // ===== GUARDAR EDICIÓN DE MANTENIMIENTO =====
+    $(document).on('click', '.btn-guardar-man', function() {
+        var idMan = $(this).data('id');
+        var $fila = $(this).closest('tr');
+        
+        var formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('nombre', $fila.find('.nombreedit').val());
+        formData.append('descripcion', $fila.find('.descripcioneditman').val());
+        formData.append('fecha', $fila.find('.fechamanedit').val());
+        formData.append('meses', $fila.find('.mesesedit').val());
+        formData.append('proxima_fecha', $fila.find('.proximasfechaedit').val());
+        
+        var docFile = $fila.find('.doc-man-input')[0].files[0];
+        if (docFile) {
+            formData.append('doc', docFile);
+        }
+        
+        $.ajax({
+            url: '/guardar/mantenimiento-editar/' + idMan,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success: function(resp) {
+                $("#successModal").modal('show');
+                $('#texto_success').text('Mantenimiento actualizado correctamente');
+                // Si se subió un nuevo doc, actualizar visualmente
+                if (resp.doc_url) {
+                    // Recargar para ver el nuevo doc
+                    setTimeout(() => location.reload(), 1500);
+                }
+            },
+            error: function() {
+                alert('Error al actualizar el mantenimiento');
+            }
+        });
+    });
+
+    // ===== ELIMINAR DOCUMENTO DE PROPIEDAD =====
+    $(document).on('click', '.btn-eliminar-doc', function() {
+        var tipo = $(this).data('tipo');
+        var id = $(this).data('id');
+        var $btn = $(this);
+        
+        if (!confirm('¿Seguro/a que quieres eliminar este documento?')) return;
+        
+        $.ajax({
+            url: '/eliminar-documento-propiedad/' + id,
+            type: 'POST',
+            data: { tipo: tipo, _token: $('meta[name="csrf-token"]').attr('content') },
+            success: function(resp) {
+                $("#successModal").modal('show');
+                $('#texto_success').text('Documento eliminado correctamente');
+                $btn.closest('.card').replaceWith(
+                    '<div class="text-muted fst-italic small mt-2">' +
+                    '<i class="fas fa-exclamation-circle me-1 text-warning"></i>' +
+                    '<span class="text-white">Sin documento</span></div>'
+                );
+            },
+            error: function() {
+                alert('Error al eliminar el documento');
+            }
+        });
     });
 </script>
 @endsection
