@@ -910,18 +910,21 @@
 
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
-                                    <label for="inventariodoc" class="">Inventario</label>
+                                    <label for="inventariodoc">Inventario</label>
                                     <input type="file" id="inventariodoc" class="form-control mb-2">
 
                                     @if(isset($doc->inventario) && $doc->inventario != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
+                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-inventario-{{ $doc->id }}">
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->inventario) }}</span>
+                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->inventario) }}</span>
                                             </div>
-                                            <a href="{{ asset($doc->inventario) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
+                                            <div class="d-flex gap-1">
+                                                <a href="{{ asset($doc->inventario) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'inventario')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
@@ -933,18 +936,21 @@
 
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
-                                    <label for="actadoc" class="">Acta de Entrega</label>
+                                    <label for="actadoc">Acta de Entrega</label>
                                     <input type="file" id="actadoc" class="form-control mb-2">
 
                                     @if(isset($doc->acta_entrega) && $doc->acta_entrega != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
+                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-acta_entrega-{{ $doc->id }}">
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->acta_entrega) }}</span>
+                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->acta_entrega) }}</span>
                                             </div>
-                                            <a href="{{ asset($doc->acta_entrega) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
+                                            <div class="d-flex gap-1">
+                                                <a href="{{ asset($doc->acta_entrega) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'acta_entrega')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
@@ -956,18 +962,21 @@
 
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
-                                    <label for="contratodoc" class="">Contrato</label>
+                                    <label for="contratodoc">Contrato</label>
                                     <input type="file" id="contratodoc" class="form-control mb-2">
 
                                     @if(isset($doc->contrato) && $doc->contrato != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
+                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-contrato-{{ $doc->id }}">
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->contrato) }}</span>
+                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->contrato) }}</span>
                                             </div>
-                                            <a href="{{ asset($doc->contrato) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
+                                            <div class="d-flex gap-1">
+                                                <a href="{{ asset($doc->contrato) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'contrato')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
@@ -979,18 +988,21 @@
 
                             <div class="col-lg-3 mb-4">
                                 <div class="form-group">
-                                    <label for="poderdoc" class="">Poder de Administración</label>
+                                    <label for="poderdoc">Poder de Administración</label>
                                     <input type="file" id="poderdoc" class="form-control mb-2">
 
                                     @if(isset($doc->poder_adm) && $doc->poder_adm != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
+                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-poder_adm-{{ $doc->id }}">
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($doc->poder_adm) }}</span>
+                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->poder_adm) }}</span>
                                             </div>
-                                            <a href="{{ asset($doc->poder_adm) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                Ver
-                                            </a>
+                                            <div class="d-flex gap-1">
+                                                <a href="{{ asset($doc->poder_adm) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'poder_adm')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     @else
                                         <div class="text-muted fst-italic small mt-2">
@@ -1385,20 +1397,6 @@
                                 </div>
                             </div>
                         
-                            <div class="form-group mb-3 col-4 text-center">
-                                <label class="d-block mb-2"><b>¿Incluye Mes de Garantía?</b></label>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="mes_garantiaedit" id="mesGarantiaSi" value="1">
-                                    <label class="form-check-label text-black" for="mesGarantiaSi">Sí</label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="mes_garantiaedit" id="mesGarantiaNo" value="0">
-                                    <label class="form-check-label text-black" for="mesGarantiaNo">No</label>
-                                </div>
-                            </div>
-
                             <div class="form-group mb-3 col-lg-4">
                                 <label for="gastosComunesEditInput"><b>Gatos Comunes</b></label>
                                 <div class="input-group">
@@ -3965,6 +3963,7 @@ async function generarContratoWord() {
         validarTipoVivienda();
         vivienda.addEventListener('change', validarTipoVivienda);
     });
+
 </script>
 @endsection
 
