@@ -908,107 +908,109 @@
                                 <input type="text" id="estacionamiento_visita_edit"placeholder="Estacionamientos de visitas" class="form-control" value="{{$detallespropiedad->estacionamiento_visitas}}" >
                             </div>
 
-                            <div class="col-lg-3 mb-4">
-                                <div class="form-group">
-                                    <label for="inventariodoc">Inventario</label>
-                                    <input type="file" id="inventariodoc" class="form-control mb-2">
-
-                                    @if(isset($doc->inventario) && $doc->inventario != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-inventario-{{ $doc->id }}">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->inventario) }}</span>
+                            <div class="row">
+                                <div class="col-lg-3 mb-4">
+                                    <div class="form-group">
+                                        <label for="inventariodoc">Inventario</label>
+                                        <input type="file" id="inventariodoc" class="form-control mb-2">
+                                        @if(isset($doc->inventario) && $doc->inventario != '')
+                                            <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->inventario) }}</span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->inventario) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill btn-eliminar-doc" 
+                                                            data-id="{{ $doc->id }}" data-tipo="inventario">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="d-flex gap-1">
-                                                <a href="{{ asset($doc->inventario) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'inventario')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                        @else
+                                            <div class="text-muted fst-italic small mt-2">
+                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
                                             </div>
-                                        </div>
-                                    @else
-                                        <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-3 mb-4">
-                                <div class="form-group">
-                                    <label for="actadoc">Acta de Entrega</label>
-                                    <input type="file" id="actadoc" class="form-control mb-2">
-
-                                    @if(isset($doc->acta_entrega) && $doc->acta_entrega != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-acta_entrega-{{ $doc->id }}">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->acta_entrega) }}</span>
+                                <div class="col-lg-3 mb-4">
+                                    <div class="form-group">
+                                        <label for="actadoc">Acta de Entrega</label>
+                                        <input type="file" id="actadoc" class="form-control mb-2">
+                                        @if(isset($doc->acta_entrega) && $doc->acta_entrega != '')
+                                            <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->acta_entrega) }}</span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->acta_entrega) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill btn-eliminar-doc" 
+                                                            data-id="{{ $doc->id }}" data-tipo="acta">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="d-flex gap-1">
-                                                <a href="{{ asset($doc->acta_entrega) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'acta_entrega')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                        @else
+                                            <div class="text-muted fst-italic small mt-2">
+                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
                                             </div>
-                                        </div>
-                                    @else
-                                        <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-3 mb-4">
-                                <div class="form-group">
-                                    <label for="contratodoc">Contrato</label>
-                                    <input type="file" id="contratodoc" class="form-control mb-2">
-
-                                    @if(isset($doc->contrato) && $doc->contrato != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-contrato-{{ $doc->id }}">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->contrato) }}</span>
+                                <div class="col-lg-3 mb-4">
+                                    <div class="form-group">
+                                        <label for="contratodoc">Contrato</label>
+                                        <input type="file" id="contratodoc" class="form-control mb-2">
+                                        @if(isset($doc->contrato) && $doc->contrato != '')
+                                            <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->contrato) }}</span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->contrato) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill btn-eliminar-doc" 
+                                                            data-id="{{ $doc->id }}" data-tipo="contrato">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="d-flex gap-1">
-                                                <a href="{{ asset($doc->contrato) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'contrato')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                        @else
+                                            <div class="text-muted fst-italic small mt-2">
+                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
                                             </div>
-                                        </div>
-                                    @else
-                                        <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-3 mb-4">
-                                <div class="form-group">
-                                    <label for="poderdoc">Poder de Administración</label>
-                                    <input type="file" id="poderdoc" class="form-control mb-2">
-
-                                    @if(isset($doc->poder_adm) && $doc->poder_adm != '')
-                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row" id="card-poder_adm-{{ $doc->id }}">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->poder_adm) }}</span>
+                                <div class="col-lg-3 mb-4">
+                                    <div class="form-group">
+                                        <label for="poderdoc">Poder de Administración</label>
+                                        <input type="file" id="poderdoc" class="form-control mb-2">
+                                        @if(isset($doc->poder_adm) && $doc->poder_adm != '')
+                                            <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center flex-row">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                    <span class="text-truncate" style="max-width: 100px;">{{ basename($doc->poder_adm) }}</span>
+                                                </div>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ asset($doc->poder_adm) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill btn-eliminar-doc" 
+                                                            data-id="{{ $doc->id }}" data-tipo="poder">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div class="d-flex gap-1">
-                                                <a href="{{ asset($doc->poder_adm) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" onclick="eliminarArchivo('{{ $doc->id }}', 'poder_adm')">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                        @else
+                                            <div class="text-muted fst-italic small mt-2">
+                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
                                             </div>
-                                        </div>
-                                    @else
-                                        <div class="text-muted fst-italic small mt-2">
-                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i>Sin documento
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
 
@@ -3963,6 +3965,41 @@ async function generarContratoWord() {
         validarTipoVivienda();
         vivienda.addEventListener('change', validarTipoVivienda);
     });
+
+    $(document).on('click', '.btn-eliminar-doc', function() {
+    var $btn = $(this);
+    var tipo = $btn.data('tipo');
+    var id = $btn.data('id');
+    
+    if (!confirm('¿Seguro/a que quieres eliminar este documento?')) return;
+    
+    $.ajax({
+        url: '/eliminar-documento-propiedad/' + id,
+        type: 'POST',
+        data: { 
+            tipo: tipo, 
+            _token: $('meta[name="csrf-token"]').attr('content') 
+        },
+        success: function(resp) {
+            // Mostrar modal de éxito si existe
+            if ($("#successModal").length) {
+                $("#successModal").modal('show');
+                $('#texto_success').text('Documento eliminado correctamente');
+            }
+            
+            // Reemplazar la card por el mensaje de "Sin documento"
+            // Usamos text-secondary en lugar de text-white para que sea legible en fondo claro
+            $btn.closest('.card').replaceWith(
+                '<div class="text-muted fst-italic small mt-2">' +
+                '<i class="fas fa-exclamation-circle me-1 text-warning"></i>' +
+                '<span class="text-secondary">Sin documento</span></div>'
+            );
+        },
+        error: function() {
+            alert('Error al eliminar el documento');
+        }
+    });
+});
 
 </script>
 @endsection
