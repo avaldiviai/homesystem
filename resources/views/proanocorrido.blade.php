@@ -505,7 +505,7 @@
                                             <select class="form-select" id="agua_caliente">
                                                 <option value="" disabled selected>Seleccione una opción</option>
                                                 <option value="Calefont">Calefont</option>
-                                                <option value="Thermo">Thermo</option>
+                                                <option value="Termo">Termo</option>
                                                 <option value="Caldera">Caldera</option>
                                             </select>
                                         </div>
@@ -529,11 +529,22 @@
                                         <label for="inventario" class="form-label">Inventario</label>
                                         <textarea type="text" class="form-control" id="inventario" name="inventario" placeholder="Ej: muebles incluidos"></textarea>
                                 </div>
-                                <div class="form-group mb-3 col-lg-4">
-                                    <label for="estacionamiento_visitas" class="form-label">Estacionamiento Visitas</label>
-                                    <input type="text" class="form-control" id="estacionamiento_visitas" name="estacionamiento_visitas"
-                                        placeholder="Ej: 5">
+
+                                <!--- Estacionamiento visitas --->
+                                <div class="form-group mb-3 col-lg-4 text-center">
+                                    <label class="form-label">Estacionamiento Visitas</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="estacionamiento_visitas_si" name="estacionamiento_visitas" value="1">
+                                            <label class="form-check-label" for="estacionamiento_visitas_si">Sí</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="estacionamiento_visitas_no" name="estacionamiento_visitas" value="0">
+                                            <label class="form-check-label" for="estacionamiento_visitas_no">No</label>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>    
                             <div class="row g-3 m-1 shadow" style="background-color: #FFE2B2; border-radius: .9rem;">
                                 <div class="form-group mb-3 col-lg-3 col-sm-4 text-center">
@@ -1505,7 +1516,7 @@ $("#close_success").click(function() {
                     var mt2_total = $("#mt2_total").val();
                     var mt2_construido = $("#mt2_construido").val();
                     var mt2_terraza = $("#mt2_terraza").val();
-                    var estacionamiento_visitas = $("#estacionamiento_visitas").val();
+                    var estacionamiento_visitas = $('input[name="estacionamiento_visitas"]:checked').val();
 
                     var ascensor = $("#ascensor").is(':checked');
                     var ascensor_no = $("#ascensor_no").is(':checked');

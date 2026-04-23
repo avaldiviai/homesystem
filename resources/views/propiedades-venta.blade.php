@@ -634,7 +634,7 @@
                                                         <option value="" disabled selected>Seleccione una opción
                                                         </option>
                                                         <option value="Calefont">Calefont</option>
-                                                        <option value="Thermo">Thermo</option>
+                                                        <option value="Termo">Termo</option>
                                                         <option value="Caldera">Caldera</option>
                                                     </select>
                                                 </div>

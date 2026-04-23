@@ -672,7 +672,7 @@
                                             <option value="3" {{ $detallespropiedad->logia === '3' ? 'selected' : '' }}>Conexión para lavadora</option>
                                         </select>
                                     </div>
-                                    {{-- CAMBIO 12: "Thermo" → "Termo" --}}
+                                    {{-- CAMBIO 12: "Termo" → "Termo" --}}
                                     <div class="col-lg-3 mb-3">
                                         <label for="agua_caliente_edit">Agua Caliente</label>
                                         <select name="agua_caliente_edit" id="agua_caliente_edit" class="form-select">

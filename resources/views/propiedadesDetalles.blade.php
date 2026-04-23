@@ -876,7 +876,7 @@
                                 <select name="agua_caliente_edit" id="agua_caliente_edit" class="form-select" >
                                     <option value="" {{ is_null($detallespropiedad->agua_caliente) ? 'selected' : '' }}>Seleccione una opción</option>
                                     <option value="Calefont" {{ $detallespropiedad->agua_caliente === 'Calefont' ? 'selected' : '' }}>Calefont</option>
-                                    <option value="Thermo" {{ $detallespropiedad->agua_caliente === 'Thermo' ? 'selected' : '' }}>Thermo</option>
+                                    <option value="Termo" {{ $detallespropiedad->agua_caliente === 'Termo' ? 'selected' : '' }}>Termo</option>
                                     <option value="Caldera" {{ $detallespropiedad->agua_caliente === 'Caldera' ? 'selected' : '' }}>Caldera</option>
                                 </select>
 
@@ -903,9 +903,24 @@
                                 <label for="mt2_total_edit">Mt2 Total</label>
                                 <input type="text" id="mt2_total_edit" placeholder="Mt2 Total" class="form-control" value="{{$detallespropiedad->mt2_total}}" >
                             </div>
+
+                            <!-- Estacionamiento visitas -->
                             <div class="col-lg-3 mb-3">
-                                <label for="estacionamiento_visita_edit">Estacionamiento de Visita</label>
-                                <input type="text" id="estacionamiento_visita_edit"placeholder="Estacionamientos de visitas" class="form-control" value="{{$detallespropiedad->estacionamiento_visitas}}" >
+                                <label class="form-label w-100 text-white">Estacionamiento de Visita</label>
+                                <div class="d-flex justify-content-center">
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" id="estacionamiento_visita_edit_yes" name="estacionamiento_visita_edit"
+                                            class="form-check-input" value="1"
+                                            {{ isset($detallespropiedad->estacionamiento_visitas) && $detallespropiedad->estacionamiento_visitas == 1 ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="estacionamiento_visita_edit_yes">Sí</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" id="estacionamiento_visita_edit_no" name="estacionamiento_visita_edit"
+                                            class="form-check-input" value="0"
+                                            {{ isset($detallespropiedad->estacionamiento_visitas) && $detallespropiedad->estacionamiento_visitas == 0 ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="estacionamiento_visita_edit_no">No</label>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -2067,7 +2082,7 @@
                 var mt2_construido = $("#mt2_construido_edit").val();
                 var mt2_terraza = $("#mt2_terraza_edit").val();
                 var mt2_total = $("#mt2_total_edit").val();
-                var estacionamiento_visita = $("#estacionamiento_visita_edit").val();
+                var estacionamiento_visita = $('input[name="estacionamiento_visita_edit"]:checked').val();
                 
                 var espacio_lavadora_edit_yes = $("#espacio_lavadora_edit_yes").is(':checked');
                 var espacio_lavadora_edit_no = $("#espacio_lavadora_edit_no").is(':checked');
