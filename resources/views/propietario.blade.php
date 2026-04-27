@@ -8,93 +8,176 @@
                 {{-- Contenido --}}
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-6" style="text-align: start; margin-top: 40px; margin-bottom: 20px; margin-start: 30px;color: white">
+                        <div class="col-6" style="text-align: start; margin-top: 40px; margin-bottom: 20px; color: white">
                             <h1 class="text-uppercase text-black">Propietarios</h1>
                         </div>
                     </div>
                 </div>
-                {{-- Tabla de usuarios --}}
+
+                {{-- Barra de herramientas --}}
                 <div class="container-fluid">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-md-4 mb-4">
-                            <div class="input-group mx-2 shadow-lg" style="max-width: 400px;">
+                    <div class="row justify-content-between align-items-center mb-3">
+                        <div class="col-md-5 mb-3">
+                            <div class="input-group shadow-lg" style="max-width: 420px;">
                                 <span class="input-group-text bg-primary text-white shadow-sm">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </span>
-                                <input type="text" id="buscador_cnn" placeholder="Buscar Propietario" 
-                                    class="form-control shadow-sm border-0" 
-                                    style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                <input type="text" id="buscador_cnn" placeholder="Buscar Propietario"
+                                    class="form-control shadow-sm border-0"
+                                    style="box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                             </div>
                         </div>
-                        <div class="col-md-3 mb-4 text-end">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarpropietario" style=>
-                                <span>AGREGAR PROPIETARIO</span>
+                        <div class="col-md-7 mb-3 d-flex justify-content-end align-items-center gap-2">
+                            {{-- Toggle vista --}}
+                            <div class="btn-group shadow-sm" role="group">
+                                <button type="button" id="btn-vista-tarjetas" class="btn btn-primary btn-sm px-3 active-view" title="Vista tarjetas">
+                                    <i class="fa-solid fa-grip"></i>
+                                </button>
+                                <button type="button" id="btn-vista-lista" class="btn btn-outline-secondary btn-sm px-3" title="Vista lista">
+                                    <i class="fa-solid fa-list"></i>
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-success shadow" data-bs-toggle="modal" data-bs-target="#agregarpropietario">
+                                <i class="fas fa-plus me-1"></i> AGREGAR PROPIETARIO
                             </button>
                         </div>
                     </div>
-                    <div class="overflow-auto shadow-lg" style="max-height: 65vh;">
-                        <table class="table table-striped-columns">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nombre</th>
-                                    <th>Rut</th>
-                                    <th>Correo</th>
-                                    <th>Telefono</th>
-                                    <th>Diereccion</th>
-                                    <th>Ciudad</th>
-                                    <th>Acciones</th>
-                                </tr>
 
-                            </thead>
-                            <tbody id="tablaUa">
-                                @foreach ($propietarios as $propietario)
+                    {{-- ===== VISTA TARJETAS ===== --}}
+                    <div id="vista-tarjetas" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 pb-4">
+                        @foreach ($propietarios as $propietario)
+                        <div class="col propietario-item" data-nombre="{{ strtolower($propietario->nombre) }}" data-rut="{{ strtolower($propietario->rut) }}">
+                            <div class="card-propietario h-100 shadow-sm position-relative">
+                                {{-- Enlace principal a detalle --}}
+                                <a href="{{ route('propietario.detalles', $propietario->id) }}" class="card-link-overlay" title="Ver propiedades de {{ $propietario->nombre }}"></a>
+
+                                {{-- Avatar e info --}}
+                                <div class="card-prop-body">
+                                    <div class="prop-avatar">
+                                        {{ strtoupper(substr($propietario->nombre, 0, 1)) }}
+                                    </div>
+                                    <div class="prop-info">
+                                        <h6 class="prop-name">{{ $propietario->nombre }}</h6>
+                                        <span class="prop-rut">{{ $propietario->rut }}</span>
+                                    </div>
+                                </div>
+
+                                {{-- Datos de contacto --}}
+                                <div class="card-prop-details">
+                                    <div class="prop-detail-item">
+                                        <i class="fa-solid fa-envelope text-primary"></i>
+                                        <span class="text-truncate">{{ $propietario->correo ?? '—' }}</span>
+                                    </div>
+                                    <div class="prop-detail-item">
+                                        <i class="fa-solid fa-phone text-success"></i>
+                                        <span>{{ $propietario->telefono ?? '—' }}</span>
+                                    </div>
+                                    <div class="prop-detail-item">
+                                        <i class="fa-solid fa-location-dot text-danger"></i>
+                                        <span class="text-truncate">{{ $propietario->ciudad ?? '—' }}</span>
+                                    </div>
+                                </div>
+
+                                {{-- Acciones --}}
+                                <div class="card-prop-actions">
+                                    <a href="{{ route('propietario.detalles', $propietario->id) }}"
+                                       class="btn-prop-action btn-ver" title="Ver propiedades">
+                                        <i class="fas fa-building"></i>
+                                        <span>Propiedades</span>
+                                    </a>
+                                    <button type="button"
+                                        class="btn-prop-action btn-editar editar-propietario-btn"
+                                        data-id="{{ $propietario->id }}" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                        <span>Editar</span>
+                                    </button>
+                                    <button type="button"
+                                        class="btn-prop-action btn-cuenta mostra-cuentas-btn"
+                                        data-id="{{ $propietario->id }}" title="Cuentas bancarias">
+                                        <i class="fa-solid fa-sack-dollar"></i>
+                                        <span>Cuentas</span>
+                                    </button>
+                                    <button type="button"
+                                        class="btn-prop-action btn-eliminar borrar-propietario-btn"
+                                        data-id="{{ $propietario->id }}" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span>Eliminar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    {{-- ===== VISTA LISTA ===== --}}
+                    <div id="vista-lista" class="pb-4" style="display:none;">
+                        <div class="overflow-auto shadow-lg" style="max-height: 65vh;">
+                            <table class="table table-striped-columns align-middle">
+                                <thead class="table-dark">
                                     <tr>
-
-                                        <td >{{ $loop->iteration }}</td>
-                                        <td >{{ $propietario->nombre }}</td>
-                                        <td >{{ $propietario->rut }}</td>
-                                        <td >{{ $propietario->correo }}</td>
-                                        <td >{{ $propietario->telefono }}</td>
-                                        <td >{{ $propietario->direccion }}</td>
-                                        <td >{{ $propietario->ciudad }}</td>
-
+                                        <th>#</th>
+                                        <th>Nombre</th>
+                                        <th>Rut</th>
+                                        <th>Correo</th>
+                                        <th>Teléfono</th>
+                                        <th>Dirección</th>
+                                        <th>Ciudad</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaUa">
+                                    @foreach ($propietarios as $propietario)
+                                    <tr class="propietario-fila"
+                                        data-nombre="{{ strtolower($propietario->nombre) }}"
+                                        data-rut="{{ strtolower($propietario->rut) }}">
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            <!-- Iconos de editar y eliminar -->
-                                            <a href="javascript:void(0)" class="btn btn-primary btn-sm editar-propietario-btn" data-id="{{ $propietario->id }}" data-toggle="modal">
+                                            <a href="{{ route('propietario.detalles', $propietario->id) }}" style="text-decoration:none; color:inherit; font-weight:600;">
+                                                {{ $propietario->nombre }}
+                                            </a>
+                                        </td>
+                                        <td>{{ $propietario->rut }}</td>
+                                        <td>{{ $propietario->correo }}</td>
+                                        <td>{{ $propietario->telefono }}</td>
+                                        <td>{{ $propietario->direccion }}</td>
+                                        <td>{{ $propietario->ciudad }}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" class="btn btn-primary btn-sm editar-propietario-btn" data-id="{{ $propietario->id }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="#" class="btn btn-danger btn-sm borrar-propietario-btn" data-id="{{ $propietario->id }}"><i class="fas fa-trash-alt"></i></a>
-                                            <a href="#" class="btn btn-success btn-sm mostra-cuentas-btn"data-id="{{ $propietario->id }}"><i class="fa-solid fa-sack-dollar"></i></i></a>
-
+                                            <a href="#" class="btn btn-danger btn-sm borrar-propietario-btn" data-id="{{ $propietario->id }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-success btn-sm mostra-cuentas-btn" data-id="{{ $propietario->id }}">
+                                                <i class="fa-solid fa-sack-dollar"></i>
+                                            </a>
                                         </td>
-
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+
+                </div>{{-- /container --}}
             </div>
             @include('layouts.footer')
         </div>
     </div>
 </div>
 
-{{-- SECCION DE MODALES --}}
+{{-- ====================== MODALES (sin cambios) ====================== --}}
 
-<!-- Modal agregar Propietario nuevo-->
-<div class="modal fade" id="agregarpropietario"  tabindex="-1" data-bs-backdrop="static" tabindex="-1" aria-labelledby="agregarpropietarioLabel" aria-hidden="true">
+<!-- Modal agregar Propietario -->
+<div class="modal fade" id="agregarpropietario" tabindex="-1" data-bs-backdrop="static" aria-labelledby="agregarpropietarioLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modal-lg">
             <div class="modal-header">
                 <h5 class="modal-title" id="agregarpropietarioLabel">Agregar Propietario</h5>
             </div>
-
-            <div class="modal-body ">
+            <div class="modal-body">
                 <form>
                     <div class="container">
-                        <!-- Campos de entrada -->
                         <div class="row">
                             <div class="form-group mb-3">
                                 <label for="nombreInput"><b>Nombre</b></label>
@@ -102,27 +185,24 @@
                             </div>
                         </div>
                         <div class="row">
-                        <div class="form-group mb-3 col-6">
-                            <label for="rutInput"><b>Rut</b></label>
-                            <input type="text" class="form-control mt-2" id="rutInput" placeholder="12.345.678-9"
-                            pattern="\d{1,2}\.\d{3}\.\d{3}-[\dkK]" title="Formato válido: 12.345.678-9" minlength="9" maxlength="12">
-                        </div>
-
-                        <div class="form-group mb-3 col-6">
-                            <label for="telefonoInput"><b>Teléfono</b></label>
-                            <input type="text" class="form-control mt-2" id="telefonoInput" 
-                                placeholder="Ej: 912345678" maxlength="9" minlength="9" required 
-                                pattern="\d{9}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);">
-                        </div>
-
+                            <div class="form-group mb-3 col-6">
+                                <label for="rutInput"><b>Rut</b></label>
+                                <input type="text" class="form-control mt-2" id="rutInput" placeholder="12.345.678-9"
+                                    pattern="\d{1,2}\.\d{3}\.\d{3}-[\dkK]" title="Formato válido: 12.345.678-9" minlength="9" maxlength="12">
+                            </div>
+                            <div class="form-group mb-3 col-6">
+                                <label for="telefonoInput"><b>Teléfono</b></label>
+                                <input type="text" class="form-control mt-2" id="telefonoInput"
+                                    placeholder="Ej: 912345678" maxlength="9" minlength="9" required
+                                    pattern="\d{9}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);">
+                            </div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="form-group mb-3 ">
+                            <div class="form-group mb-3">
                                 <label for="correoInput"><b>Correo</b></label>
                                 <input type="text" class="form-control mt-2" id="correoInput" placeholder="Ej: pedro@gmail.com" required>
                             </div>
-
                             <div class="row">
                                 <div class="form-group mb-3 col-6">
                                     <label for="direccionInput"><b>Dirección</b></label>
@@ -133,121 +213,67 @@
                                     <input type="text" class="form-control mt-2" id="ciudadInput" placeholder="Ciudad" required>
                                 </div>
                             </div>
-                        <div class="col-12">
-                            <button class="btn btn-success w-100 mt-3 mb-3 text-uppercase text-white" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample2 ">
-                                <b>Agregar Datos Bancarios</b>
-                            </button>
+                            <div class="col-12">
+                                <button class="btn btn-success w-100 mt-3 mb-3 text-uppercase text-white" type="button"
+                                    data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false">
+                                    <b>Agregar Datos Bancarios</b>
+                                </button>
+                            </div>
+                            <div class="collapse multi-collapse" id="multiCollapseExample2">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="nombreBancoInput"><b>Nombre del Banco</b></label>
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control m-1" id="nombreBancoInput" placeholder="Nombre del Banco" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="numeroCuenteInput"><b>Numero de Cuenta</b></label>
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control m-1" id="numeroCuenteInput" placeholder="numero de cuenta" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="TipoCuentaInput"><b>Tipo de Cuenta</b></label>
+                                        <div class="form-group mb-2 d-flex">
+                                            <select name="notificaion" id="TipoCuentaInput" class="form-select m-1">
+                                                <option selected disabled value="option">Seleccione un tipo de Cuenta</option>
+                                                <option value="Ahorro">Ahorro</option>
+                                                <option value="Corriente">Corriente</option>
+                                                <option value="Vista">Vista</option>
+                                                <option value="Chequera electrónica">Chequera Electrónica</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 d-flex justify-content-end">
+                                        <button class="btn btn-success m-1 text-uppercase text-white" id="agregar-datosbanca"><b>Agregar Cuenta</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="text-uppercase mt-4" id="lista-Datos"></ul>
                         </div>
-                        <!-- <h5><b>Datos Bancarios</b></h5> -->
-                        <div class="collapse multi-collapse" id="multiCollapseExample2">
-                        <div class="row">
-                                <div class="col-md-4">
-                                    <label for="nombreBancoInput"><b>Nombre del Banco</b></label>
-                                    <div class="form-group mb-2">
-                                        <input type="text" class="form-control m-1" id="nombreBancoInput" placeholder="Nombre del Banco" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="numeroCuenteInput"><b>Numero de Cuenta</b></label>
-                                    <div class="form-group mb-2">
-                                        <input type="text" class="form-control m-1" id="numeroCuenteInput" placeholder="numero de cuenta" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="TipoCuentaInput"><b>Tipo de Cuenta</b></label>
-                                    <div class="form-group mb-2 d-flex">
-                                        <select name="notificaion" id="TipoCuentaInput" class="form-select m-1">
-                                            <option selected disabled value="option">Seleccione un tipo de Cuenta</option>
-                                            <option value="Ahorro">Ahorro</option>
-                                            <option value="Corriente">Corriente</option>
-                                            <option value="Vista">Vista</option>
-                                            <option value="Chequera electrónica">Chequera Electrónica</option>
-
-
-                                        </select>
-                                    </div>
-                                </div>
-                            {{-- <div class="col-md-4">
-                                <label for="monedaInput"><b>Moneda:</b></label>
-                                <div class="form-group mb-2 d-flex">
-                                   <select id="monedaInput" name="moneda"class="form-select m-1" required>
-                                    <option value="Peso Chileno">Cl - Peso Chileno</option>
-                                    <option value="USD">USD - Dólar Americano</option>
-                                    <option value="EUR">EUR - Euro</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="swiftInput"><b>Código SWIFT:</b></label>
-                                <div class="form-group mb-2 d-flex">
-                                <input type="text" id="swiftInput" name="codigo_swift" placeholder="codigo" class="form-control m-1">
-                                </div>
-                            </div>
-                                <div class="col-md-4">
-                                <label for="paisInput"><b>Pais:</b></label>
-                                <div class="form-group mb-2 d-flex">
-                                <input type="text" id="paisInput" name="pais"placeholder="pais donde esta el banco"class="form-control m-1">
-                             </div> --}}
-
-                                <div class="col-md-12 d-flex justify-content-end">
-                                    <button class="btn btn-success m-1 text-uppercase text-white" id="agregar-datosbanca"><b>Agregar Cuenta</b></button>
-                                </div>
-                            </div>
-                        </div>
-                                <ul class="text-uppercase mt-4" id="lista-Datos">
-                                    <!-- <li></li> -->
-                                </ul>
-                            </div>
                         <div class="modal-footer">
-                        <!-- Botones de cambios -->
-                        <button type="button" id="btn_agregar" class="btn btn-primary">Guardar</button>
-                        <button type="button" id="btn_cerrar_agregar" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" id="btn_agregar" class="btn btn-primary">Guardar</button>
+                            <button type="button" id="btn_cerrar_agregar" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-</div>
- <!-- Modal exito -->
- {{-- <div class="modal fade" id="modalAlertaAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAlertaAgregarLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="background: rgba(0, 0, 0, 0.0); border: none; width: 700px;">
-            <div class="modal-header alert alert-success" role="alert" style="border: none;">
-                <i class="bi bi-check-circle animate__animated animate__pulse" style="font-size: 40px;"></i>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-2">
-                            <lord-icon src="https://cdn.lordicon.com/oqdmuxru.json" trigger="loop" delay="2000" style="width:70px;height:70px"></lord-icon>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-                        </div>
-                        <div class="col-8 d-flex justify-content-center align-items-center">
-                            <p id="texto_succes_cliente" class="text-uppercase"></p>
-                        </div>
-                        <div class="col-2">
-                            <button type="button" class="btn-close d-flex justify-content-end" id="btn_cerrar_modal_cliente_agregar"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
 <!-- Modal Editar Propietario -->
-<div class="modal fade" id="editarPropietarioModal"  tabindex="-1" data-bs-backdrop="static" tabindex="-1" aria-labelledby="EditarpropietarioLabel" aria-hidden="true">
+<div class="modal fade" id="editarPropietarioModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="EditarpropietarioLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modal-lg">
             <div class="modal-header">
                 <h5 class="modal-title" id="EditarpropietarioLabel">Editar Propietario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
-
-            <div class="modal-body ">
+            <div class="modal-body">
                 <form>
                     <div class="container">
-                        <!-- Campos de entrada -->
                         <div class="row">
                             <div class="form-group mb-3">
                                 <label for="nombreEditInput"><b>Nombre</b></label>
@@ -255,12 +281,10 @@
                             </div>
                         </div>
                         <div class="row">
-                        <div class="form-group mb-3 col-6">
-                            <label for="rutEditInput"><b>Rut</b></label>
-                            <input type="text" class="form-control mt-2" id="rutEditInput" placeholder="12.345.678-9" 
-                            title="Formato válido: 12.345.678-9" minlength="9" maxlength="12">
-                        </div>
-
+                            <div class="form-group mb-3 col-6">
+                                <label for="rutEditInput"><b>Rut</b></label>
+                                <input type="text" class="form-control mt-2" id="rutEditInput" placeholder="12.345.678-9" minlength="9" maxlength="12">
+                            </div>
                             <div class="form-group mb-3 col-6">
                                 <label for="telefonoEditInput"><b>Telefono</b></label>
                                 <input type="text" class="form-control mt-2" id="telefonoEditInput" placeholder="Ej: 912345678" required>
@@ -268,30 +292,26 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="form-group mb-3 ">
+                            <div class="form-group mb-3">
                                 <label for="correoEditInput"><b>Correo</b></label>
                                 <input type="text" class="form-control mt-2" id="correoEditInput" placeholder="Ej: pedro@gmail.com" required>
                             </div>
-
-                        <div class="row">
-                            <div class="form-group mb-3 col-6">
-                                <label for="direccionEditInput"><b>Dirección</b></label>
-                                <input type="text" class="form-control mt-2" id="direccionEditInput" placeholder="Dirección" required>
+                            <div class="row">
+                                <div class="form-group mb-3 col-6">
+                                    <label for="direccionEditInput"><b>Dirección</b></label>
+                                    <input type="text" class="form-control mt-2" id="direccionEditInput" placeholder="Dirección" required>
+                                </div>
+                                <div class="form-group mb-3 col-6">
+                                    <label for="ciudadEditInput"><b>Ciudad</b></label>
+                                    <input type="text" class="form-control mt-2" id="ciudadEditInput" placeholder="Ciudad" required>
+                                </div>
                             </div>
-                            <div class="form-group mb-3 col-6">
-                                <label for="ciudadEditInput"><b>Ciudad</b></label>
-                                <input type="text" class="form-control mt-2" id="ciudadEditInput" placeholder="Ciudad" required>
-                            </div>
-                        </div>
-
                         </div>
                         <hr>
                     </div>
-                        <!-- Botones de cambios -->
-                        <div class="modal-footer">
+                    <div class="modal-footer">
                         <button type="button" id="btn_editar" class="btn btn-primary">Guardar</button>
                         <button type="button" id="btn_cerrar_agregar" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
                     </div>
                 </form>
             </div>
@@ -299,81 +319,65 @@
     </div>
 </div>
 
-
- <!-- Modal editar -->
- <div class="modal fade" id="MostrarCuenta" tabindex="-1" aria-labelledby="MostrarcuentaLabel"
- aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
- <div class="modal-dialog modal-xl" role="document">
-     <div class="modal-content">
-         <div class="modal-header">
-             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <h5 class="modal-title" id="" style="text-align: center;">Cuentas Bancarias</h5>
-         <form action="" method="POST" enctype="multipart/form-data">
-             <div class="modal-body">
-                 <div class="row">
-                 <h5 class=" text-cent">
-                </div>
-                <div class="form-group">
-                    <div id="listaCuentasEdit"></div>
-                </div>
-                <ul class="text-uppercase mt-4" id="lista-agregados-edit">
-                    <!-- <li></li> -->
-                </ul>
-                <div class="col-12">
-                    <button class="btn btn-warning w-100 mt-3 mb-3 text-uppercase text-white" 
-                    data-id="" 
-                    type="button" 
-                    data-bs-toggle="collapse" 
-                    data-bs-target=".multi-collapse3" 
-                    aria-expanded="false" 
-                    aria-controls="multiCollapseExample3">
-                    <b>Agregar Nueva cuenta</b>
-                </button>
-
-                </div>
-                <div class="collapse multi-collapse3" id="multiCollapseExample3">
-                    <div class="row">
-                   
-                            <input type="hidden" id="idPropietarioInput"> <!-- Campo oculto para el ID del propietario -->
-                     
-                        <div class="col-md-4">
+<!-- Modal Mostrar Cuentas -->
+<div class="modal fade" id="MostrarCuenta" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <h5 class="modal-title" style="text-align:center;">Cuentas Bancarias</h5>
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row"><h5 class="text-cent"></div>
+                    <div class="form-group"><div id="listaCuentasEdit"></div></div>
+                    <ul class="text-uppercase mt-4" id="lista-agregados-edit"></ul>
+                    <div class="col-12">
+                        <button class="btn btn-warning w-100 mt-3 mb-3 text-uppercase text-white" type="button"
+                            data-bs-toggle="collapse" data-bs-target=".multi-collapse3">
+                            <b>Agregar Nueva cuenta</b>
+                        </button>
+                    </div>
+                    <div class="collapse multi-collapse3" id="multiCollapseExample3">
+                        <div class="row">
+                            <input type="hidden" id="idPropietarioInput">
+                            <div class="col-md-4">
                                 <label for="nombreBancoInput2"><b>Nombre del Banco</b></label>
                                 <div class="form-group mb-2">
                                     <input type="text" class="form-control m-1" id="nombreBancoInput2" placeholder="Nombre del Banco" required>
                                 </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="numeroCuenteInput2"><b>Numero de Cuenta</b></label>
-                            <div class="form-group mb-2">
-                                <input type="text" class="form-control m-1" id="numeroCuenteInput2" placeholder="numero de cuenta" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="numeroCuenteInput2"><b>Numero de Cuenta</b></label>
+                                <div class="form-group mb-2">
+                                    <input type="text" class="form-control m-1" id="numeroCuenteInput2" placeholder="numero de cuenta" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="TipoCuentaInput2"><b>Tipo de Cuenta</b></label>
+                                <div class="form-group mb-2 d-flex">
+                                    <select name="notificaion" id="TipoCuentaInput2" class="form-select m-1">
+                                        <option selected disabled value="option">Seleccione un tipo de Cuenta</option>
+                                        <option value="Ahorro">Ahorro</option>
+                                        <option value="Corriente">Corriente</option>
+                                        <option value="Vista">vista</option>
+                                        <option value="Chequera electronica">Chequera Electronica</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <label for="TipoCuentaInput2"><b>Tipo de Cuenta</b></label>
-                            <div class="form-group mb-2 d-flex">
-                                <select name="notificaion" id="TipoCuentaInput2" class="form-select m-1">
-                                    <option selected disabled value="option">Seleccione un tipo de Cuenta</option>
-                                    <option value="Ahorro">Ahorro</option>
-                                    <option value="Corriente">Corriente</option>
-                                    <option value="Vista">vista</option>
-                                    <option value="Chequera electronica">Chequera Electronica</option>
-                                </select>
-                            </div>
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button class="btn btn-info m-1 text-uppercase text-white" data-id="" id="agregar-datosbanca2"><b>Agregar Nueva Cuenta</b></button>
                         </div>
                     </div>
-                     <div class="col-md-12 d-flex justify-content-end">
-                    <button class="btn btn-info m-1 text-uppercase text-white" data-id="" id="agregar-datosbanca2"><b>Agregar Nueva Cuenta</b></button>
                 </div>
-            </div>
-         </form>
+            </form>
         </div>
     </div>
 </div>
-</div>
 
-<!-- Modal Editar Cuenta-->
-<div class="modal fade" id="editarCuentaModal"  tabindex="-1" data-bs-backdrop="static" tabindex="-1" aria-labelledby="EditarCuetaLabel" aria-hidden="true">
+<!-- Modal Editar Cuenta -->
+<div class="modal fade" id="editarCuentaModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modal-lg">
             <div class="modal-header">
@@ -382,57 +386,40 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="EditarCuentaLabel">Editar Cuentas Bancarias</h5>
             </div>
-
-            <div class="modal-body ">
+            <div class="modal-body">
                 <form>
                     <div class="container">
-                        <!-- Campos de entrada -->
-                        <div class="col-md-12 mb-3">
-                            <!-- <label for="NombreTestigoDetalles" class="form-label">Testigo</label> -->
-                            <div id="listaCuentasDetalle"></div>
-                            <!-- <input type="text" class="form-control" id="NombreTestigoDetalles" disabled> -->
-                        </div>
-
-                         {{-- <div class="collapse multi-collapsee" id="multiCollapseEdit"> --}}
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="nombreBancoInputEdit"><b>Nombre del Banco</b></label>
-                                    <div class="form-group mb-2">
-                                        <input type="text" class="form-control m-1" id="nombreBancoInputEdit" placeholder="Nombre del Banco" required>
-                                    </div>
+                        <div class="col-md-12 mb-3"><div id="listaCuentasDetalle"></div></div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="nombreBancoInputEdit"><b>Nombre del Banco</b></label>
+                                <div class="form-group mb-2">
+                                    <input type="text" class="form-control m-1" id="nombreBancoInputEdit" placeholder="Nombre del Banco" required>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="numeroCuenteInputEdit"><b>Numero de Cuenta</b></label>
-                                    <div class="form-group mb-2">
-                                        <input type="text" class="form-control m-1" id="numeroCuenteInputEdit" placeholder="numero de cuenta" required>
-                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="numeroCuenteInputEdit"><b>Numero de Cuenta</b></label>
+                                <div class="form-group mb-2">
+                                    <input type="text" class="form-control m-1" id="numeroCuenteInputEdit" placeholder="numero de cuenta" required>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="TipoCuentaInputEdit"><b>Tipo de Cuenta</b></label>
-                                    <div class="form-group mb-2 d-flex">
-                                        <select name="notificaion" id="TipoCuentaInputEdit" class="form-select m-1">
-                                            <option selected disabled value="option">Seleccione un tipo de Cuenta</option>
-                                            <option value="Ahorro">Ahorro</option>
-                                            <option value="Corriente">Corriente</option>
-                                            <option value="Vista">Vista</option>
-                                            <option value="Chequera electronica">Chequera electronica</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="TipoCuentaInputEdit"><b>Tipo de Cuenta</b></label>
+                                <div class="form-group mb-2 d-flex">
+                                    <select name="notificaion" id="TipoCuentaInputEdit" class="form-select m-1">
+                                        <option selected disabled value="option">Seleccione un tipo de Cuenta</option>
+                                        <option value="Ahorro">Ahorro</option>
+                                        <option value="Corriente">Corriente</option>
+                                        <option value="Vista">Vista</option>
+                                        <option value="Chequera electronica">Chequera electronica</option>
+                                    </select>
                                 </div>
-
                             </div>
                         </div>
-
-                            <ul class="text-uppercase mt-4" id="lista_Datos_Cuentas">
-                                    <!-- <li></li> -->
-                             </ul>
-
-
-                        <!-- Botones de cambios -->
-                        <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button> -->
-                            <button type="button" class="btn btn-warning text-uppercase" id="btn_editar_cuenta"><b>Guardar cambios</b></button>
-                        </div>
+                    </div>
+                    <ul class="text-uppercase mt-4" id="lista_Datos_Cuentas"></ul>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning text-uppercase" id="btn_editar_cuenta"><b>Guardar cambios</b></button>
                     </div>
                 </form>
             </div>
@@ -440,699 +427,535 @@
     </div>
 </div>
 
-
-<!--MODAL DE CONFIRMAR PARA ELIMINAR -->
-<div class="modal fade" id="modalEliminarPropietario" tabindex="-1" aria-labelledby="modalEliminarPropietarioLabel" aria-hidden="true"
-data-bs-backdrop="static" data-bs-keyboard="false">
-<div class="modal-dialog modal-lg">
-    <div class="alert alert-danger d-flex align-items-center" id="alerta" role="alert">
-        <div class="modal-content" style="background-color: rgb(0,0,0,0.0); border:none">
-            <h5 class="m-4 text-uppercase text-center">¿Seguro que quieres eliminar el propietario?</h5>
+<!-- Modal Confirmar Eliminar -->
+<div class="modal fade" id="modalEliminarPropietario" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="alert alert-danger d-flex align-items-center" id="alerta" role="alert">
+            <div class="modal-content" style="background-color:rgb(0,0,0,0.0);border:none">
+                <h5 class="m-4 text-uppercase text-center">¿Seguro que quieres eliminar el propietario?</h5>
                 <input type="hidden" id="eliminar-idPropietario">
-            <div class="modalfooter d-flex justify-content-center">
-                <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" id="confirmDelete" class="btn btn-secondary m-2">Eliminar</button>
+                <div class="modalfooter d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="confirmDelete" class="btn btn-secondary m-2">Eliminar</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 
-<div class="modal fade" id="modalerroreliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modalerroreliminarLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-header alert alert-warning" role="alert" style="border: none;">
-                <i class="bi bi-x-lg"></i>
-                <div class="modal-content" style="background-color: rgb(0,0,0,0.0); border:none">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-2">
-                                <lord-icon src="https://cdn.lordicon.com/jnzhohhs.json"trigger="loop" delay="2000"
-                                    style="width:70px;height:70px">
-                                </lord-icon>
-                            </div>
-                            <div class="col-8 d-flex justify-content-center align-items-center">
-                                <p id="texto_error" class="text-uppercase">
-                                </p>
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn-close d-flex justify-content-end"
-                                    data-bs-dismiss="modal" aria-label="Close" id="btn_cerrar_error_eliminar"></button>
-                            </div>
+<!-- Modal Error Eliminar -->
+<div class="modal fade" id="modalerroreliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-header alert alert-warning" role="alert" style="border:none;">
+            <div class="modal-content" style="background-color:rgb(0,0,0,0.0);border:none">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2">
+                            <lord-icon src="https://cdn.lordicon.com/jnzhohhs.json" trigger="loop" delay="2000" style="width:70px;height:70px"></lord-icon>
+                        </div>
+                        <div class="col-8 d-flex justify-content-center align-items-center">
+                            <p id="texto_error" class="text-uppercase"></p>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="modal" aria-label="Close" id="btn_cerrar_error_eliminar"></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-      {{-- <!-- Modal ERROR CONTRA PARTE-->
-      <div class="modal fade" id="testigoAlertModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="testigoAlertModalLabel" aria-hidden="true">
-        <div class="modal-dialog ">
-            <div class="modal-content" style="background: rgba(0, 0, 0, 0.0); border: none; max-width: 700px;">
-                <div class="modal-header alert alert-danger" style="border: none;">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-2">
-                                <!-- <lord-icon src="https://cdn.lordicon.com/oqdmuxru.json" trigger="loop" delay="2000" style="width:70px;height:70px"></lord-icon> -->
-                            </div>
-                            <div class="col-8 d-flex justify-content-center align-items-center">
-                                    <p id="texto_success_archivos" class="text-uppercase">Por favor, Ingrese sus Datos Bancarios</p>
-                                </div>
-                                <div class="col-2">
-                                <button type="button" class="btn-close d-flex justify-content-end" data-bs-dismiss="modal" aria-label="Close" id="btn_cerrar_modal"></button>
-                            </div>
+</div>
+
+<!-- Modal Delete Cuenta -->
+<div class="modal fade" id="deleteCuentaModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="alert alert-danger d-flex align-items-center" id="alerta" role="alert">
+            <div class="modal-content" style="background-color:rgb(0,0,0,0.0);border:none">
+                <h5 class="m-4 text-uppercase text-center">¿Seguro que quieres eliminar la cuenta?</h5>
+                <div class="modalfooter d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btn_eliminar_cuenta" class="btn btn-secondary m-2">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Éxito -->
+<div class="modal fade" id="modalAlertaAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background:rgba(0,0,0,0.0);border:none;width:700px;">
+            <div class="modal-header alert alert-success" role="alert" style="border:none;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2">
+                            <lord-icon src="https://cdn.lordicon.com/oqdmuxru.json" trigger="loop" delay="2000" style="width:70px;height:70px"></lord-icon>
+                        </div>
+                        <div class="col-8 d-flex justify-content-center align-items-center">
+                            <p id="texto_success" class="text-uppercase"></p>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn-close d-flex justify-content-end" id="btn-close"></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> --}}
-     <!-- modal delete cuenta -->
-     <div class="modal fade" id="deleteCuentaModal" tabindex="-1" aria-labelledby="deleteCuentaModalLabel"
-     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-     <div class="modal-dialog modal-lg">
-         <div class="alert alert-danger d-flex align-items-center" id="alerta" role="alert">
-             <div class="modal-content" style="background-color: rgb(0,0,0,0.0); border:none">
-                 <h5 class="m-4 text-uppercase text-center">¿Seguro que quieres eliminar la cuenta?</h2>
-                 <div class="modalfooter d-flex justify-content-center">
-                     <button type="button" class="btn btn-danger m-2"
-                         data-bs-dismiss="modal">Cancelar</button>
-                     <button type="button" id="btn_eliminar_cuenta"
-                         class="btn btn-secondary m-2">Eliminar</button>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
-
- <div class="modal fade" id="modalAlertaAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="successLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="background: rgba(0, 0, 0, 0.0); border: none; width: 700px;">
-                <div class="modal-header alert alert-success" role="alert" style="border: none;">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-2">
-                                <lord-icon src="https://cdn.lordicon.com/oqdmuxru.json" trigger="loop" delay="2000"
-                                    style="width:70px;height:70px"></lord-icon>
-                            </div>
-                            <div class="col-8 d-flex justify-content-center align-items-center">
-                                <p id="texto_success" class="text-uppercase">
-                                </p>
-                            </div>
-                                <div class="col-2">
-                                    <button type="button" class="btn-close d-flex justify-content-end"  id="btn-close"></button>
-                                </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
 
 @endsection
+
+@section('css')
+@parent
+<style>
+/* ─── Tarjetas de propietario ─────────────────────────────────────── */
+.card-propietario {
+    background: #fff;
+    border-radius: 16px;
+    border: 1.5px solid #f0f0f0;
+    overflow: hidden;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+.card-propietario:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12) !important;
+    border-color: #0d6efd44;
+}
+
+/* Enlace invisible que cubre toda la tarjeta */
+.card-link-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 16px;
+}
+
+/* Zona de acciones con z-index superior al overlay */
+.card-prop-actions {
+    position: relative;
+    z-index: 2;
+}
+
+/* Cabecera con avatar */
+.card-prop-body {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 18px 14px;
+    border-bottom: 1px solid #f5f5f5;
+    background: linear-gradient(135deg, #fff 60%, #f8f4ff 100%);
+}
+.prop-avatar {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(13,110,253,.25);
+    letter-spacing: -1px;
+}
+.prop-info {
+    overflow: hidden;
+}
+.prop-name {
+    margin: 0;
+    font-size: .95rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.prop-rut {
+    font-size: .78rem;
+    color: #888;
+    font-weight: 500;
+}
+
+/* Detalles de contacto */
+.card-prop-details {
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+.prop-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .82rem;
+    color: #555;
+    overflow: hidden;
+}
+.prop-detail-item i {
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.prop-detail-item span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Acciones */
+.card-prop-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    border-top: 1px solid #f0f0f0;
+}
+.btn-prop-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 10px 6px 8px;
+    font-size: .7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    background: none;
+    border: none;
+    border-right: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background .18s, color .18s;
+    color: #555;
+    text-decoration: none;
+}
+.btn-prop-action:last-child { border-right: none; }
+.btn-prop-action i { font-size: .95rem; }
+
+.btn-ver:hover     { background: #e8f0fe; color: #0d6efd; }
+.btn-editar:hover  { background: #fff3cd; color: #d97706; }
+.btn-cuenta:hover  { background: #d1fae5; color: #059669; }
+.btn-eliminar:hover{ background: #fee2e2; color: #dc2626; }
+
+/* ─── Toggle botones ──────────────────────────────────────────────── */
+#btn-vista-tarjetas.active-view,
+#btn-vista-lista.active-view {
+    background-color: #0d6efd;
+    color: #fff;
+    border-color: #0d6efd;
+}
+</style>
+@endsection
+
 @section('javascript')
 @parent
 <script>
-    // funcion que siempre tiene que ir en script inicio
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+$(document).ready(function () {
+    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+
+    /* ─── Toggle vista tarjetas / lista ─────────────────────────── */
+    var vistaActual = localStorage.getItem('propietarios_vista') || 'tarjetas';
+
+    function aplicarVista(vista) {
+        if (vista === 'tarjetas') {
+            $('#vista-tarjetas').show();
+            $('#vista-lista').hide();
+            $('#btn-vista-tarjetas').addClass('active-view btn-primary').removeClass('btn-outline-secondary');
+            $('#btn-vista-lista').addClass('btn-outline-secondary').removeClass('active-view btn-primary');
+        } else {
+            $('#vista-tarjetas').hide();
+            $('#vista-lista').show();
+            $('#btn-vista-lista').addClass('active-view btn-primary').removeClass('btn-outline-secondary');
+            $('#btn-vista-tarjetas').addClass('btn-outline-secondary').removeClass('active-view btn-primary');
+        }
+        vistaActual = vista;
+        localStorage.setItem('propietarios_vista', vista);
+    }
+
+    aplicarVista(vistaActual);
+
+    $('#btn-vista-tarjetas').on('click', function () { aplicarVista('tarjetas'); });
+    $('#btn-vista-lista').on('click', function ()    { aplicarVista('lista'); });
+
+    /* ─── Buscador (funciona en ambas vistas) ────────────────────── */
+    $('#buscador_cnn').on('keyup', function () {
+        var valor = $(this).val().toLowerCase();
+        // Tarjetas
+        $('.propietario-item').each(function () {
+            var texto = $(this).data('nombre') + ' ' + $(this).data('rut');
+            $(this).toggle(texto.includes(valor));
+        });
+        // Lista
+        $('#tablaUa tr.propietario-fila').each(function () {
+            var texto = $(this).text().toLowerCase();
+            $(this).toggle(texto.includes(valor));
+        });
+    });
+
+    /* ─── RUT formatters ─────────────────────────────────────────── */
+    function formatRut(input) {
+        let val = input.value.replace(/[^\dkK]/g, '');
+        if (val.length > 1) {
+            let body = val.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            let dv = val.slice(-1).toUpperCase();
+            input.value = `${body}-${dv}`;
+        } else { input.value = val; }
+    }
+    document.getElementById('rutInput').addEventListener('input', function () { formatRut(this); });
+    document.getElementById('rutEditInput').addEventListener('input', function () { formatRut(this); });
+
+    /* ─── Datos bancarios (agregar a lista) ─────────────────────── */
+    var DatosAgregados = [];
+    var listaDatos = $('#lista-Datos');
+
+    $('#agregar-datosbanca').on('click', function (e) {
+        e.preventDefault();
+        var nombre_banco = $('#nombreBancoInput').val();
+        var numero_cuenta = $('#numeroCuenteInput').val();
+        var tipo_cuenta = $('#TipoCuentaInput').val();
+
+        if (nombre_banco) {
+            var dato = { id: DatosAgregados.length + 1, nombre_banco, numero_cuenta, tipo_cuenta };
+            DatosAgregados.push(dato);
+            $('#nombreBancoInput, #numeroCuenteInput').val('');
+            $('#TipoCuentaInput').val('option');
+
+            if ($('#tablaDatos').length === 0) {
+                var tbl = $('<table>').attr('id','tablaDatos').addClass('table table-striped table-bordered');
+                tbl.append($('<thead>').append($('<tr>').append($('<th>').text('Nombre Banco')).append($('<th>').text('N° Cuenta')).append($('<th>').text('Tipo'))));
+                listaDatos.append(tbl);
+            }
+            var tbody = $('#tablaDatos tbody').length ? $('#tablaDatos tbody') : $('<tbody>').appendTo('#tablaDatos');
+            tbody.append($('<tr>').append($('<td>').text(dato.nombre_banco)).append($('<td>').text(dato.numero_cuenta)).append($('<td>').text(dato.tipo_cuenta)));
+        }
+    });
+
+    /* ─── Guardar nuevo propietario ─────────────────────────────── */
+    $('#btn_agregar').on('click', function (e) {
+        e.preventDefault();
+        $('.error-message').remove();
+        var nombre = $('#nombreInput').val().trim();
+        var rut = $('#rutInput').val().trim();
+        var telefono = $('#telefonoInput').val().trim();
+        var correo = $('#correoInput').val().trim();
+        var direccion = $('#direccionInput').val().trim();
+        var ciudad = $('#ciudadInput').val().trim();
+        var valid = true;
+
+        function showError(sel, msg) {
+            $(sel).after(`<small class="text-danger error-message">${msg}</small>`);
+            valid = false;
+        }
+        if (!nombre) showError('#nombreInput', 'Campo obligatorio');
+        if (!rut) showError('#rutInput', 'Campo obligatorio');
+        if (!telefono) showError('#telefonoInput', 'Campo obligatorio');
+        else if (telefono.length !== 9) showError('#telefonoInput', 'Debe tener 9 dígitos');
+        if (!correo) showError('#correoInput', 'Campo obligatorio');
+        if (!direccion) showError('#direccionInput', 'Campo obligatorio');
+        if (!ciudad) showError('#ciudadInput', 'Campo obligatorio');
+        if (!valid) return;
+
+        var formData = new FormData();
+        formData.append('nombre', nombre);
+        formData.append('rut', rut);
+        formData.append('telefono', telefono);
+        formData.append('correo', correo);
+        formData.append('direccion', direccion);
+        formData.append('ciudad', ciudad);
+        if (typeof DatosAgregados !== 'undefined') formData.append('DatosAgregados', JSON.stringify(DatosAgregados));
+
+        $.ajax({
+            url: '{{ url("/propietariosadd") }}',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function () {
+                $('#agregarpropietario').modal('hide');
+                $('#modalAlertaAgregar').modal('show');
+                $('#texto_success').html('El Propietario se ha creado exitosamente.');
+            },
+            error: function (jqXHR) {
+                if (jqXHR.status === 409 && jqXHR.responseJSON?.message) {
+                    alert(jqXHR.responseJSON.message);
                 }
-            })
-        console.log('Listo para trabajar')
-
-             ////////////////////////////BUSCADOR/////////////////////////
-             $("#buscador_cnn").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#tablaUa tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-
-            // para que salga con . y - el rut normal 
-            document.getElementById('rutInput').addEventListener('input', function (event) {
-                let input = event.target.value.replace(/[^\dkK]/g, ''); // Elimina cualquier cosa que no sea dígito o 'k'/'K'
-
-                if (input.length > 1) {
-                    let body = input.slice(0, -1); // Cuerpo del RUT
-                    let formattedBody = body.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Añade puntos cada 3 dígitos
-                    let dv = input.slice(-1).toUpperCase(); // Dígito verificador, en mayúscula
-                    event.target.value = `${formattedBody}-${dv}`; // Formatea el valor
-                } else {
-                    event.target.value = input; // Si tiene menos de 2 caracteres, no formatea
-                }
-            });
-
-            // para que salga con . y - el rut editar
-
-            document.getElementById('rutEditInput').addEventListener('input', function (event) {
-                let input = event.target.value.replace(/[^\dkK]/g, ''); // Elimina cualquier cosa que no sea dígito o 'k'/'K'
-
-                if (input.length > 1) {
-                    let body = input.slice(0, -1); // Cuerpo del RUT
-                    let formattedBody = body.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Añade puntos cada 3 dígitos
-                    let dv = input.slice(-1).toUpperCase(); // Dígito verificador, en mayúscula
-                    event.target.value = `${formattedBody}-${dv}`; // Formatea el valor
-                } else {
-                    event.target.value = input; // Si tiene menos de 2 caracteres, no formatea
-                }
-            });
-
-/// LISTA DE LA TABLAS DE CUENTAS AGREGADAS/////////////
-
-
-        var DatosAgregados = [];
-        var listaDatos = $("#lista-Datos");
-            $("#agregar-datosbanca").on('click', function(event){
-                event.preventDefault();
-
-                var nombre_banco = $("#nombreBancoInput").val();
-                var numero_cuenta = $("#numeroCuenteInput").val();
-                var tipo_cuenta = $("#TipoCuentaInput").val();
-                // var moneda = $("#monedaInput").val();
-                // var codigo_swift= $("#swiftInput").val();
-                // var pais_banco = $("#paisInput").val();
-
-                if(nombre_banco) {
-                    var datosbancarios= {
-                        id: DatosAgregados.length + 1, // Generar un ID temporal o único
-                        nombre_banco: nombre_banco,
-                        numero_cuenta: numero_cuenta,
-                        tipo_cuenta:tipo_cuenta,
-                        // moneda: moneda,
-                        // codigo_swift: codigo_swift,
-                        // pais_banco:pais_banco,
-                    };
-
-
-                    // Agregar el dato al arreglo
-                    DatosAgregados.push(datosbancarios);
-
-
-                    // Limpiar el campo de entrada
-                    $("#nombreBancoInput").val('');
-                    $("#numeroCuenteInput").val('');
-                    $("#TipoCuentaInput").val('option');
-                    // $("#monedaInput").val('option');
-                    // $("#swiftInput").val('');
-                    // $("#paisInput").val('');
-
-
-                    // Crear la tabla si no existe
-                    if ($("#tablaDatos").length === 0) {
-                        var table = $("<table>").attr("id", "tablaDatos").addClass("table table-striped table-bordered");
-                        var thead = $("<thead>");
-                        var headerRow = $("<tr>");
-                        headerRow.append($("<th>").text("Nombre Banco"));
-                        headerRow.append($("<th>").text("N° CUENTA"));
-                        headerRow.append($("<th>").text("TIPO DE CUENTA"));
-                        thead.append(headerRow);
-                        table.append(thead);
-                        listaDatos.append(table); // 'listaDatos' es el contenedor donde se desea agregar la tabla
-                    }
-
-                    // Agregar una nueva fila a la tabla con los datos del testigo
-                    var tbody = $("#tablaDatos tbody");
-                    if (tbody.length === 0) {
-                        tbody = $("<tbody>");
-                        $("#tablaDatos").append(tbody);
-                    }
-
-                    var row = $("<tr>");
-                    row.append($("<td>").html(datosbancarios.nombre_banco + "&nbsp;&nbsp;&nbsp;")); // Espacio añadido
-                    row.append($("<td>").html(datosbancarios.numero_cuenta + "&nbsp;&nbsp;&nbsp;"));    // Espacio añadido
-                    row.append($("<td>").html(datosbancarios.tipo_cuenta + "&nbsp;&nbsp;&nbsp;")); // Espacio añadido
-                    tbody.append(row);
-
-
-                    console.log("Datos  agregado correctamente:", datosbancarios);
-                    console.log("Datos agregados:", DatosAgregados);
-
-                } else {
-                    $("#testigoAlertModal").modal('show');
-
-                    // alert("Por favor, ingrese el nombre del testigo.");
-                }
-            });
-
-
-
-
-
-                // Limpiar los mensajes de error anteriores
-                $(".error-message").remove();
-        $("#buscador_cn").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $(".cartas .card").each(function() {
-                var cardText = $(this).find('.card-title').text().toLowerCase();
-                if (cardText.includes(value)) {
-                    $(this).prependTo($(this).parent()); // Mover al principio del contenedor padre
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
+            }
         });
 
-        $("#btn_agregar").on('click', function(event) {
-            event.preventDefault();
+        $('#btn-close').click(function () { $('#modalAlertaAgregar').modal('hide'); location.reload(); });
+    });
 
-            // Limpiar errores previos
-            $(".error-message").remove();
-
-            // Obtener valores
-            var nombre = $("#nombreInput").val().trim();
-            var rut = $("#rutInput").val().trim();
-            var telefono = $("#telefonoInput").val().trim();
-            var correo = $("#correoInput").val().trim();
-            var direccion = $("#direccionInput").val().trim();
-            var ciudad = $("#ciudadInput").val().trim();
-
-            let valid = true;
-
-            // Función para mostrar error debajo del campo
-            function showError(selector, mensaje) {
-                $(selector).after(`<small class="text-danger error-message">${mensaje}</small>`);
-                valid = false;
+    /* ─── Editar propietario ────────────────────────────────────── */
+    $(document).on('click', '.editar-propietario-btn', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = $(this).data('id');
+        $.ajax({ type: 'GET', url: '/propietarios/' + id, dataType: 'json',
+            success: function (data) {
+                $('#editarPropietarioModal').modal('show');
+                $('#btn_editar').data('id', id);
+                $('#nombreEditInput').val(data.nombre);
+                $('#rutEditInput').val(data.rut);
+                $('#telefonoEditInput').val(data.telefono);
+                $('#correoEditInput').val(data.correo);
+                $('#direccionEditInput').val(data.direccion);
+                $('#ciudadEditInput').val(data.ciudad);
             }
-
-            // Validar campos
-            if (nombre === "") showError("#nombreInput", "Campo obligatorio");
-            if (rut === "") showError("#rutInput", "Campo obligatorio");
-            if (telefono === "") showError("#telefonoInput", "Campo obligatorio");
-            else if (telefono.length !== 9) showError("#telefonoInput", "Debe tener 9 dígitos");
-            if (correo === "") showError("#correoInput", "Campo obligatorio");
-            if (direccion === "") showError("#direccionInput", "Campo obligatorio");
-            if (ciudad === "") showError("#ciudadInput", "Campo obligatorio");
-
-            if (!valid) return; // Detener si hay errores
-
-            // Crear FormData
-            var formData = new FormData();
-            formData.append('nombre', nombre);
-            formData.append('rut', rut);
-            formData.append('telefono', telefono);
-            formData.append('correo', correo);
-            formData.append('direccion', direccion);
-            formData.append('ciudad', ciudad);
-
-            if (typeof DatosAgregados !== 'undefined') {
-                formData.append('DatosAgregados', JSON.stringify(DatosAgregados));
-            }
-
-            // Enviar AJAX
-            $.ajax({
-                url: '{{url("/propietariosadd")}}',
-                type: 'POST',
-                data: formData,
-                dataType: 'json',
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(respuesta) {
-                    console.log("respuesta", respuesta);
-                    $("#agregarpropietario").modal('hide');
-                    $("#modalAlertaAgregar").modal('show');
-                    $("#texto_success").html("El Propietario se ha creado exitosamente.");
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    if (jqXHR.status === 409 && jqXHR.responseJSON?.message) {
-                        alert(jqXHR.responseJSON.message); // O muestra en un modal debajo del campo
-                    } else {
-                        console.log("Error:", errorThrown);
-                    }
-                }
-            });
-
-            // Cierre del modal
-            $("#btn-close").click(function() {
-                $("#modalAlertaAgregar").modal('hide');
-                location.reload();
-            });
         });
+    });
 
-
-        $('.editar-propietario-btn').on('click', function() {
-            event.preventDefault();
-            var id = $(this).data('id');
-
-            $.ajax({
-                type: 'GET',
-                url: '/propietarios/' + id,
-                dataType: 'json',
-                success: function(data) {
-                    $('#editarPropietarioModal').modal('show');
-                    $("#btn_editar").data("id",id);
-                    $('#nombreEditInput').val(data.nombre);
-                    $('#rutEditInput').val(data.rut);
-                    $('#telefonoEditInput').val(data.telefono);
-                    $('#correoEditInput').val(data.correo);
-                    $('#direccionEditInput').val(data.direccion);
-                    $('#ciudadEditInput').val(data.ciudad);
-
-                    // $('#nombreBancoInputEdit').val(data.nombre_banco);
-                    // $('#numeroCuenteInputEdit').val(data.numero_cuenta);
-                    // $('#TipoCuentaInputEdit').val(data.tipo_cuenta);
-
-                     }
-               });
-            });
-            $('#btn_editar').on('click', function() {
-            event.preventDefault();
-            var Id = $(this).data('id');
-            var nombre = $('#nombreEditInput').val();
-            var rut = $('#rutEditInput').val();
-            var telefono = $('#telefonoEditInput').val();
-            var correo = $('#correoEditInput').val();
-            var direccion = $('#direccionEditInput').val();
-            var ciudad = $('#ciudadEditInput').val();
-            var argumentos = {
-            nombre: nombre,
-            rut: rut,
-            telefono: telefono,
-            correo: correo,
-            direccion: direccion,
-            ciudad: ciudad
-
-            };
-
-            console.log("Datos Obtenidos", argumentos);
-
-            $.ajax({
-            url: '/propietarios/'+ Id,
+    $('#btn_editar').on('click', function (e) {
+        e.preventDefault();
+        var Id = $(this).data('id');
+        $.ajax({
+            url: '/propietarios/' + Id,
             type: 'POST',
             datatype: 'json',
-            data: argumentos
-            })
-
-            .done(function(respuesta) {
-                console.log("respuesta", respuesta);
-                $("#editarPropietarioModal").modal('hide');
-                $("#modalAlertaAgregar").modal('show');
-                $("#texto_success").html("El Propietario se ha Editado exitosamente.");
-            })
-
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.log("Error", errorThrown);
-                $("#myModal").modal('hide');
-                $("#modalerrorcliente").modal('show');
-            });
-
-            $("#btn-close").click(function() {
-                $("#modalAlertaAgregar").modal('hide');
-                location.reload();
-            });
+            data: {
+                nombre: $('#nombreEditInput').val(), rut: $('#rutEditInput').val(),
+                telefono: $('#telefonoEditInput').val(), correo: $('#correoEditInput').val(),
+                direccion: $('#direccionEditInput').val(), ciudad: $('#ciudadEditInput').val()
+            }
+        }).done(function () {
+            $('#editarPropietarioModal').modal('hide');
+            $('#modalAlertaAgregar').modal('show');
+            $('#texto_success').html('El Propietario se ha Editado exitosamente.');
         });
+        $('#btn-close').click(function () { $('#modalAlertaAgregar').modal('hide'); location.reload(); });
+    });
 
+    /* ─── Eliminar propietario ──────────────────────────────────── */
+    $(document).on('click', '.borrar-propietario-btn', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = $(this).data('id');
+        $('#eliminar-idPropietario').val(id);
+        $('#modalEliminarPropietario').modal('show');
+    });
 
-
-        $('.borrar-propietario-btn').click(function() {
-              var id = $(this).data('id');
-                 console.log(id);
-               $('#eliminar-idPropietario').val(id);
-                 $('#modalEliminarPropietario').modal('show');
-            });
-
-        // Función de confirmar eliminación de propietario
-        $('#confirmDelete').click(function(event) {
-            event.preventDefault();
-            var id = $('#eliminar-idPropietario').val();
-            console.log(id);
-            $.ajax({
-                url: '/propietarioestado/' + id,
-                type: 'PATCH', // o 'PUT'
-                data: {
-                    _token: '{{csrf_token()}}',
-                    estado: 0 // nuevo estado del propietario
-                },
-                success: function(data) {
-                    console.log(data);
-                    $('#modalEliminarPropietario').modal('hide');
-                    $("#modalAlertaAgregar").modal('show');
-                    $('#texto_success').text('El Propietario se ha Ocultado con éxito');
-                },
-                fail: function(jqXHR, textStatus, errorThrown) {
-                    console.log("Error", errorThrown);
-                    $("#modalEliminarPropietario").modal('hide');
-                    $("#modalerroreliminar").modal('show');
-                    $('#texto_error').text('Error al Ocultar el propietario');
-                }
-
-          }); // fin delete
-
-          $("#btn-close").click(function() {
-                $("#modalAlertaAgregar").modal('hide');
-                location.reload();
-            });
-
-
-          $("#btn_cerrar_error_eliminar").click(function() {
-                $("#modalerroreliminar").modal('hide');
-                location.reload();
-         });
-
-
-         });
-
-         ////MOSTRAR MODAL DE TABLA DE CUENTAS ///
-
-            $(".mostra-cuentas-btn").on('click', function(event) {
-            event.preventDefault();
-
-            var id_Cuenta = $(this).data('id');
-            // Asignar idPropietario al campo oculto
-            $('#idPropietarioInput').val(id_Cuenta);
-            $.ajax({
-                url: '/Mostrar/cuenta/' + id_Cuenta,
-                type: 'GET',
-                dataType: 'json'
-            })
-            .done(function(respuesta) {
-                console.log('Respuesta del servidor:');
-                console.log(respuesta);
-
-                var listaCuentasEdit = $("#lista-agregados-edit");
-                // listaCuentasEdit.empty();
-
-                if (respuesta.datosbancarios) {
-                    console.log('Datos bancarios:');
-                  console.log(respuesta.datosbancarios);
-                  var tableContainer = $("<div>").addClass("table-responsive");
-                    var table = $("<table>").addClass("table table-striped table-bordered");
-                    var header = $("<thead>")
-                        .append($("<tr>")
-                            .append($("<th>").text("Nombre De Banco"))
-                            .append($("<th>").text("Numero Cuenta"))
-                            .append($("<th>").text("Tipo Cuenta"))
-                            .append($("<th>").text("Acciones"))
-                        );
-                    table.append(header);
-
-                    var body = $("<tbody>");
-                    respuesta.datosbancarios.forEach(function(datosbancarios) {
-                        var row = $("<tr>")
-                            .append($("<td>").text(datosbancarios.nombre_banco))
-                            .append($("<td>").text(datosbancarios.numero_cuenta))
-                            .append($("<td>").text(datosbancarios.tipo_cuenta))
-                            .append(
-                                $("<td>").html(
-                                    '<a href="#" class="btn btn-warning btn-sm editar-cuenta" data-id="' + datosbancarios.id + '"><i class="fas fa-edit"></i></a> ' +
-                                    '<a href="#" class="btn btn-danger btn-sm eliminar-cuenta" data-id="' + datosbancarios.id + '"><i class="fas fa-trash-alt"></i></a>')
-                            );
-                        body.append(row);
-                    });
-
-
-                    table.append(body);
-                    listaCuentasEdit.html(table);
-                    tableContainer.append(table); // Envolver la tabla en el contenedor responsive
-                    listaCuentasEdit.html(tableContainer);
-
-                }
-                  // Mostrar el modal después de actualizar la tabla
-                     $('#MostrarCuenta').modal('show');
-
-            });
+    $('#confirmDelete').click(function (e) {
+        e.preventDefault();
+        var id = $('#eliminar-idPropietario').val();
+        $.ajax({
+            url: '/propietarioestado/' + id,
+            type: 'PATCH',
+            data: { _token: '{{ csrf_token() }}', estado: 0 },
+            success: function () {
+                $('#modalEliminarPropietario').modal('hide');
+                $('#modalAlertaAgregar').modal('show');
+                $('#texto_success').text('El Propietario se ha Ocultado con éxito');
+            }
         });
+        $('#btn-close').click(function () { $('#modalAlertaAgregar').modal('hide'); location.reload(); });
+        $('#btn_cerrar_error_eliminar').click(function () { $('#modalerroreliminar').modal('hide'); location.reload(); });
+    });
 
-        //  GUARDAR NUEVA CUENTA BANCARIA
+    /* ─── Mostrar cuentas bancarias ─────────────────────────────── */
+    $(document).on('click', '.mostra-cuentas-btn', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id_Cuenta = $(this).data('id');
+        $('#idPropietarioInput').val(id_Cuenta);
 
-         //Boton agregar  cuenta
-         $("#agregar-datosbanca2").on('click', function(event) {
-                event.preventDefault();
-                var idPropietario = $('#idPropietarioInput').val();
-                var nombreBanco = $('#nombreBancoInput2').val();
-                var numeroCuenta = $('#numeroCuenteInput2').val();
-                var tipoCuenta = $('#TipoCuentaInput2').val();
-
-
-                argumentos = {
-                    id_propietario: idPropietario,
-                    nombre_banco: nombreBanco,
-                    numero_cuenta: numeroCuenta,
-                    tipo_cuenta: tipoCuenta
-
-                };
-
-                console.log(argumentos);
-
-                // Realizar la solicitud AJAX
-                $.ajax({
-                    url: '{{ url("/Nueva/cuenta2aad") }}',
-                    type: 'POST',
-                    data: argumentos,
-                    dataType: 'json',
-                    success: function(respuesta) {
-                        console.log("respuesta", respuesta);
-
-                        $("#modalAlertaAgregar").modal('show');
-                        $("#texto_success").html("La cuenta se ha Creado exitosamente");
-                        $("#MostrarCuenta").modal('hide');
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log("Error:", errorThrown);
-                        $('#modalerror').modal('show');
-
-                    }
-
-                });  $("#btn-close").click(function() {
-                $("#modalAlertaAgregar").modal('hide');
-                location.reload(); // Recarga la página
-
-
-
+        $.ajax({ url: '/Mostrar/cuenta/' + id_Cuenta, type: 'GET', dataType: 'json' })
+        .done(function (respuesta) {
+            var listaCuentasEdit = $('#lista-agregados-edit');
+            if (respuesta.datosbancarios) {
+                var tableContainer = $('<div>').addClass('table-responsive');
+                var table = $('<table>').addClass('table table-striped table-bordered');
+                var header = $('<thead>').append($('<tr>').append($('<th>').text('Nombre De Banco')).append($('<th>').text('Numero Cuenta')).append($('<th>').text('Tipo Cuenta')).append($('<th>').text('Acciones')));
+                table.append(header);
+                var body = $('<tbody>');
+                respuesta.datosbancarios.forEach(function (d) {
+                    body.append($('<tr>').append($('<td>').text(d.nombre_banco)).append($('<td>').text(d.numero_cuenta)).append($('<td>').text(d.tipo_cuenta)).append($('<td>').html('<a href="#" class="btn btn-warning btn-sm editar-cuenta" data-id="'+d.id+'"><i class="fas fa-edit"></i></a> <a href="#" class="btn btn-danger btn-sm eliminar-cuenta" data-id="'+d.id+'"><i class="fas fa-trash-alt"></i></a>')));
                 });
-            }); //fin agregar arriendo
-
-
-
-
-   // Manejar edición de cuentas
-        $(document).on('click', '.editar-cuenta', function() {
-            var id_cuenta = $(this).data('id');
-            console.log('id cuenta:', id_cuenta);
-
-            // Realizar la solicitud AJAX para obtener los datos de la cuenta
-            $.ajax({
-                url: '/cuentas/editar_cuenta/' + id_cuenta,
-                type: 'GET',
-                dataType: 'json',
-            })
-            .done(function(respuesta) {
-                console.log(respuesta);
-
-                // Verificar si hay un error en la respuesta
-                if (respuesta.error) {
-                    alert(respuesta.error); // Muestra un mensaje de error si no se encuentra la cuenta
-                    return;
-                }
-
-                // Mostrar el modal de edición
-                $("#editarCuentaModal").modal('show');
-                $("#MostrarCuenta").modal('hide');
-                $("#btn_editar_cuenta").data('id', id_cuenta);
-
-                // Asignar los valores a los campos de edición
-                $("#nombreBancoInputEdit").val(respuesta.cuenta_bancaria.nombre_banco);
-                $("#numeroCuenteInputEdit").val(respuesta.cuenta_bancaria.numero_cuenta);
-                $("#TipoCuentaInputEdit").val(respuesta.cuenta_bancaria.tipo_cuenta);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.log("Error:", errorThrown);
-                alert("Ocurrió un error al intentar obtener los datos de la cuenta.");
-            });
+                table.append(body);
+                tableContainer.append(table);
+                listaCuentasEdit.html(tableContainer);
+            }
+            $('#MostrarCuenta').modal('show');
         });
-        // Guardar la edicion de la cuenta bancaria
-            $("#btn_editar_cuenta").on('click', function() {
-                var id = $(this).data('id');
-                console.log('id cuentaee:', id);
+    });
 
-                // Obtener los valores del formulario
-                var nombre_banco = $("#nombreBancoInputEdit").val();
-                var numero_cuenta = $("#numeroCuenteInputEdit").val();
-                var tipo_cuenta = $("#TipoCuentaInputEdit").val();
-
-
-                var argumentos = {
-                    id: id,
-                    nombre_banco: nombre_banco,
-                    numero_cuenta: numero_cuenta,
-                    tipo_cuenta: tipo_cuenta,
-
-                }
-                console.log(argumentos)
-                console.log('ID de cuenta enviado:', id);
-                // Realizar la solicitud AJAX para guardar los cambios
-                $.ajax({
-                    url: '/cuentaEditar/guardar/'+ id,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: argumentos,
-                })
-                .done(function(respuesta) {
-                    console.log(respuesta);
-                        // Si la respuesta es exitosa, puedes cerrar el modal y actualizar la lista de testigos
-                        $("#modalAlertaAgregar").modal('show');
-                        $("#texto_success").html("La cuenta se ha Editado exitosamente");
-                        $("#editarCuentaModal").modal('hide');
-
-
-                })
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    console.log("Error", errorThrown);
-                    // Aquí podrías mostrar un modal o mensaje de error
-                });
-                 // Manejar el clic en la "X"
-                    $("#btn-close").on("click", function() {
-                        $("#modalAlertaAgregar").modal('hide'); // Oculta el mensaje
-                        location.reload(); // Recarga la página
-                    });
-            });
-
-            $(document).on('click', '.eliminar-cuenta', function() {
-                event.preventDefault();
-
-                var id_cuenta = $(this).data('id');
-                console.log("Id Cuenta: " + id_cuenta);
-
-                $("#editarCliente").modal('hide');
-
-                // Mostrar modal de confirmación
-                $("#deleteCuentaModal").modal('show');
-
-                // Manejar confirmación
-                $("#btn_eliminar_cuenta").on('click', function() {
-                //     // Realizar la solicitud AJAX solo si se confirma la eliminación
-                    $.ajax({
-                        url: '/cuenta/eliminar/' + id_cuenta,
-                        type: 'DELETE',
-                        dataType: 'json',
-                    })
-                    .done(function(respuesta) {
-                        $("#deleteCuentaModal").modal('hide');
-
-                        $("#modalAlertaAgregar").modal('show');
-                        $("#texto_success").html("La cuenta Bancaria se Eliminado exitosamente");
-                        $("#MostrarCuenta").modal('hide');
-
-                    })
-                    .fail(function(jqXHR, textStatus, errorThrown) {
-                        console.log("Error", errorThrown);
-                        // $("#modalAlertaErrorEliminar").modal('show');
-
-                    });  $("#btn-close").click(function() {
-                    $("#modalAlertaAgregar").modal('hide');
-
-
-                    });
-                });
-            });
+    /* ─── Agregar nueva cuenta bancaria ─────────────────────────── */
+    $('#agregar-datosbanca2').on('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: '{{ url("/Nueva/cuenta2aad") }}',
+            type: 'POST',
+            data: {
+                id_propietario: $('#idPropietarioInput').val(),
+                nombre_banco: $('#nombreBancoInput2').val(),
+                numero_cuenta: $('#numeroCuenteInput2').val(),
+                tipo_cuenta: $('#TipoCuentaInput2').val()
+            },
+            dataType: 'json',
+            success: function () {
+                $('#modalAlertaAgregar').modal('show');
+                $('#texto_success').html('La cuenta se ha Creado exitosamente');
+                $('#MostrarCuenta').modal('hide');
+            }
         });
+        $('#btn-close').click(function () { $('#modalAlertaAgregar').modal('hide'); location.reload(); });
+    });
 
+    /* ─── Editar cuenta bancaria ─────────────────────────────────── */
+    $(document).on('click', '.editar-cuenta', function (e) {
+        e.preventDefault();
+        var id_cuenta = $(this).data('id');
+        $.ajax({ url: '/cuentas/editar_cuenta/' + id_cuenta, type: 'GET', dataType: 'json' })
+        .done(function (r) {
+            $('#editarCuentaModal').modal('show');
+            $('#MostrarCuenta').modal('hide');
+            $('#btn_editar_cuenta').data('id', id_cuenta);
+            $('#nombreBancoInputEdit').val(r.cuenta_bancaria.nombre_banco);
+            $('#numeroCuenteInputEdit').val(r.cuenta_bancaria.numero_cuenta);
+            $('#TipoCuentaInputEdit').val(r.cuenta_bancaria.tipo_cuenta);
+        });
+    });
+
+    $('#btn_editar_cuenta').on('click', function () {
+        var id = $(this).data('id');
+        $.ajax({
+            url: '/cuentaEditar/guardar/' + id,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id, nombre_banco: $('#nombreBancoInputEdit').val(),
+                numero_cuenta: $('#numeroCuenteInputEdit').val(),
+                tipo_cuenta: $('#TipoCuentaInputEdit').val()
+            }
+        }).done(function () {
+            $('#modalAlertaAgregar').modal('show');
+            $('#texto_success').html('La cuenta se ha Editado exitosamente');
+            $('#editarCuentaModal').modal('hide');
+        });
+        $('#btn-close').on('click', function () { $('#modalAlertaAgregar').modal('hide'); location.reload(); });
+    });
+
+    /* ─── Eliminar cuenta bancaria ───────────────────────────────── */
+    $(document).on('click', '.eliminar-cuenta', function (e) {
+        e.preventDefault();
+        var id_cuenta = $(this).data('id');
+        $('#deleteCuentaModal').modal('show');
+        $('#btn_eliminar_cuenta').off('click').on('click', function () {
+            $.ajax({ url: '/cuenta/eliminar/' + id_cuenta, type: 'DELETE', dataType: 'json' })
+            .done(function () {
+                $('#deleteCuentaModal').modal('hide');
+                $('#modalAlertaAgregar').modal('show');
+                $('#texto_success').html('La cuenta Bancaria se ha Eliminado exitosamente');
+                $('#MostrarCuenta').modal('hide');
+            });
+            $('#btn-close').click(function () { $('#modalAlertaAgregar').modal('hide'); });
+        });
+    });
+
+}); // end ready
 </script>
 @endsection
-

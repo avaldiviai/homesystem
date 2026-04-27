@@ -49,4 +49,8 @@ class Verano extends Model
     {
         return $this->belongsTo(PropietarioVerano::class, 'id_verano', 'id');
     }
+    public function precios()
+    {
+        return $this->hasMany(\App\Models\Precios::class, 'id_propiedad');
+    }
 }

@@ -75,6 +75,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/cuenta/eliminar/{id_cuenta}',[PropietarioController::class,'eliminarcuenta']);
     Route::post('/Nueva/cuenta2aad', [PropietarioController::class, 'addNuevaCuenta']);
 
+    Route::get('/propietario/{id}/detalles', [PropietarioController::class, 'detalles'])->name('propietario.detalles');
+    
     ////////// RUTAS ELEMENTOS //////////
     Route::get('/elementos', [ElementosController::class, 'index']);
     Route::post('/Elementosadd', [ElementosController::class, 'add']);

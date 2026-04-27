@@ -68,5 +68,9 @@ class Propiedad extends Model
             'id_propietario'           // columna en pivote que referencia el propietario
         );
     }
+    public function precios()
+    {
+        return $this->hasMany(\App\Models\Precios::class, 'id_propiedad');
+    }
     
 }
