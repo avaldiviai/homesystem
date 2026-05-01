@@ -11,6 +11,90 @@
                         <h1 class="text-uppercase text-black text-center">Detalles Marzo a Diciembre</h1>
                     </div>
 
+                    <div class="col-lg-6 p-4">
+                        <div class="row p-3 shadow text-white mb-4" style="background-color:#E67E22; border-radius: .9rem;">
+                            <div class="mb-3">
+                                <div class="p-2 text-center">
+                                    <div class="col-lg-7 mb-2 bg-black rounded-pill shadow text-white text-center">
+                                        <h4 for="" class="form-label">Imágenes de la propiedad</h4>
+                                    </div>
+                                    
+                                    @if($imagen && $imagen->count() > 0)
+                                        <div class="d-flex flex-wrap align-items-center justify-content-center" style="max-height: 400px; overflow-y: auto;">
+                                            @foreach($imagen as $img)
+                                                <div class="position-relative m-1">
+                                                    <img src="{{ asset($img->link) }}" class="rounded" style="width: 150px; height: 217px; object-fit: cover;" alt="{{ $detalles->direccion }}" data-imagen-url="{{ asset($img->link) }}">
+                                                    <div class="position-absolute" style="top: 10px; right: 10px; display: flex; gap: 5px; background: rgba(255, 255, 255, 0.8); border-radius: 50px; padding: 15px;">
+                                                        <a href="javascript:void(0)" data-id="{{$img->id}}" id="btn-checkPro" class="d-flex align-items-center portada">
+                                                            <i class="fas fa-check fa-lg" style="color: green;"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0)" data-id="{{$img->id}}" class="d-flex align-items-center delete-img">
+                                                            <i class="fas fa-trash-alt fa-lg" style="color: red;"></i>
+                                                        </a>
+                                                        <a href="{{ asset($img->link) }}" download class="d-flex align-items-center">
+                                                            <i class="fas fa-download fa-lg" style="color: #007bff;"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p>No hay imágenes disponibles.</p>
+                                    @endif
+                                    
+                                    <div class="form-group mb-3 mt-4">
+                                        <div class="col-lg-6 mb-2 bg-black rounded-pill shadow text-white text-center">
+                                            <h4 for="" class="form-label">Agregar Imágenes</h4>
+                                        </div>
+                                        <div class="upload-container">
+                                            <div id="drop-area" class="drop-area">
+                                                <p>Arrastra y suelta las imágenes aquí</p>
+                                                <input class="form-control" type="file" id="imagenes" multiple required style="display: none;">
+                                            </div>
+                                            <div id="preview" class="d-flex flex-wrap justify-content-center mt-3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row p-3 shadow text-white" style="background-color:#E67E22; border-radius: .9rem;">
+                            <div class="col-lg-12 mb-5">
+                                <div class="col-lg-6 bg-black rounded-pill shadow text-white text-center">
+                                    <h4 class="">video de la propiedad</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-lg-12">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-center">
+                                        @foreach($videos as $vid)
+                                            <div class="position-relative m-1">
+                                                <video width="100%" height="300" controls loop muted autoplay playsinline style="width: 100%; display: block; margin-bottom: 5px;">
+                                                    <source src="{{ asset(''. $vid->video) }}" alt="video" type="video/mp4">
+                                                    Tu navegador no soporta la etiqueta de video.
+                                                </video>
+                                                <a href="javascript:void(0)" data-id="{{$vid->id}}" class="position-absolute delete-video" style="top: 30px; right: 10px; background: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: .5rem;">
+                                                    <i class="fas fa-trash-alt fa-lg" style="color: red;"></i>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mb-4">
+                                    <div class="col-lg-4 mb-2 bg-black rounded-pill shadow text-white text-center">
+                                        <h4>Agregar Video</h4>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <div id="video-drop-area" class="form-control p-4 d-flex align-items-center justify-content-center text-center"
+                                            style="height: auto; border: 2px dashed #000; border-radius: 10px; background-color:rgba(249, 249, 249, 0); cursor: pointer;" ondragover="event.preventDefault()" ondrop="handleVideoDrop(event)">
+                                            Arrastra aquí tu video o haz clic para seleccionarlo
+                                        </div>
+                                        <input class="form-control" type="file" name="videos" id="videos" accept="video/*" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- <div class="col-lg-4">
                         <div class="form-check form-switch bg-black d-flex align-items-center container p-2 shadow" 
                             style="margin-top: 40px; margin-bottom: 30px; color: white; border-radius: .9rem;">
@@ -23,135 +107,145 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="col-lg-12 text-white  mb-3 p-4" >
-                        <div class="row shadow p-2"style="background-color:#E67E22; border-radius: .9rem;">
-                            <div class="col-lg-12 mb-1">
-                                <div class="col-lg-3 bg-black text-white text-center rounded-pill shadow">
+                    <div class="col-lg-6 mb-3 p-4"> 
+                        <div class="row shadow p-3 mb-4" style="background-color:#E67E22; border-radius: .9rem;">
+                            
+                            <div class="col-lg-12 mb-3">
+                                <div class="col-lg-7 bg-black text-white text-center rounded-pill shadow"> 
                                     <h4 class="mb-2">Detalles de la Propiedad</h4>
                                 </div>
                             </div>
-                            <div class="col-lg-4 mb-3">
-                                <label for="diciembreedit">Precio Marzo a Diciembre</label>
-                                <div class="input-group">
-                                    <input type="text"
-                                        class="form-control"
-                                        id="diciembreedit"
-                                        placeholder="Precio Marzo a Diciembre"
-                                        value="{{$precios->diciembre}}"
-                                        oninput="formatearMiles(this)"
-                                        required>
-                                        
-                                    <div class="input-group-text">
-                                        <span class="fw-bold text-dark">CLP</span>
+
+                            <div class="row mb-4 text-white">
+                                <div class="col-lg-6">
+                                    <label for="propietarioInput">Propietarios</label>
+                                    <div class="d-flex justify-content-between">
+                                        <select id="propietarioInput" class="form-select me-2">
+                                            <option disabled selected value="0">Seleccione un propietario</option>
+                                            @foreach ($new_Propietarios as $propietario)
+                                                <option value="{{ $propietario->id}}">{{ $propietario->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                        <button class="btn btn-primary rounded-pill" id="agregar-propietario">Agregar</button>
+                                    </div>
+                                    <ul class="text-uppercase mt-4 m-1 p-1" id="lista-agregados"></ul>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="p-2 shadow text-dark" style="background-color: #FFE2B2; border-radius: .9rem;">
+                                        <div class="bg-black rounded-pill shadow text-white text-center mb-2">
+                                            <h5 class="mb-0 small p-1">Lista de Propietarios</h5>
+                                        </div> 
+                                        <div style="max-height: 120px; overflow-y: auto; overflow-x: hidden;">
+                                            @foreach($propietarios as $prop)
+                                            <div class="input-group mb-1">
+                                                <span class="input-group-text p-1"><i class="fa-solid fa-user-tie"></i></span>
+                                                <input type="text" class="form-control form-control-sm" value="{{ $prop->propietario->nombre }}" readonly>
+                                                <span class="input-group-text p-1">
+                                                    <a href="javascript:void(0)" data-id="{{$prop->id}}" class="delete-propietario">
+                                                        <i class="fas fa-trash-alt" style="color: red;"></i>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
-                                <input type="hidden" id="tipo_moneda" value="CLP">
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                    <label for="direccionedit">Direccion de la propiedad</label>
-                                    <input type="text" id="direccionedit" class="form-control"  value="{{$detalles->direccion}}">
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                    <label for="ciudadedit">Ciudad de la propiedad</label>
-                                    <input type="text" id="ciudadedit" class="form-control"  value="{{$detalles->ciudad}}">
                             </div>
 
-                            <div class="col-lg-4 mb-3">
-                                    <label for="condominioedit">Condominio</label>
-                                    <input type="text" id="condominioedit" class="form-control"  value="{{$detalles->condominio}}">
-                            </div>
-                            <div class="col-lg-4">
-                                <label for="viviendaedit">Tipo de Vivienda</label>
-                                <!-- <input type="text" id="viviendaedit" class="form-control" disabled value="{{$detalles->tipo_vivienda}}"> -->
-                                <select name="viviendaedit" id="viviendaedit" class="form-select" >
-                                    <option value="" {{ is_null($detalles->tipo_vivienda) ? 'selected' : '' }}>Seleccione una opción</option>
-                                    <option value="Casa" {{ $detalles->tipo_vivienda === 'Casa' ? 'selected' : '' }}>Casa</option>
-                                    <option value="Departamento" {{ $detalles->tipo_vivienda === 'Departamento' ? 'selected' : '' }}>Departamento</option>
+                            <hr class="border-light">
 
-                                </select>
-                            </div>
-
-                            <div class="form-group col-4 col-lg-4 d-none" id="wrap_tipo_cocina_depto_edit">
-                                <label for="tipo_cocina_depto_edit">Tipo de cocina</label>
-                                <select class="form-select" name="tipo_cocina_depto_edit" id="tipo_cocina_depto_edit">
-                                    <option value="" {{ is_null($detalles->tipo_cocina) ? 'selected' : '' }}>
-                                        Seleccione una opción
-                                    </option>
-                                    <option value="Encimera"
-                                        {{ $detalles->tipo_cocina === 'Encimera' ? 'selected' : '' }}>
-                                        Encimera
-                                    </option>
-                                    <option value="Vitroceramica"
-                                        {{ $detalles->tipo_cocina === 'Vitroceramica' ? 'selected' : '' }}>
-                                        Vitrocerámica
-                                    </option>
-                                </select>
-                                <input type="hidden" id="modal_tipo_vivienda" value="{{ strtolower($detallespropiedad->tipo_vivienda) }}">
-                            </div>
-                            
-                            <div class="col-lg-4 mb-3">
-                                <label for="torreedit">Torre</label>
-                                <input type="text" id="torreedit" class="form-control"  value="{{$detalles->torre}}">
-                            </div>
-                            <div class="col-lg-2 mb-3">
-                                <label for="numero_torre">N° de Departamento</label>
-                                <input type="text" id="numero_torre" class="form-control"  value="{{$detalles->num_torre}}">
-                            </div>
-                            <div class="col-lg-2">
-                                <label for="roledit">Rol</label>
-                                <input type="text" id="roledit" class="form-control"  value="{{$detalles->rol}}">
-                            </div>
-                            <div class="col-lg-8 mb-3">
-                                <!-- <div class="form-group"> -->
-                                    <label class="" for="descripcionPropiedad">Descripcion</label>
-                                    <textarea class="form-control" name="descripcionPropiedad" id="descripcionPropiedad" placeholder="Descripcion de la propiedad">{{$detalles->descripcion}}</textarea>
-                                <!-- </div> -->
-                            </div>
-                            
-                            <div class="form-group col-lg-6">
-                                <label for="propietarioInput">Propietarios</label>
-                                <div class="d-flex justify-content-between ">
-                                    <select id="propietarioInput" class="form-select me-2" >
-                                        <option disabled selected value="0">Seleccione un propietario</option>
-                                        @foreach ($new_Propietarios as $propietario)
-                                        <option value="{{ $propietario->id}}">{{ $propietario->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button class="btn btn-primary rounded-pill" id="agregar-propietario">Agregar</button>
+                            <div class="row">
+                                <div class="col-lg-6 text-dark">
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label for="direccionedit" class="fw-bold small">Dirección</label>
+                                        <input type="text" id="direccionedit" class="form-control form-control-sm" value="{{$detalles->direccion}}">
+                                    </div>
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label for="ciudadedit" class="fw-bold small">Comuna</label>
+                                        <input type="text" id="ciudadedit" class="form-control form-control-sm" value="{{$detalles->ciudad}}">
+                                    </div>
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label for="roledit" class="fw-bold small">Rol</label>
+                                        <input type="text" id="roledit" class="form-control form-control-sm" value="{{$detalles->rol}}">
+                                    </div>
                                 </div>
-                                <ul class="text-uppercase mt-4 m-1 p-1 m-4" id="lista-agregados">
-                                    <!-- <button class="btn btn-danger"><i class="fas fa-trash-alt fa-lg text-white"></i></button> -->
-                                </ul>
-                            </div>
-                            
-                            <div class="col-lg-6 mt-3 mb-3 text-dark">
-                                <div class="mb-3">
-                                    <div class="row mb-3 p-2 mb-2 shadow" style="background-color: #FFE2B2; border-radius: .9rem;">
-                                        <div class="col-lg-12">
-                                            <div class="col-lg-6 bg-black rounded-pill shadow text-white text-center">
-                                                <h4>Todos los Propietarios</h4>
-                                            </div> 
-                                        </div>   
-                                        @foreach($propietarios as $prop)
-                                        <div class="col-lg-6">
-                                            <div class="input-group m-1" style="max-width: auto;">
-                                                <span class="input-group-text">
-                                                    <i class="fa-solid fa-user-tie"></i>
-                                                </span>
-                                                <input type="text" id="propietarios" class="form-control" value="{{ $prop->propietario->nombre }}" readonly>
-                                                <span class="input-group-text">
-                                                    <a href="javascript(0)" id="btn-eliminarPro" data-id="{{$prop->id}}" class="delete-propietario"><i class="fas fa-trash-alt fa-lg" style="color: red;"></i></a>
-                                                </span>
-                                                <input type="text" id="propietariosrut" class="form-control" value="{{ $prop->propietario->rut }}"style="display: none;" readonly>
 
-                                            </div>
-                                        </div>
-                                        @endforeach
+                                <div class="col-lg-6 text-dark">
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label for="numero_luzedit" class="fw-bold small">N° Cliente Luz</label>
+                                        <input type="text" id="numero_luzedit" class="form-control form-control-sm" value="{{$detalles->numero_luz}}">
+                                    </div>
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label for="numero_aguaedit" class="fw-bold small">N° Cliente Agua</label>
+                                        <input type="text" id="numero_aguaedit" class="form-control form-control-sm" value="{{$detalles->numero_agua}}">
+                                    </div>
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label for="numero_gasedit" class="fw-bold small">N° Cliente Gas</label>
+                                        <input type="text" id="numero_gasedit" class="form-control form-control-sm" value="{{$detalles->numero_gas}}">
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row shadow p-3 text-white" style="background-color:#E67E22; border-radius: .9rem;">
+                            <div class="col-lg-12 mb-3">
+                                <div class="col-lg-6 bg-black text-white text-center rounded-pill shadow">
+                                    <h4 class="mb-2">Características</h4>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 mb-3">
+                                <label for="dormitorios_edit" class="fw-bold small">Dormitorios</label>
+                                <input type="text" id="dormitorios_edit" class="form-control form-control-sm" value="{{$detallespropiedad->dormitorios}}">
+                            </div>
+                            <div class="col-lg-4 mb-3">
+                                <label for="banos_edit" class="fw-bold small">Baños</label>
+                                <input type="text" id="banos_edit" class="form-control form-control-sm" value="{{$detallespropiedad->banos}}">
+                            </div>
+                            <div class="col-lg-4 mb-3">
+                                <label for="mt2_total_edit" class="fw-bold small">Mt2 Total</label>
+                                <input type="text" id="mt2_total_edit" class="form-control form-control-sm" value="{{$detallespropiedad->mt2_total}}">
+                            </div>
+
+                            <div class="col-lg-4 mb-3">
+                                <label for="numeroEstacionamientoInput" class="fw-bold small">Estacionamiento</label>
+                                <input type="text" id="numeroEstacionamientoInput" class="form-control form-control-sm" value="{{$sub_est->estacionamiento}}">
+                            </div>
+                            <div class="col-lg-4 mb-3">
+                                <label for="numeroBodegaInput" class="fw-bold small">N° Bodega</label>
+                                <input type="text" id="numeroBodegaInput" class="form-control form-control-sm" value="{{$sub_bodega->bodega}}">
+                            </div>
+                            <div class="col-lg-4 mb-3">
+                                <label for="viviendaedit" class="fw-bold small">Vivienda</label>
+                                <select name="viviendaedit" id="viviendaedit" class="form-select form-select-sm">
+                                    <option value="Casa" {{ $detalles->tipo_vivienda === 'Casa' ? 'selected' : '' }}>Casa</option>
+                                    <option value="Departamento" {{ $detalles->tipo_vivienda === 'Departamento' ? 'selected' : '' }}>Depto</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-6 mb-3">
+                                <label class="fw-bold small d-block">Amoblado</label>
+                                <div class="btn-group btn-group-sm w-100 shadow-sm">
+                                    <input type="radio" class="btn-check" name="am_op" id="am_si">
+                                    <label class="btn btn-dark" for="am_si">SÍ</label>
+                                    <input type="radio" class="btn-check" name="am_op" id="am_no" checked>
+                                    <label class="btn btn-dark" for="am_no">NO</label>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 mb-3">
+                                <label for="elementos_entregados" class="fw-bold small">Elementos Entregados</label>
+                                <input type="text" id="elementos_entregados" class="form-control form-control-sm" placeholder="Controles, llaves...">
+                            </div>
+
+                            <div class="col-lg-12">
+                                <label class="fw-bold small">Observaciones adicionales</label>
+                                <textarea id="observaciones_caracteristicas" class="form-control form-control-sm" rows="2"></textarea>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="col-lg-12 p-4">
                         <div class="row" style="background-color:#E67E22; border-radius: .9rem; height: auto;">
                             <div class="col-lg-12 p-3">
@@ -706,94 +800,6 @@
                         </div>
                     </div>
                    
-                    
-                    <div class="col-lg-6 p-4">
-                        <div class="row p-3 shadow text-white" style="background-color:#E67E22; border-radius: .9rem;">
-                            <div class=" mb-3">
-                                <div class=" p-2 text-center">
-                                    <div class="col-lg-7 mb-2 bg-black rounded-pill shadow text-white text-center">
-                                        <h4 for="" class="form-label">Imágenes de la propiedad</h4>
-                                    </div>                                    
-                                    @if($imagen && $imagen->count() > 0)
-                                        <div class="d-flex flex-wrap align-items-center justify-content-center" style="max-height: 400px; overflow-y: auto;">
-                                            @foreach($imagen as $img)
-                                                <div class="position-relative m-1">
-                                                    <img src="{{ asset($img->link) }}" class="rounded" style="width: 150px; height: 217px; object-fit: cover;" alt="{{ $detalles->direccion }}" data-imagen-url="{{ asset($img->link) }}">
-                                                    <div class="position-absolute" style="top: 10px; right: 10px; display: flex; gap: 5px; background: rgba(255, 255, 255, 0.8); border-radius: 50px; padding: 15px;">
-                                                        <a href="javascript:void(0)" data-id="{{$img->id}}" id="btn-checkPro" class="d-flex align-items-center portada">
-                                                            <i class="fas fa-check fa-lg" style="color: green;"></i>
-                                                        </a>
-                                                        <a href="javascript:void(0)" data-id="{{$img->id}}" class="d-flex align-items-center delete-img">
-                                                            <i class="fas fa-trash-alt fa-lg" style="color: red;"></i>
-                                                        </a>
-                                                        <a href="{{ asset($img->link) }}" download class="d-flex align-items-center">
-                                                            <i class="fas fa-download fa-lg" style="color: #007bff;"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-
-                                    @else
-                                        <p>No hay imágenes disponibles.</p>
-                                    @endif
-                                    <div class="form-group mb-3 mt-4">
-                                        <div class="col-lg-6 mb-2 bg-black rounded-pill shadow text-white text-center">
-                                            <h4 for="" class="form-label">Agregar Imágenes</h4>
-                                        </div>  
-                                        <!-- Área de arrastre y soltar -->
-                                        <div class="upload-container">
-                                            <div id="drop-area" class="drop-area">
-                                                <p>Arrastra y suelta las imágenes aquí</p>
-                                                <input class="form-control" type="file" id="imagenes" multiple required style="display: none;">
-                                            </div>
-                                            <div id="preview" class="d-flex flex-wrap justify-content-center mt-3"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 p-4">
-                        <div class="row p-3 shadow text-white"style="background-color:#E67E22; border-radius: .9rem;">
-                            <div class="col-lg-12 mb-5">
-                                <div class="col-lg-6 bg-black rounded-pill shadow text-white text-center">
-                                    <h4 class="">video de la propiedad</h4>
-                                </div>
-                            </div>  
-                            <div class="row mt-5">
-                                <div class="col-lg-12">
-                                    <div class="d-flex flex-wrap align-items-center justify-content-center">
-                                        @foreach($videos as $vid)
-                                            <div class="position-relative m-1" >
-                                                <video width="100%" height="300" controls loop muted autoplay playsinline 
-                                                    style="width: 100%; display: block; margin-bottom: 5px;" class="">
-                                                    <source src="{{ asset(''. $vid->video) }}" alt="video" type="video/mp4">
-                                                    Tu navegador no soporta la etiqueta de video.
-                                                </video>
-                                                <a href="javascript:void(0)" data-id="{{$vid->id}}" class="position-absolute delete-video" 
-                                                    style="top: 30px; right: 10px; background: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: .5rem;">
-                                                    <i class="fas fa-trash-alt fa-lg" style="color: red;"></i>
-                                                </a>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 mb-4">
-                                    <div class="col-lg-4 mb-2 bg-black rounded-pill shadow text-white text-center">
-                                        <h4>Agregar Video</h4>
-                                    </div>                                    
-                                    <div class="form-group mb-3 ">
-                                        <div id="video-drop-area" class="form-control p-4 d-flex align-items-center justify-content-center text-center"
-                                            style="height: auto; border: 2px dashed #000; border-radius: 10px; background-color:rgba(249, 249, 249, 0); cursor: pointer;"ondragover="event.preventDefault()" ondrop="handleVideoDrop(event)">
-                                            Arrastra aquí tu video o haz clic para seleccionarlo
-                                        </div>
-                                        <input class="form-control" type="file" name="videos" id="videos" accept="video/*" style="display: none;">
-                                   </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-lg-6 p-4">
                         <div class="row shadow p-2 text-white" style="background-color:#E67E22; border-radius: .9rem;">
                             <div class="col-lg-12 mb-2">
