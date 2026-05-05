@@ -45,6 +45,14 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/graficos', function () {
+    return view('graficos');
+});
+
+Route::get('/plantilla', function () {
+    return view('plantilla');
+});
+
 Route::middleware(['auth', 'admin'])->group(function () {
         ///////////////////BUSCAR DATOS//////////////////////
     Route::get('/api/arrendatario/{id}', [ContratoController::class, 'getArrendatario']);

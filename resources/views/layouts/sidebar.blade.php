@@ -32,7 +32,14 @@
                     </a>
                 </li>
 
-                <!-- Propietarios -->
+                <li class="nav-item mb-3">
+                    <li class="nav-item mb-3">
+                    <a href="/plantilla" class="nav-link d-flex align-items-center ">
+                        <i class="fa-solid fa-file-lines me-2 text-warning"></i>
+                        <span>Plantilla de Empresa</span>
+                    </a>
+                </li>
+
                 <li class="nav-item mb-3">
                     <a href="/propietarios" class="nav-link d-flex align-items-center ">
                         <i class="fa-solid fa-user-tie me-2 text-warning"></i>
@@ -40,14 +47,13 @@
                     </a>
                 </li>
 
-                <!-- Adm. de Propiedades -->
                 <li class="nav-item mb-3">
                     <a class="nav-link d-flex justify-content-between align-items-center " data-bs-toggle="collapse" href="#propiedades" role="button" aria-expanded="false" aria-controls="propiedades">
-                        <span><i class="fa-solid fa-building me-2 text-warning"></i> Adm. de Propiedades</span>
+                        <span><i class="fa-solid fa-building me-2 text-warning"></i> Propiedades Disponibles</span>
                         <i class="fa-solid fa-chevron-down text-muted"></i>
                     </a>
                     <div class="collapse rounded" id="propiedades">
-                        <ul class="nav flex-column ms-3 mt-2 " >
+                        <ul class="nav flex-column ms-3 mt-2">
                             <li class="nav-item">
                                 <a href="/propiedades" class="nav-link"><i class="fa-solid fa-building me-2 text-warning"></i> Pro. Marzo a Dic.</a>
                             </li>
@@ -64,10 +70,16 @@
                     </div>
                 </li>
 
-                <!-- Gestión de Arriendos -->
+                <li class="nav-item mb-3">
+                    <a href="/graficos" class="nav-link d-flex align-items-center ">
+                        <i class="fa-solid fa-chart-line me-2 text-warning"></i>
+                        <span>Gráficos de Empresa</span>
+                    </a>
+                </li>
+
                 <li class="nav-item mb-3">
                     <a class="nav-link d-flex justify-content-between align-items-center " data-bs-toggle="collapse" href="#arriendos" role="button" aria-expanded="false" aria-controls="arriendos">
-                        <span><i class="fa-solid fa-key me-2 text-warning"></i> Gestión de Arriendos</span>
+                        <span><i class="fa-solid fa-key me-2 text-warning"></i> Arriendo Temporal</span>
                         <i class="fa-solid fa-chevron-down text-muted"></i>
                     </a>
                     <div class="collapse" id="arriendos">
@@ -77,36 +89,24 @@
                             <li class="nav-item"><a href="/comision" class="nav-link "><i class="fa-solid fa-percent me-2 text-warning"></i> Comisión</a></li>
                             <li class="nav-item"><a href="/pagos" class="nav-link "><i class="fa-solid fa-money-bill-wave me-2 text-warning"></i> Pagos</a></li>
                             <li class="nav-item"><a href="/contratos" class="nav-link "><i class="fa-solid fa-file-contract me-2 text-warning"></i> Contratos</a></li>
-                        <!--    <li class="nav-item"><a href="/servicios" class="nav-link "><i class="fa-solid fa-truck me-2 text-warning"></i> Servicios</a></li>-->
                             <li class="nav-item"><a href="/inventario" class="nav-link "><i class="fa-solid fa-cart-flatbed me-2 text-warning"></i> Inventario</a></li>
                         </ul>
                     </div>
                 </li>
 
-                <!-- Servicios -->
                 <li class="nav-item mb-3">
-                    <a href="/servicios" class="nav-link d-flex align-items-center ">
-                        <i class="fa-solid fa-truck me-2 text-warning"></i>
-                        <span>Servicios</span>
-                    </a>
-                </li>
-
-                <!-- Administración de Usuarios -->
-                <li class="nav-item mb-4">
-                    <a class="nav-link d-flex justify-content-between align-items-center " data-bs-toggle="collapse" href="#usuarios" role="button" aria-expanded="false" aria-controls="usuarios">
-                        <span><i class="fa-solid fa-briefcase me-2 text-warning"></i> Adm. de Usuarios</span>
+                    <a class="nav-link d-flex justify-content-between align-items-center " data-bs-toggle="collapse" href="#rrhh" role="button" aria-expanded="false" aria-controls="rrhh">
+                        <span><i class="fa-solid fa-users-gear me-2 text-warning"></i> RRHH</span>
                         <i class="fa-solid fa-chevron-down text-muted"></i>
                     </a>
-                    <div class="collapse" id="usuarios">
+                    <div class="collapse" id="rrhh">
                         <ul class="nav flex-column ms-3 mt-2">
                             <li class="nav-item"><a href="/cargos" class="nav-link "><i class="fa-solid fa-briefcase me-2 text-warning"></i> Cargos</a></li>
                             <li class="nav-item"><a href="/usuarios" class="nav-link "><i class="fa-solid fa-user me-2 text-warning"></i> Usuarios</a></li>
-                            <li class="nav-item"><a href="/sueldos" class="nav-link "><i class="fa-solid fa-user me-2 text-warning"></i> Sueldos de Usuarios</a></li>
+                            <li class="nav-item"><a href="/sueldos" class="nav-link "><i class="fa-solid fa-money-check-dollar me-2 text-warning"></i> Sueldos de Usuarios</a></li>
                         </ul>
                     </div>
                 </li>
-
-                
             </div>
         </nav>
     </aside>
