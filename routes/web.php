@@ -27,7 +27,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\EventController;
-
+use App\Http\Controllers\PlanillaEmpresaController;
+use App\Models\PlanillaEmpresa;
 
 
 /*
@@ -229,6 +230,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
     Route::post('/inventario', [InventarioController::class, 'store']);
     Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+
+    // ────────────────────────────────────────────────────────────────────────────
+    // RUTAS PLANILLAS EMPRESA
+    // ────────────────────────────────────────────────────────────────────────────
+
+ 
+    // Vista principal
+    Route::get('/plantilla', [PlanillaEmpresaController::class, 'index']);
+    
+    // API JSON usada por el frontend
+    Route::get ('/planillas/listar',          [PlanillaEmpresaController::class, 'listar']);
+    Route::post('/planillas/guardar',         [PlanillaEmpresaController::class, 'guardar']);
+    Route::post('/planillas/editar',          [PlanillaEmpresaController::class, 'editar']);
+    Route::delete('/planillas/eliminar/{id}', [PlanillaEmpresaController::class, 'eliminar']);
+    Route::get('/planillas/grafico',          [PlanillaEmpresaController::class, 'datosGrafico']);
 
     ////////////////////////////////// PROPIEDADES DE VERANO ///////////////////////////
     Route::get('/verano', [VeranoController::class, 'index_verano'])->name('verano.verano');
