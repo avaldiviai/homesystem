@@ -2,7 +2,7 @@
     <!-- Logo -->
     <div class="text-center py-3">
         <a href="#" class="d-inline-flex align-items-center text-decoration-none">
-            <img src="img/HOMEpng.png" alt="Logo" class="img-fluid" style="max-width: 250px;">
+            <img src="{{ asset('img/HOMEpng.png') }}" alt="Logo" class="img-fluid" style="max-width: 250px;">
         </a>
     </div>
 

@@ -29,6 +29,8 @@ use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PlanillaEmpresaController;
 use App\Models\PlanillaEmpresa;
+use App\Http\Controllers\GraficosController;
+use App\Models\GraficoEmpresa;
 
 
 /*
@@ -46,9 +48,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/graficos', function () {
-    return view('graficos');
-});
 
 Route::get('/plantilla', function () {
     return view('plantilla');
@@ -125,6 +124,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::post('/arrendatarios/detalles', [ArrendatarioController::class, 'addArrendatariodetalles']);
 
+
+    ////////// RUTAS GRAFICOS //////////
+    Route::get('/graficos', [GraficosController::class, 'index'])
+        ->name('graficos.index');
+
+    Route::get('/graficos/mensual', [GraficosController::class, 'mensual'])
+        ->name('graficos.mensual');
+
+    Route::get('/graficos/mes/{año}/{mes}', [GraficosController::class, 'datosMesApi'])
+        ->name('graficos.mes');
+
+    Route::get('/graficos/anual/{año}', [GraficosController::class, 'datosAnualApi'])
+        ->name('graficos.anual');
+
+    Route::post('/graficos/guardar', [GraficosController::class, 'guardar'])
+        ->name('graficos.guardar');
 
     ////////// RUTAS PAGOS //////////
     Route::get('/pagos', [PagosController::class, 'index']);
