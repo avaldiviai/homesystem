@@ -1,15 +1,163 @@
 @extends('layouts.app')
+
 @section('content')
-<div class="container-fluid overflow-hidden" style="background-color: #f5f5f5">
-    <div class="row vh-100 overflow-auto" style="background-image: url('/img/home_casa.jpg'); background-size: cover; background-position: center; height: 100vh;">
-        <!-- Sidebar -->
-        @include('layouts.sidebar')
+<div class="container-fluid overflow-hidden px-0" style="background-color: #f5f5f5;">
+    <div class="row vh-100 g-0" style="background-image: url('/img/home_casa.jpg'); background-size: cover; background-position: center;">
         
+        @include('layouts.sidebar')
+
+        <div class="col overflow-auto vh-100 py-4 px-4">
+            
+            <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
+    
+                <button class="pla-toggle active rounded-pill px-3" style="border: 2px solid #0d6efd; color: #000000;">
+                    <i class="fa-solid fa-key me-2" style="color: #0d6efd;"></i>Adm.
+                </button>
+                
+                <button class="pla-toggle rounded-pill px-3" style="border: 2px solid #ea0e0e; color: #000000;">
+                    <i class="fa-solid fa-house me-2" style="color: #ea0e0e;"></i>Arriend.
+                </button>
+                
+                <button class="pla-toggle rounded-pill px-3" style="border: 2px solid #d9b215; color: #000000;">
+                    <i class="fa-solid fa-dollar-sign me-2" style="color: #d9b215;"></i>Ventas
+                </button>
+                
+                <button class="pla-toggle rounded-pill px-3" style="border: 2px solid #fd7e14; color: #000000;">
+                    <i class="fa-solid fa-helmet-safety me-2" style="color: #fd7e14;"></i>Obras
+                </button>
+                
+                <button class="pla-toggle rounded-pill px-3" style="border: 2px solid #198754; color: #000000;">
+                    <i class="fa-solid fa-money-bill-wave me-2" style="color: #198754;"></i>Sueldos
+                </button>
+                
+                <button class="pla-toggle rounded-pill px-3" style="border: 2px solid #8b0ef2; color: #000000;">
+                    <i class="fa-solid fa-percent me-2" style="color: #8b0ef2;"></i>Arqueo
+                </button>
+
+            </div>
+
+           <div class="row">
+                <div class="col-md-6">
+                    
+                    <div class="card border-0 p-3 text-start h-100 pla-card-propietarios">
+                        
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="pla-icon-container">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <div class="pla-cell-title text-dark fw-700">Listado de Propietarios</div>
+                                <div class="pla-cell-sub text-muted">Ordenado alfabéticamente</div>
+                            </div>
+                        </div>
+
+                        <div class="pla-doc-list propietarios-scroll">
+                            
+                            <div class="pla-doc-item justify-content-between align-items-center py-2 px-1 propietario-item">
+                                <span class="fw-600 text-dark propietario-name">
+                                    <i class="fa-regular fa-circle-user me-2 text-muted"></i>Alejandro Vargas M.
+                                </span>
+                                <a href="#" class="badge rounded-pill text-decoration-none btn-hoja-vida">
+                                    Hoja de Vida
+                                </a>
+                            </div>
+
+                            <div class="pla-doc-item justify-content-between align-items-center py-2 px-1 propietario-item">
+                                <span class="fw-600 text-dark propietario-name">
+                                    <i class="fa-regular fa-circle-user me-2 text-muted"></i>Carlos Fuentes Q.
+                                </span>
+                                <a href="#" class="badge rounded-pill text-decoration-none btn-hoja-vida">
+                                    Hoja de Vida
+                                </a>
+                            </div>
+
+                            <div class="pla-doc-item justify-content-between align-items-center py-2 px-1 propietario-item">
+                                <span class="fw-600 text-dark propietario-name">
+                                    <i class="fa-regular fa-circle-user me-2 text-muted"></i>Daniela Soto L.
+                                </span>
+                                <a href="#" class="badge rounded-pill text-decoration-none btn-hoja-vida">
+                                    Hoja de Vida
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>        
+</div>
 @endsection
 
 @section('css')
 @parent
 <style>
+   /* ─── Card de Propietarios con Borde y Sombra Naranja Izquierda ─── */
+    .pla-card-propietarios {
+        background: #ffffff; 
+        border-radius: 16px; 
+        border-left: 5px solid #E67E22 !important; 
+        box-shadow: -6px 4px 18px rgba(230, 126, 34, 0.2), 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    /* Contenedor del Icono de Perfil Naranja */
+    .pla-icon-container {
+        background: #E67E22; 
+        width: 40px; 
+        height: 40px; 
+        border-radius: 10px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 1.1rem; 
+        color: #fff; 
+        flex-shrink: 0;
+    }
+
+    /* Ajustes de Texto Generales */
+    .pla-card-propietarios .pla-cell-title {
+        font-size: 1.05rem; 
+        line-height: 1.2;
+    }
+
+    .pla-card-propietarios .pla-cell-sub {
+        font-size: .75rem; 
+        margin-top: 1px;
+    }
+
+    /* Scroll Controlado para la lista */
+    .propietarios-scroll {
+        max-height: 220px; 
+        overflow-y: auto; 
+        scrollbar-width: thin;
+    }
+
+    /* Items de Propietarios */
+    .propietario-item {
+        border-bottom: 1px solid #f0ede8;
+    }
+
+    .propietario-name {
+        font-size: .88rem;
+    }
+
+    .propietario-name i {
+        font-size: .95rem;
+    }
+
+    /* Badge / Botón Naranja de Hoja de Vida */
+    .btn-hoja-vida {
+        background: #E67E22; 
+        color: #fff; 
+        font-size: .7rem; 
+        padding: 5px 10px;
+        transition: background 0.2s ease;
+    }
+
+    .btn-hoja-vida:hover {
+        background: #d35400;
+        color: #fff;
+    }
     .card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         border-radius: 10px;
