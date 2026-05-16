@@ -57,33 +57,54 @@
                                 <span class="fw-600 text-dark propietario-name">
                                     <i class="fa-regular fa-circle-user me-2 text-muted"></i>Alejandro Vargas M.
                                 </span>
-                                <a href="#" class="badge rounded-pill text-decoration-none btn-hoja-vida">
-                                    Hoja de Vida
-                                </a>
                             </div>
 
                             <div class="pla-doc-item justify-content-between align-items-center py-2 px-1 propietario-item">
                                 <span class="fw-600 text-dark propietario-name">
                                     <i class="fa-regular fa-circle-user me-2 text-muted"></i>Carlos Fuentes Q.
                                 </span>
-                                <a href="#" class="badge rounded-pill text-decoration-none btn-hoja-vida">
-                                    Hoja de Vida
-                                </a>
                             </div>
 
                             <div class="pla-doc-item justify-content-between align-items-center py-2 px-1 propietario-item">
                                 <span class="fw-600 text-dark propietario-name">
                                     <i class="fa-regular fa-circle-user me-2 text-muted"></i>Daniela Soto L.
                                 </span>
-                                <a href="#" class="badge rounded-pill text-decoration-none btn-hoja-vida">
-                                    Hoja de Vida
-                                </a>
                             </div>
-
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="col-md-6">
+                    <div class="card border-0 p-3 text-center h-100 pla-card-docs d-flex flex-column justify-content-between">
+                        
+                        <div class="d-flex align-items-center gap-3 mb-3 text-start">
+                            <div class="pla-icon-docs-container">
+                                <i class="fa-solid fa-file-invoice"></i>
+                            </div>
+                            <div>
+                                <div class="pla-docs-title text-dark fw-700">Hoja de Vida / Documentos</div>
+                                <div class="pla-docs-sub text-muted">Gestión de archivos del propietario</div>
+                            </div>
+                        </div>
+
+                        <div class="pla-cell pla-cell--docs border-0 shadow-none bg-light p-4 rounded-3 my-auto">
+                            <div class="pla-doc-zone d-flex flex-column align-items-center justify-content-center gap-2" id="docs-1">
+                                <i class="fa-solid fa-cloud-arrow-up icon-upload"></i>
+                                <span class="upload-text">Sin archivos aún</span>
+                            </div>
+                        </div>
+                        
+                        <div class="pla-actions d-flex gap-2 mt-3 w-100">
+                            <button class="pla-abtn pla-abtn--filled btn-agregar flex-fill py-2" data-tipo="1">
+                                <i class="fa-solid fa-plus me-1"></i> Agregar
+                            </button>
+                            <button class="pla-abtn btn-ver flex-fill py-2" data-tipo="1">
+                                <i class="fa-solid fa-eye me-1"></i> Ver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
         </div>
     </div>        
 </div>
@@ -245,6 +266,51 @@
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
     }
+    .pla-card-propietarios {
+        background: #ffffff; 
+        border-radius: 16px; 
+        border-left: 5px solid #E67E22 !important; 
+        box-shadow: -6px 4px 18px rgba(230, 126, 34, 0.2), 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .pla-icon-container {
+        background: #E67E22; 
+        width: 40px; height: 40px; border-radius: 10px; 
+        display: flex; align-items: center; justify-content: center; 
+        font-size: 1.1rem; color: #fff; flex-shrink: 0;
+    }
+    .propietarios-scroll { max-height: 220px; overflow-y: auto; scrollbar-width: thin; }
+    .propietario-item { border-bottom: 1px solid #f0ede8; }
+    .propietario-name { font-size: .88rem; }
+    .btn-hoja-vida { background: #E67E22; color: #fff; font-size: .7rem; padding: 5px 10px; }
+    .btn-hoja-vida:hover { background: #d35400; color: #fff; }
+
+    /* Estilos de la Tarjeta de Documentos */
+    .pla-card-docs {
+        background: #ffffff;
+        border-radius: 16px;
+        border-left: 5px solid #E67E22 !important;
+        box-shadow: -6px 4px 18px rgba(230, 126, 34, 0.2), 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .pla-icon-docs-container {
+        background: #E67E22;
+        width: 40px; height: 40px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.1rem; color: #fff; flex-shrink: 0;
+    }
+    .icon-upload { font-size: 1.8rem; color: #ccc; }
+    .upload-text { font-size: .85rem; color: #aaa; }
+    
+    .pla-card-docs .btn-agregar {
+        background: #E67E22; color: #fff; border: none; border-radius: 8px;
+        font-size: .85rem; font-weight: 600; transition: background 0.2s ease;
+    }
+    .pla-card-docs .btn-agregar:hover { background: #d35400; }
+    
+    .pla-card-docs .btn-ver {
+        background: transparent; color: #E67E22; border: 2px solid #E67E22;
+        border-radius: 8px; font-size: .85rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .pla-card-docs .btn-ver:hover { background: rgba(230, 126, 34, 0.05); color: #d35400; border-color: #d35400; }
 </style>
 @endsection
 
