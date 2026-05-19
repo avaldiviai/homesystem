@@ -31,7 +31,8 @@ use App\Http\Controllers\PlanillaEmpresaController;
 use App\Models\PlanillaEmpresa;
 use App\Http\Controllers\GraficosController;
 use App\Models\GraficoEmpresa;
-
+use App\Http\Controllers\RrhhController;
+use App\Models\ArchivoRrhh;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,6 +148,26 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/pagos/editar/{idPago}', [PagosController::class, 'datosPagos']);
     Route::post('/pagos/add_editar_pagos', [PagosController::class, 'addEditPago']);
     Route::post('/pagos/eliminar', [PagosController::class, 'eliminarPago']);
+
+
+    ////////// RUTAS RRHH //////////
+    // Vista principal equipo
+    Route::get('/rrhh/equipo',                      [RrhhController::class, 'index'])->name('rrhh.equipo');
+    
+    // CRUD Usuarios RRHH
+    Route::get('/rrhh/usuario/{id}',               [RrhhController::class, 'show']);
+    Route::post('/rrhh/usuario',                   [RrhhController::class, 'store']);
+    Route::post('/rrhh/usuario/{id}',              [RrhhController::class, 'update']);   // POST con _method no es necesario; usamos POST directo para multipart
+    Route::delete('/rrhh/usuario/{id}',            [RrhhController::class, 'destroy']);
+    
+    // Archivos adjuntos
+    Route::delete('/rrhh/archivo/{id}',            [RrhhController::class, 'destroyArchivo']);
+    
+    // CRUD Cargos
+    Route::get('/rrhh/cargos',                     [RrhhController::class, 'getCargos']);
+    Route::post('/rrhh/cargo',                     [RrhhController::class, 'storeCargo']);
+    Route::post('/rrhh/cargo/{id}',                [RrhhController::class, 'updateCargo']);
+    Route::delete('/rrhh/cargo/{id}',              [RrhhController::class, 'destroyCargo']);
 
     ///////////////// RUTAS PROPIEDADES EN VENTA ////////////////
     Route::get('/propiedadesVenta', [PropiedadController::class, 'indexVenta']);

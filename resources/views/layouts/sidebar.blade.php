@@ -102,18 +102,23 @@
                     </div>
                 </li>
 
+                <!-- ── RRHH ── -->
                 <li class="nav-item mb-3">
                     <a class="nav-link d-flex justify-content-between align-items-center"
                        data-bs-toggle="collapse" href="#rrhh" role="button"
-                       aria-expanded="false" aria-controls="rrhh">
+                       aria-expanded="{{ request()->is('rrhh/*') ? 'true' : 'false' }}"
+                       aria-controls="rrhh">
                         <span><i class="fa-solid fa-users-gear me-2 text-warning"></i> RRHH</span>
                         <i class="fa-solid fa-chevron-down text-muted"></i>
                     </a>
-                    <div class="collapse" id="rrhh">
+                    <div class="collapse {{ request()->is('rrhh/*') ? 'show' : '' }}" id="rrhh">
                         <ul class="nav flex-column ms-3 mt-2">
-                            <li class="nav-item"><a href="/cargos" class="nav-link"><i class="fa-solid fa-briefcase me-2 text-warning"></i> Cargos</a></li>
-                            <li class="nav-item"><a href="/usuarios" class="nav-link"><i class="fa-solid fa-user me-2 text-warning"></i> Usuarios</a></li>
-                            <li class="nav-item"><a href="/sueldos" class="nav-link"><i class="fa-solid fa-money-check-dollar me-2 text-warning"></i> Sueldos de Usuarios</a></li>
+                            <li class="nav-item">
+                                <a href="/rrhh/equipo" class="nav-link {{ request()->is('rrhh/equipo') ? 'active-link' : '' }}">
+                                    <i class="fa-solid fa-id-card me-2 text-warning"></i> Equipo de trabajo
+                                </a>
+                            </li>
+                            
                         </ul>
                     </div>
                 </li>
@@ -135,18 +140,12 @@
 
 <style>
 /* ─── SIDEBAR STICKY ─────────────────────────────────────────────────── */
-/*
- * La clave: el padre .row NO debe tener overflow-auto ni overflow-hidden.
- * El scroll lo hace únicamente la columna del contenido principal (.pla-main-col).
- * Esta columna del sidebar usa position:sticky + height:100vh para quedarse fija.
- */
 .pla-sidebar-col {
     position: sticky;
     top: 0;
     height: 100vh;
     overflow-y: auto;
     flex-shrink: 0;
-    /* Scroll interno suave para el menú si es largo */
     scrollbar-width: thin;
     scrollbar-color: rgba(0,0,0,.15) transparent;
 }
@@ -156,13 +155,12 @@
     border-radius: 4px;
 }
 
-/* #menuContainer ya no necesita max-height fijo — el sidebar entero scrollea */
 #menuContainer {
     max-height: none;
     overflow-y: visible;
 }
 
-/* ─── Hover de links ─────────────────────────────────────────────────── */
+/* ─── Hover y activo ─────────────────────────────────────────────────── */
 .nav-link {
     color: rgb(0,0,0) !important;
 }
@@ -175,5 +173,15 @@
 .nav-link:hover i,
 .nav-link:hover span {
     color: rgb(255,255,255) !important;
+}
+/* Link activo (página actual) */
+.nav-link.active-link {
+    background-color: #E67E22;
+    color: #fff !important;
+    border-radius: 0.375rem;
+    font-weight: 700;
+}
+.nav-link.active-link i {
+    color: #fff !important;
 }
 </style>
