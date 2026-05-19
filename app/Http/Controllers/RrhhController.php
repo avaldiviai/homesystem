@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ArchivoRrhh;
 use App\Models\Cargo;
+use App\Models\DatosBancarioUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,8 +16,8 @@ class RrhhController extends Controller
 
     public function index()
     {
-        $users   = User::with(['cargo', 'archivosRrhh'])->get();
-        $cargos  = Cargo::all();
+        $users  = User::with(['cargo', 'archivosRrhh', 'datosBancarioUser'])->get();
+        $cargos = Cargo::all();
 
         return view('rrhh.equipo', compact('users', 'cargos'));
     }
@@ -25,11 +26,12 @@ class RrhhController extends Controller
 
     public function show($id)
     {
-        $user = User::with(['cargo', 'archivosRrhh'])->findOrFail($id);
+        $user = User::with(['cargo', 'archivosRrhh', 'datosBancarioUser'])->findOrFail($id);
 
         return response()->json([
-            'user'    => $user,
-            'archivos' => $user->archivosRrhh,
+            'user'          => $user,
+            'archivos'      => $user->archivosRrhh,
+            'datos_bancarios' => $user->datosBancarioUser,
         ]);
     }
 
@@ -38,10 +40,10 @@ class RrhhController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|string|min:6',
-            'id_cargo'  => 'required|exists:cargos,id',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'id_cargo' => 'required|exists:cargos,id',
         ]);
 
         $user = new User();
@@ -53,13 +55,17 @@ class RrhhController extends Controller
         $user->direccion = $request->direccion;
         $user->save();
 
-        // Guardar datos bancarios si vienen
-        if ($request->filled('nombre_banco') || $request->filled('numero_cuenta')) {
-            // guardamos en datos_bancarios usando un propietario ficticio no aplica aquí,
-            // los datos de cuenta van directamente en el campo datos_cuenta del usuario
+        // ── Guardar datos bancarios ──────────────────────────────────────────
+        if ($request->filled('nombre_banco') || $request->filled('numero_cuenta') || $request->filled('tipo_cuenta')) {
+            DatosBancarioUser::create([
+                'id_user'       => $user->id,
+                'nombre_banco'  => $request->nombre_banco,
+                'numero_cuenta' => $request->numero_cuenta,
+                'tipo_cuenta'   => $request->tipo_cuenta,
+            ]);
         }
 
-        // Archivos adjuntos
+        // ── Guardar archivos adjuntos ────────────────────────────────────────
         if ($request->hasFile('archivos')) {
             foreach ($request->file('archivos') as $archivo) {
                 $nombre = $archivo->getClientOriginalName();
@@ -74,7 +80,10 @@ class RrhhController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Usuario creado correctamente', 'user' => $user->load('cargo', 'archivosRrhh')]);
+        return response()->json([
+            'message' => 'Colaborador creado correctamente',
+            'user'    => $user->load('cargo', 'archivosRrhh', 'datosBancarioUser'),
+        ]);
     }
 
     // ─── Actualizar usuario ───────────────────────────────────────────────────
@@ -95,7 +104,19 @@ class RrhhController extends Controller
 
         $user->save();
 
-        // Nuevos archivos
+        // ── Actualizar o crear datos bancarios ───────────────────────────────
+        if ($request->filled('nombre_banco') || $request->filled('numero_cuenta') || $request->filled('tipo_cuenta')) {
+            DatosBancarioUser::updateOrCreate(
+                ['id_user' => $user->id],
+                [
+                    'nombre_banco'  => $request->nombre_banco  ?? '',
+                    'numero_cuenta' => $request->numero_cuenta ?? '',
+                    'tipo_cuenta'   => $request->tipo_cuenta   ?? '',
+                ]
+            );
+        }
+
+        // ── Nuevos archivos adjuntos ─────────────────────────────────────────
         if ($request->hasFile('archivos')) {
             foreach ($request->file('archivos') as $archivo) {
                 $nombre = $archivo->getClientOriginalName();
@@ -110,7 +131,10 @@ class RrhhController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Usuario actualizado correctamente', 'user' => $user->load('cargo', 'archivosRrhh')]);
+        return response()->json([
+            'message' => 'Colaborador actualizado correctamente',
+            'user'    => $user->load('cargo', 'archivosRrhh', 'datosBancarioUser'),
+        ]);
     }
 
     // ─── Eliminar usuario ─────────────────────────────────────────────────────
@@ -125,9 +149,10 @@ class RrhhController extends Controller
             $archivo->delete();
         }
 
+        // Los datos bancarios se eliminan por cascade (onDelete cascade en migración)
         $user->delete();
 
-        return response()->json(['message' => 'Usuario eliminado correctamente']);
+        return response()->json(['message' => 'Colaborador eliminado correctamente']);
     }
 
     // ─── Eliminar un archivo adjunto ──────────────────────────────────────────
@@ -146,7 +171,6 @@ class RrhhController extends Controller
     public function storeCargo(Request $request)
     {
         $request->validate(['nombre' => 'required|string|max:255']);
-
         $cargo = Cargo::create(['nombre' => $request->nombre]);
 
         return response()->json(['message' => 'Cargo creado correctamente', 'cargo' => $cargo]);

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,7 +27,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password'          => 'hashed',
     ];
 
     // Relación con cargo
@@ -41,5 +40,11 @@ class User extends Authenticatable
     public function archivosRrhh()
     {
         return $this->hasMany(ArchivoRrhh::class, 'id_user');
+    }
+
+    // Relación con datos bancarios del usuario
+    public function datosBancarioUser()
+    {
+        return $this->hasOne(DatosBancarioUser::class, 'id_user');
     }
 }
