@@ -1,15 +1,84 @@
 @extends('layouts.app')
+
 @section('content')
-<div class="container-fluid overflow-hidden" style="background-color: #f5f5f5">
-    <div class="row vh-100 overflow-auto" style="background-image: url('/img/home_casa.jpg'); background-size: cover; background-position: center; height: 100vh;">
-        <!-- Sidebar -->
-        @include('layouts.sidebar')
+<div class="container-fluid overflow-hidden px-0" style="background-color: #f5f5f5;">
+    <div class="row vh-100 g-0" style="background-image: url('/img/home_casa.jpg'); background-size: cover; background-position: center;">
         
+        @include('layouts.sidebar')
+
+    </div>        
+</div>
 @endsection
 
 @section('css')
 @parent
 <style>
+   /* ─── Card de Propietarios con Borde y Sombra Naranja Izquierda ─── */
+    .pla-card-propietarios {
+        background: #ffffff; 
+        border-radius: 16px; 
+        border-left: 5px solid #E67E22 !important; 
+        box-shadow: -6px 4px 18px rgba(230, 126, 34, 0.2), 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    /* Contenedor del Icono de Perfil Naranja */
+    .pla-icon-container {
+        background: #E67E22; 
+        width: 40px; 
+        height: 40px; 
+        border-radius: 10px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 1.1rem; 
+        color: #fff; 
+        flex-shrink: 0;
+    }
+
+    /* Ajustes de Texto Generales */
+    .pla-card-propietarios .pla-cell-title {
+        font-size: 1.05rem; 
+        line-height: 1.2;
+    }
+
+    .pla-card-propietarios .pla-cell-sub {
+        font-size: .75rem; 
+        margin-top: 1px;
+    }
+
+    /* Scroll Controlado para la lista */
+    .propietarios-scroll {
+        max-height: 220px; 
+        overflow-y: auto; 
+        scrollbar-width: thin;
+    }
+
+    /* Items de Propietarios */
+    .propietario-item {
+        border-bottom: 1px solid #f0ede8;
+    }
+
+    .propietario-name {
+        font-size: .88rem;
+    }
+
+    .propietario-name i {
+        font-size: .95rem;
+    }
+
+    /* Badge / Botón Naranja de Hoja de Vida */
+    .btn-hoja-vida {
+        background: #E67E22; 
+        color: #fff; 
+        font-size: .7rem; 
+        padding: 5px 10px;
+        transition: background 0.2s ease;
+    }
+
+    .btn-hoja-vida:hover {
+        background: #d35400;
+        color: #fff;
+    }
     .card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         border-radius: 10px;
@@ -97,6 +166,51 @@
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
     }
+    .pla-card-propietarios {
+        background: #ffffff; 
+        border-radius: 16px; 
+        border-left: 5px solid #E67E22 !important; 
+        box-shadow: -6px 4px 18px rgba(230, 126, 34, 0.2), 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .pla-icon-container {
+        background: #E67E22; 
+        width: 40px; height: 40px; border-radius: 10px; 
+        display: flex; align-items: center; justify-content: center; 
+        font-size: 1.1rem; color: #fff; flex-shrink: 0;
+    }
+    .propietarios-scroll { max-height: 220px; overflow-y: auto; scrollbar-width: thin; }
+    .propietario-item { border-bottom: 1px solid #f0ede8; }
+    .propietario-name { font-size: .88rem; }
+    .btn-hoja-vida { background: #E67E22; color: #fff; font-size: .7rem; padding: 5px 10px; }
+    .btn-hoja-vida:hover { background: #d35400; color: #fff; }
+
+    /* Estilos de la Tarjeta de Documentos */
+    .pla-card-docs {
+        background: #ffffff;
+        border-radius: 16px;
+        border-left: 5px solid #E67E22 !important;
+        box-shadow: -6px 4px 18px rgba(230, 126, 34, 0.2), 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .pla-icon-docs-container {
+        background: #E67E22;
+        width: 40px; height: 40px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.1rem; color: #fff; flex-shrink: 0;
+    }
+    .icon-upload { font-size: 1.8rem; color: #ccc; }
+    .upload-text { font-size: .85rem; color: #aaa; }
+    
+    .pla-card-docs .btn-agregar {
+        background: #E67E22; color: #fff; border: none; border-radius: 8px;
+        font-size: .85rem; font-weight: 600; transition: background 0.2s ease;
+    }
+    .pla-card-docs .btn-agregar:hover { background: #d35400; }
+    
+    .pla-card-docs .btn-ver {
+        background: transparent; color: #E67E22; border: 2px solid #E67E22;
+        border-radius: 8px; font-size: .85rem; font-weight: 600; transition: all 0.2s ease;
+    }
+    .pla-card-docs .btn-ver:hover { background: rgba(230, 126, 34, 0.05); color: #d35400; border-color: #d35400; }
 </style>
 @endsection
 
