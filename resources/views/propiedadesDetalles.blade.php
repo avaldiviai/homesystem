@@ -4,10 +4,9 @@
 <div class="container-fluid" style="background-color:rgb(255, 255, 255)">
     <div class="row">
         @include('layouts.sidebar')
-
         <div class="col">
             <div class="container-fluid">
-                <div class="row overflow-auto" style="max-height: 100vh;">
+                <div class="row">
 
                     <div class="col-lg-12" style="text-align: start; margin-top: 40px; margin-bottom: 20px; margin-start: 30px; color: white;">
                         <h1 class="text-uppercase text-black text-center">Detalles Marzo a Diciembre</h1>
@@ -316,6 +315,70 @@
                             </div>
                         </div>
 
+                        {{-- ARRENDATARIO --}}
+                        <div class="row shadow p-3 text-white mt-4"
+                            style="background-color:#E67E22; border-radius:.9rem;">
+
+                            <div class="col-lg-12 mb-3">
+                                <div class="col-lg-6 bg-black text-white text-center rounded-pill shadow">
+                                    <h4>Arrendatario</h4>
+                                </div>
+                            </div>
+
+                            {{-- Nombre --}}
+                            <div class="col-lg-12 mb-3">
+                                <label>Nombre Arrendatario</label>
+
+                                <select id="arrendatario_select" class="form-select form-select-sm">
+                                    <option disabled selected>Seleccione un arrendatario</option>
+
+                                    @foreach($arrendatario as $arrendatario)
+                                        <option value="{{ $arrendatario->id }}">
+                                            {{ $arrendatario->nombre }}
+                                        </option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
+                            {{-- Rut --}}
+                            <div class="col-lg-6 mb-3">
+                                <label>Rut</label>
+
+                                <input type="text"
+                                    id="rut_arrendatario"
+                                    class="form-control form-control-sm"
+                                    placeholder="12345678-9">
+                            </div>
+
+                            {{-- Fecha pago --}}
+                            <div class="col-lg-6 mb-3">
+                                <label>Fecha de Pago</label>
+
+                                <input type="date"
+                                    id="fecha_pago"
+                                    class="form-control form-control-sm">
+                            </div>
+
+                            {{-- Adjuntar información --}}
+                            <div class="col-lg-6 mb-3">
+                                <label>Adjuntar Información Cliente</label>
+
+                                <input type="file"
+                                    id="info_cliente"
+                                    class="form-control form-control-sm">
+                            </div>
+
+                            {{-- Adjuntar contratos --}}
+                            <div class="col-lg-6 mb-3">
+                                <label>Contratos / Acta / Inventario</label>
+
+                                <input type="file"
+                                    id="documentos_arrendatario"
+                                    class="form-control form-control-sm"
+                                    multiple>
+                            </div>
+                        </div>
                     </div>
 
                     {{-- MANTENIMIENTO --}}
@@ -404,10 +467,10 @@
 
                         </div>
                     </div>
-                    @include('layouts.footer')
                 </div>
             </div>
         </div>
+        @include('layouts.footer')
     </div>
 </div>
 
