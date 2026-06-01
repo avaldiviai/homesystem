@@ -143,11 +143,6 @@
                                 <input type="date" id="proximo_reajuste" class="form-control form-control-sm" value="2026-08-17">
                             </div>
 
-                            <div class="col-lg-12 mb-3">
-                                <label class="fw-bold small">Reajuste automático</label>
-                                <input type="text" class="form-control form-control-sm" value="Se reajusta cada 1 año automáticamente" readonly>
-                            </div>
-
                             <div class="col-lg-12 mb-2">
                                 <label class="fw-bold small">Comisión de administración</label>
                                 <select id="comision_admin" class="form-select form-select-sm">
@@ -260,14 +255,34 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-4 mb-3">
+                           <div class="col-lg-4 mb-3">
                                 <label>Dormitorios</label>
-                                <input type="text" id="dormitorios_edit" class="form-control form-control-sm" value="{{ $detallespropiedad->dormitorios }}">
+                                <select id="dormitorios_edit" class="form-select form-select-sm">
+                                    <option value="" disabled {{ empty($detallespropiedad->dormitorios) ? 'selected' : '' }}>
+                                        Seleccione la cantidad
+                                    </option>
+
+                                    @for($i = 1; $i <= 10; $i++)
+                                        <option value="{{ $i }}" {{ $detallespropiedad->dormitorios == $i ? 'selected' : '' }}>
+                                            {{ $i }}
+                                        </option>
+                                    @endfor
+                                </select>
                             </div>
 
                             <div class="col-lg-4 mb-3">
                                 <label>Baños</label>
-                                <input type="text" id="banos_edit" class="form-control form-control-sm" value="{{ $detallespropiedad->banos }}">
+                                <select id="banos_edit" class="form-select form-select-sm">
+                                    <option value="" disabled {{ empty($detallespropiedad->banos) ? 'selected' : '' }}>
+                                        Seleccione la cantidad
+                                    </option>
+
+                                    @for($i = 1; $i <= 4; $i++)
+                                        <option value="{{ $i }}" {{ $detallespropiedad->banos == $i ? 'selected' : '' }}>
+                                            {{ $i }}
+                                        </option>
+                                    @endfor
+                                </select>
                             </div>
 
                             <div class="col-lg-4 mb-3">
@@ -277,7 +292,22 @@
 
                             <div class="col-lg-4 mb-3">
                                 <label>Estacionamiento</label>
-                                <input type="text" id="numeroEstacionamientoInput" class="form-control form-control-sm" value="{{ $sub_est->estacionamiento }}">
+
+                                <div class="btn-group btn-group-sm w-100 shadow-sm">
+
+                                    <input type="radio" class="btn-check" name="estacionamiento" id="est_si"
+                                        value="Si"
+                                        {{ isset($sub_est) && $sub_est->estacionamiento == 'Si' ? 'checked' : '' }}>
+
+                                    <label class="btn btn-dark" for="est_si">Sí</label>
+
+                                    <input type="radio" class="btn-check" name="estacionamiento" id="est_no"
+                                        value="No"
+                                        {{ isset($sub_est) && $sub_est->estacionamiento == 'No' ? 'checked' : '' }}>
+
+                                    <label class="btn btn-dark" for="est_no">No</label>
+
+                                </div>
                             </div>
 
                             <div class="col-lg-4 mb-3">
@@ -293,8 +323,9 @@
                                 </select>
                             </div>
 
-                            <div class="col-lg-6 mb-3">
-                                <label>Amoblado</label>
+                            <div class="col-lg-6 mb-3 mx-auto text-center">
+                                <label class="d-block mb-2">Amoblado</label>
+
                                 <div class="btn-group btn-group-sm w-100 shadow-sm">
                                     <input type="radio" class="btn-check" name="am_op" id="am_si">
                                     <label class="btn btn-dark" for="am_si">SÍ</label>
@@ -302,11 +333,6 @@
                                     <input type="radio" class="btn-check" name="am_op" id="am_no" checked>
                                     <label class="btn btn-dark" for="am_no">NO</label>
                                 </div>
-                            </div>
-
-                            <div class="col-lg-6 mb-3">
-                                <label>Elementos Entregados</label>
-                                <input type="text" id="elementos_entregados" class="form-control form-control-sm">
                             </div>
 
                             <div class="col-lg-12">
@@ -369,14 +395,34 @@
                                     class="form-control form-control-sm">
                             </div>
 
-                            {{-- Adjuntar contratos --}}
-                            <div class="col-lg-6 mb-3">
-                                <label>Contratos / Acta / Inventario</label>
+                            <div class="col-lg-12">
+                                <div class="row">
 
-                                <input type="file"
-                                    id="documentos_arrendatario"
-                                    class="form-control form-control-sm"
-                                    multiple>
+                                    <div class="col-lg-4 mb-3">
+                                        <label>Contrato</label>
+
+                                        <input type="file"
+                                            id="contrato_arrendatario"
+                                            class="form-control form-control-sm">
+                                    </div>
+
+                                    <div class="col-lg-4 mb-3">
+                                        <label>Acta</label>
+
+                                        <input type="file"
+                                            id="acta_arrendatario"
+                                            class="form-control form-control-sm">
+                                    </div>
+
+                                    <div class="col-lg-4 mb-3">
+                                        <label>Inventario</label>
+
+                                        <input type="file"
+                                            id="inventario_arrendatario"
+                                            class="form-control form-control-sm">
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -405,11 +451,10 @@
                                     <div class="col-lg-5">
 
                                         <div class="mb-3">
-                                            <select class="form-select form-select-sm input-mantenimiento">
-                                                <option>Calefón</option>
-                                                <option>Caldera</option>
-                                                <option>Termo</option>
-                                            </select>
+                                            <label>Elemento intervenido</label>
+                                            <input type="text"
+                                                class="form-control form-control-sm input-mantenimiento"
+                                                placeholder="Ej: Cocina, techo, calefón, baño principal, portón eléctrico...">
                                         </div>
 
                                         <div class="mb-3">
@@ -3062,6 +3107,12 @@ textarea.input-mantenimiento{
 .btn-sm{
     border-radius:.5rem;
     min-width:38px;
+}
+
+.btn-check:checked + .btn {
+    background-color: #E67E22 !important;
+    border-color: #E67E22 !important;
+    color: white !important;
 }
 </style>
 @endsection
