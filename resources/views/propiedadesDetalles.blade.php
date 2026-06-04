@@ -453,18 +453,22 @@
                                         <div class="mb-3">
                                             <label>Elemento intervenido</label>
                                             <input type="text"
-                                                class="form-control form-control-sm input-mantenimiento"
-                                                placeholder="Ej: Cocina, techo, calefón, baño principal, portón eléctrico...">
+                                                    id="elemento_intervenido"
+                                                    class="form-control form-control-sm input-mantenimiento">
                                         </div>
 
                                         <div class="mb-3">
                                             <label>Última mantención</label>
-                                            <input type="date" class="form-control form-control-sm input-mantenimiento">
+                                            <input type="date"
+                                                    id="fecha_mantencion"
+                                                    class="form-control form-control-sm input-mantenimiento">
                                         </div>
 
                                         <div class="mb-3">
                                             <label>Próxima mantención</label>
-                                            <input type="date" class="form-control form-control-sm input-mantenimiento">
+                                            <input type="date"
+                                                    id="fecha_proxima"
+                                                    class="form-control form-control-sm input-mantenimiento">
                                         </div>
 
                                     </div>
@@ -474,9 +478,9 @@
 
                                         <div class="mb-3">
                                             <label>Descripción del trabajo</label>
-                                            <textarea rows="6"
-                                                    class="form-control input-mantenimiento"
-                                                    placeholder="Detalle del trabajo realizado..."></textarea>
+                                            <textarea id="descripcion_mantencion"
+                                                rows="6"
+                                                class="form-control input-mantenimiento"></textarea>
                                         </div>
 
                                     </div>
@@ -486,7 +490,9 @@
 
                                         <div class="mb-3">
                                             <label>Archivo</label>
-                                            <input type="file" class="form-control form-control-sm archivo-mantenimiento">
+                                            <input type="file"
+                                                id="archivo_mantencion"
+                                                class="form-control form-control-sm">
                                         </div>
 
                                         <div class="mb-3">
@@ -500,7 +506,10 @@
                                         </div>
 
                                         <div class="d-flex justify-content-end mt-3">
-                                            <button class="btn btn-dark rounded-pill px-4">
+                                            <button
+                                                id="btnGuardarMantencion"
+                                                class="btn btn-dark rounded-pill px-4">
+
                                                 Agregar Trabajo
                                             </button>
                                         </div>
@@ -2960,6 +2969,56 @@ async function generarContratoWord() {
         error: function() {
             alert('Error al eliminar el documento');
         }
+    });
+
+    $('#btnGuardarMantencion').click(function(){
+
+        let formData = new FormData();
+
+        formData.append(
+            'nombre',
+            $('#elemento_intervenido').val()
+        );
+
+        formData.append(
+            'descripcion',
+            $('#descripcion_mantencion').val()
+        );
+
+        formData.append(
+            'fecha_mantencion',
+            $('#fecha_mantencion').val()
+        );
+
+        formData.append(
+            'fecha_proxima',
+            $('#fecha_proxima').val()
+        );
+
+        formData.append(
+            'id_propiedad',
+            {{$detalles->id}}
+        );
+
+        formData.append(
+            'archivo',
+            $('#archivo_mantencion')[0].files[0]
+        );
+
+        $.ajax({
+            url:'/guardar-mantencion',
+            method:'POST',
+            data:formData,
+            processData:false,
+            contentType:false,
+
+            success:function(){
+
+                alert('Guardado');
+
+            }
+        });
+
     });
 });
 

@@ -2070,6 +2070,41 @@ public function eliminarDocumentoPropiedad(Request $request, $id)
     $archivo->save();
 
     return response()->json(['message' => 'Documento eliminado correctamente']);
+
+}
+public function guardarMantencion(Request $request)
+{
+    $rutaDocumento = null;
+
+    if($request->hasFile('archivo'))
+    {
+        $archivo = $request->file('archivo');
+
+        $nombre = time().'_'.$archivo->getClientOriginalName();
+
+        $archivo->move(
+            public_path('mantenimientos'),
+            $nombre
+        );
+
+        $rutaDocumento =
+            'mantenimientos/'.$nombre;
+    }
+
+    Mantenimiento::create([
+        'nombre'           => $request->nombre,
+        'descripcion'      => $request->descripcion,
+        'fecha_mantencion' => $request->fecha_mantencion,
+        'fecha_prox_man'   => $request->fecha_proxima,
+        'meses'            => 0,
+        'envio_correo'     => 0,
+        'doc'              => $rutaDocumento,
+        'id_propiedad'     => $request->id_propiedad
+    ]);
+
+    return response()->json([
+        'success' => true
+    ]);
 }
 
 }
