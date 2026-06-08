@@ -711,6 +711,8 @@ Route::middleware(['auth', 'obrero'])->group(function () {
      Route::delete('/obrero/proanocorrido/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
      Route::get('/obrero/proanocorridopropiedadesDetallesObrero-{id}',[PropiedadController::class,'proanocorridopropiedadesDetallesObrero'])->name('obrero.proanocorridopropiedadesDetallesObrero');
      
+     Route::post('/guardar-mantencion', [PropiedadController::class,'guardarMantencion']
+);
 
 });
 
