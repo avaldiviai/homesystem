@@ -299,47 +299,47 @@
             });
 
             // //Boton agregar arrendatario
-            // $("#btn_agregar").on('click', function(event) {
-            //     event.preventDefault();
+             $("#btn_agregar").on('click', function(event) {
+                event.preventDefault();
 
-            //     // Obtener los valores de los campos de texto
-            //     var nombre = $("#nombreArrendatarioInput").val();
-            //     var rut = $("#rutInput").val();
-            //     var telefono = $("#telefonoInput").val();
-            //     var correo = $("#correoInput").val();
-            //     var direccion = $("#direccionInput").val();
-            //     var ciudad = $("#ciudadInput").val();
+                Obtener los valores de los campos de texto
+                var nombre = $("#nombreArrendatarioInput").val();
+                var rut = $("#rutInput").val();
+                var telefono = $("#telefonoInput").val();
+                var correo = $("#correoInput").val();
+                var direccion = $("#direccionInput").val();
+                var ciudad = $("#ciudadInput").val();
 
-            //     argumentos = {
-            //         nombre: nombre,
-            //         rut: rut,
-            //         telefono: telefono,
-            //         correo: correo,
-            //         direccion: direccion,
-            //         ciudad: ciudad
-            //     };
+                argumentos = {
+                nombre: nombre,
+                rut: rut,
+                telefono: telefono,
+                correo: correo,
+                direccion: direccion,
+                ciudad: ciudad
+               };
 
-            //     console.log(argumentos);
+               console.log(argumentos);
 
-            //     // Realizar la solicitud AJAX
-            //     $.ajax({
-            //         url: '{{ url('/arrendatarios/add') }}',
-            //         type: 'POST',
-            //         data: argumentos,
-            //         dataType: 'json',
-            //         success: function(respuesta) {
-            //             console.log("respuesta", respuesta);
-            //             $("#agregarArrendatario").modal('hide');
-            //             $("#successModal").modal('show');
-            //             // $("#texto_success_ventas").html("La Carta <b>" + respuesta.nuevo_detalle.titulo_carta + "</b>, se ha creado exitosamente");
-            //         },
-            //         error: function(jqXHR, textStatus, errorThrown) {
-            //             console.log("Error:", errorThrown);
-            //             $("#agregarArrendatario").modal('hide');
-            //             $('#modalerror').modal('show');
-            //         }
-            //     });
-            // }); //fin agregar arrendatario
+               // Realizar la solicitud AJAX
+                $.ajax({
+                url: '{{ url('/arrendatarios/add') }}',
+                type: 'POST',
+                 data: argumentos,
+                dataType: 'json',
+                   success: function(respuesta) {
+                     console.log("respuesta", respuesta);
+                      $("#agregarArrendatario").modal('hide');
+                      $("#successModal").modal('show');
+                     // $("#texto_success_ventas").html("La Carta <b>" + respuesta.nuevo_detalle.titulo_carta + "</b>, se ha creado exitosamente");
+                  },
+                  error: function(jqXHR, textStatus, errorThrown) {
+                       console.log("Error:", errorThrown);
+                    $("#agregarArrendatario").modal('hide');
+                       $('#modalerror').modal('show');
+                  }
+               });
+             }); //fin agregar arrendatario
 
             // boton trae datos del arrendatario para editar
             $(".btn-editar").on('click', function(event) {

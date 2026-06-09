@@ -160,7 +160,20 @@
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">
                                     <label for="AnoCorridoInput">Precio Año Corrido</label>
-                                    <input type="text" class="form-control" id="AnoCorridoInput" placeholder="Precio Año Corrido" oninput="formatearMiles(this)"  required>
+                                        <label for="AnoCorridoInput" class="form-label">Precio Año Corrido</label>
+                                        <div class="input-group">
+                                            <input type="text" 
+                                                class="form-control" 
+                                                id="AnoCorridoInput" 
+                                                placeholder="Precio Año Corrido" 
+                                                oninput="formatearMiles(this)" 
+                                                required>
+                                            
+                                            <span class="input-group-text fw-bold text-dark bg-light">
+                                                CLP
+                                            </span>
+                                        </div>
+                                    <input type="hidden" id="tipo_moneda" value="CLP">
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">
                                     <label for="direccionInput">Dirección de Propiedad</label>
@@ -430,7 +443,12 @@
                                     <div class="row g-3 m-1 shadow" style="background-color: #FFE2B2; border-radius: .9rem;">
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="AnocoInput" class="form-label">Año de Construcción</label>
-                                            <input type="date" class="form-control" id="AnocoInput" placeholder="Ej: 1999" required>
+                                            <select id="AnocoInput" class="form-control" required>
+                                                <option value="">Seleccione año</option>
+                                                @for ($y = date('Y'); $y >= 1970; $y--)
+                                                    <option value="{{ $y }}">{{ $y }}</option>
+                                                @endfor
+                                            </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="piso" class="form-label">Piso</label>
@@ -454,33 +472,32 @@
                                             <label for="orientacionInput">Orientación</label>
                                             <select class="form-select" id="orientacionInput">
                                                 <option value="" disabled selected>Seleccione una opción</option>
-                                                <option value="O">Oriente (Este)</option>
-                                                <option value="P">Poniente (Oeste)</option>
                                                 <option value="N">Norte</option>
-                                                <option value="S">Sur</option>
                                                 <option value="NE">Noreste</option>
-                                                <option value="NO">Noroeste</option>
+                                                <option value="E">Oriente (Este)</option>
                                                 <option value="SE">Sureste</option>
+                                                <option value="S">Sur</option>
                                                 <option value="SO">Suroeste</option>
+                                                <option value="O">Poniente (Oeste)</option>
+                                                <option value="NO">Noroeste</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6">
                                             <label for="cocina" class="form-label">Cocina</label>
                                             <select class="form-select" id="cocina">
                                                 <option value="" disabled selected>Seleccione una opción</option>
-                                                <option value="Eléctrica">Eléctrica</option>
-                                                <option value="Gas">Gas</option>
-                                                <option value="Conexión Gas">Conexión Gas</option>
+                                                <option value="Eléctrica">Conexión eléctrica</option>
+                                                <option value="Gas">Gas cilindro</option>
+                                                <option value="Conexión Gas">Conexión cañeria</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6 mb-3">
                                             <label for="logia" class="form-label">Logia</label>
                                             <select class="form-select" id="logiaInput">
                                                 <option value="" disabled selected>Seleccione una opción</option>
-                                                <option value="1">1</option>
-                                                <!-- <option value="1 1/2">1 1/2</option> -->
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
+                                                <option value="1">Si</option>
+                                                <option value="2">No</option>
+                                                <option value="3">Conexión para lavadora</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-12 col-lg-6 mb-3">
@@ -488,7 +505,7 @@
                                             <select class="form-select" id="agua_caliente">
                                                 <option value="" disabled selected>Seleccione una opción</option>
                                                 <option value="Calefont">Calefont</option>
-                                                <option value="Thermo">Thermo</option>
+                                                <option value="Termo">Termo</option>
                                                 <option value="Caldera">Caldera</option>
                                             </select>
                                         </div>
@@ -512,11 +529,22 @@
                                         <label for="inventario" class="form-label">Inventario</label>
                                         <textarea type="text" class="form-control" id="inventario" name="inventario" placeholder="Ej: muebles incluidos"></textarea>
                                 </div>
-                                <div class="form-group mb-3 col-lg-4">
-                                    <label for="estacionamiento_visitas" class="form-label">Estacionamiento Visitas</label>
-                                    <input type="text" class="form-control" id="estacionamiento_visitas" name="estacionamiento_visitas"
-                                        placeholder="Ej: 5">
+
+                                <!--- Estacionamiento visitas --->
+                                <div class="form-group mb-3 col-lg-4 text-center">
+                                    <label class="form-label">Estacionamiento Visitas</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="estacionamiento_visitas_si" name="estacionamiento_visitas" value="1">
+                                            <label class="form-check-label" for="estacionamiento_visitas_si">Sí</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="estacionamiento_visitas_no" name="estacionamiento_visitas" value="0">
+                                            <label class="form-check-label" for="estacionamiento_visitas_no">No</label>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>    
                             <div class="row g-3 m-1 shadow" style="background-color: #FFE2B2; border-radius: .9rem;">
                                 <div class="form-group mb-3 col-lg-3 col-sm-4 text-center">
@@ -725,7 +753,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Agregar Mantenciones</h5>
+                        <h5 class="modal-title">Agregar Mantenimientos</h5>
                         <button type="button" class="btn-close" id="" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -749,7 +777,7 @@
                                         <input type="number" class="form-control " id="cadamantenimiento" placeholder="Ingrese la cantidad de meses para la mantención" required>
                                     </div>
                                     <div class="col-lg-12 text-end">
-                                        <button type="button" class="btn btn-primary" id="agregar-mantencion">Agregar Mantención</button>
+                                        <button type="button" class="btn btn-primary" id="agregar-mantencion">Agregar Mantenimiento</button>
                                     </div>
                                 </div>
                             </div>
@@ -1143,6 +1171,13 @@
         alert('Por favor, selecciona un archivo antes de agregar.');
     }
 });
+
+        let tipoMoneda = 'CLP';
+        
+        $("#switchUF").on("change", function () {
+            tipoMoneda = this.checked ? 'UF' : 'CLP';
+        });
+
         $("#btn_agregar").on('click', function(event){
             event.preventDefault();
 
@@ -1166,6 +1201,7 @@
             var empresagas = $("#empresaGasInput").val();
             var numerogas = $("#numeroGasInput").val();
             var condominio = $("#condominioInput").val();
+            var tipo_moneda = tipoMoneda;
 
             var torre = $("#TorreInput").val();
             var num_torre = $("#TorrenumeroInput").val();
@@ -1278,7 +1314,8 @@
             formData.append('numerogas', numerogas);
             formData.append('condominio', condominio);
             formData.append('descripcionpro',descripcionpro);
-    
+            formData.append('tipo_moneda', tipo_moneda);
+            
             formData.append('ano_corrido', ano_corrido);
 
             // formData.append('propietario', propietario);
@@ -1479,7 +1516,7 @@ $("#close_success").click(function() {
                     var mt2_total = $("#mt2_total").val();
                     var mt2_construido = $("#mt2_construido").val();
                     var mt2_terraza = $("#mt2_terraza").val();
-                    var estacionamiento_visitas = $("#estacionamiento_visitas").val();
+                    var estacionamiento_visitas = $('input[name="estacionamiento_visitas"]:checked').val();
 
                     var ascensor = $("#ascensor").is(':checked');
                     var ascensor_no = $("#ascensor_no").is(':checked');
@@ -1800,7 +1837,7 @@ $("#close_success").click(function() {
                         // Actualizar la lista visual
                         actualizarListaMantenciones();
                     } else {
-                        alert("Por favor, complete todos los campos antes de agregar una mantención.");
+                        alert("Por favor, complete todos los campos antes de agregar un mantenimiento.");
                     }
                 });
 
@@ -2129,7 +2166,21 @@ $("#close_success").click(function() {
                 // Asignar el valor formateado al campo
                 input.value = valorFormateado;
             }
+            document.addEventListener('DOMContentLoaded', function () {
 
+                const switchUF = document.getElementById('switchUF');
+                const monedaTexto = document.getElementById('monedaTexto');
+
+                function actualizarMoneda() {
+                    monedaTexto.innerText = switchUF.checked ? 'UF' : 'CLP';
+                }
+
+                // Estado inicial
+                actualizarMoneda();
+
+                // Al cambiar el switch
+                switchUF.addEventListener('change', actualizarMoneda);
+            });
 
 </script>
 @endsection

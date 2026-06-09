@@ -29,6 +29,7 @@ class Propiedad extends Model
         'empresa_agua',
         'empresa_gas',
         'tipo_vivienda',
+        'tipo_cocina',
         // Datos Arriendo
         'inicio_contrato',
         'mantenimiento',
@@ -66,6 +67,10 @@ class Propiedad extends Model
             'id_propiedad',            // columna en pivote que referencia la propiedad
             'id_propietario'           // columna en pivote que referencia el propietario
         );
+    }
+    public function precios()
+    {
+        return $this->hasMany(\App\Models\Precios::class, 'id_propiedad');
     }
     
 }

@@ -39,6 +39,11 @@ class ArriendoController extends Controller
   
     public function addArriendo(Request $request)
     {
+       $request->validate([
+        'fecha_pago' => 'required|numeric|min:1|max:31',
+        'id_propiedad' => 'required',
+        // ... otras validaciones
+        ]);
         // Crear un nuevo registro de arriendo
         $new_arriendo = new Arriendo();
         // $new_arriendo->fecha_devolucion = $request->fecha_devolucion;
@@ -91,7 +96,9 @@ class ArriendoController extends Controller
         // $nuevoContrato->save(); // Guardar el contrato después de agregar las rutas de los archivos
     
         // Retornar una respuesta JSON sin incluir los archivos
-        return response()->json(['nueva_arriendo' => $new_arriendo]);
+        return response()->json([
+            'nueva_arriendo' => $new_arriendo->load('arrendatario', 'comision')
+        ]);
     }
 
     

@@ -265,8 +265,9 @@
                             <label for="tipo_cocina"><b>Tipo de cocina</b></label>
                             <select class="form-select" id="tipo_cocina">
                             <option selected disabled > Selecione un tipo de cocina</option>    
-                            <option value="America">America</option>
+                            <option value="Americana">Americana</option>
                             <option value="semi Americana">Semi Americana</option>
+                            <option value="independiente">Independiente</option>
                             </select>
                         </div>
                             <div class="col-md-4 mb-3">
@@ -312,7 +313,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Agregar Mantenciones</h5>
+                        <h5 class="modal-title">Agregar Mantenimientos</h5>
                         <button type="button" class="btn-close" id="" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -336,7 +337,7 @@
                                         <input type="number" class="form-control " id="cadamantenimiento" placeholder="Ingrese la cantidad de meses para la mantención" required>
                                     </div>
                                     <div class="col-lg-12 text-end">
-                                        <button type="button" class="btn btn-primary" id="agregar-mantencion">Agregar Mantención</button>
+                                        <button type="button" class="btn btn-primary" id="agregar-mantencion">Agregar Mantenimiento</button>
                                     </div>
                                 </div>
                             </div>
@@ -840,7 +841,7 @@ $(document).ready(function() {
                         // Actualizar la lista visual
                         actualizarListaMantenciones();
                     } else {
-                        alert("Por favor, complete todos los campos antes de agregar una mantención.");
+                        alert("Por favor, complete todos los campos antes de agregar un mantenimiento.");
                     }
                 });
 

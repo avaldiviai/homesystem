@@ -205,4 +205,38 @@ public function eliminarcuenta(Request $request, $id)
         return response()->json(['message' => 'Datos agregados correctamente']);
     }
 
+
+    public function detalles($id)
+    {
+        $propietario = Propietario::findOrFail($id);
+
+        // 🔹 PROPIEDADES NORMALES
+        $propiedadesIds = \App\Models\Propietario_propiedades::where('id_propietario', $id)
+            ->pluck('id_propiedad');
+
+        $propiedades = \App\Models\Propiedad::with(['imagenes', 'precios'])
+            ->whereIn('id', $propiedadesIds)
+            ->where('estado', 1)
+            ->get();
+
+        // 🔹 PROPIEDADES VERANO
+        $veranoIds = \App\Models\PropietarioVerano::where('id_propietario', $id)
+            ->pluck('id_verano');
+
+        $propiedadesVerano = \App\Models\Verano::with(['detallesVeranos.imagenes'])
+            ->whereIn('id', $veranoIds)
+            ->where('estado', 1)
+            ->get();
+
+        // 🔹 IMPORTANTE: marcar como tipo 4 (verano)
+        foreach ($propiedadesVerano as $verano) {
+            $verano->tipo_propiedad = 4;
+        }
+
+        // 🔹 UNIR TODO
+        $propiedades = $propiedades->concat($propiedadesVerano);
+
+        return view('propietario_detalles', compact('propietario', 'propiedades'));
+    }
+
 }
