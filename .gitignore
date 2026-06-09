@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+compose.yaml
+compose.override.yaml
+phpunit.xml
+phpunit.xml.dist
