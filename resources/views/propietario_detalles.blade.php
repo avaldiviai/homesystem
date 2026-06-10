@@ -93,9 +93,9 @@
                                 data-tipo="{{ $propiedad->tipo_propiedad }}">
                                 <a href="{{ $url }}" style="text-decoration:none; color:#000;">
                                     <div class="card shadow position-relative" style="border:none;">
-                                        <div class="position-absolute top-0 end-0 m-2" style="z-index:1000;"
-                                            >
-                                            <button type="button" class="btn btn-danger btn-sm btn-eliminar-propiedad" onclick="event.preventDefault(); event.stopPropagation();"
+                                        <div class="position-absolute top-0 end-0 m-2" style="z-index:1000;">
+                                            <button type="button" class="btn btn-danger btn-sm btn-eliminar-propiedad"
+                                                onclick="event.preventDefault(); event.stopPropagation();"
                                                 data-id="{{ $propiedad->id }}" title="Eliminar propiedad">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -966,12 +966,29 @@
 
         /* ─── GUARDAR: Venta ──────────────────────────────────────────────────── */
         $('#btn_guardar_venta').on('click', function() {
+
             if (!$('#vta_direccion').val() || !$('#vta_precio').val()) {
                 alert('Por favor complete: Dirección y Precio.');
                 return;
             }
+
+            // Referencia al botón
+            var btn = $('#btn_guardar_venta');
+            var textoOriginal = btn.html();
+
+            // Bloquear botón
+            btn.prop('disabled', true);
+
+            // Mostrar loader
+            btn.html(`
+        Guardando...
+        <span class="spinner-border spinner-border-sm ms-2" role="status"></span>
+    `);
+
             var tipoMoneda = document.getElementById('vta_switchUF').checked ? 'UF' : 'CLP';
+
             var formData = new FormData();
+
             formData.append('direccion', $('#vta_direccion').val());
             formData.append('ciudad', $('#vta_ciudad').val());
             formData.append('maps', $('#vta_maps').val());
@@ -995,9 +1012,17 @@
             formData.append('monto_b', $('#vta_monto_bod').val());
             formData.append('rol_b', $('#vta_rol_bod').val());
             formData.append('bodega', $('#vta_num_bod').val());
-            formData.append('PropietariosAgregados', JSON.stringify(propietarioActual));
+
+            formData.append(
+                'PropietariosAgregados',
+                JSON.stringify(propietarioActual)
+            );
+
             var imgs = $('#vta_imagenes')[0].files;
-            for (var i = 0; i < imgs.length; i++) formData.append('imagenes[]', imgs[i]);
+
+            for (var i = 0; i < imgs.length; i++) {
+                formData.append('imagenes[]', imgs[i]);
+            }
 
             $.ajax({
                 url: '{{ url('/propiedadesVenta/add_propiedad') }}',
@@ -1005,16 +1030,31 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function() {
+
+                success: function(response) {
+
+                    // Restaurar botón
+                    btn.prop('disabled', false);
+                    btn.html(textoOriginal);
+
                     $('#modalVenta').modal('hide');
+
                     mostrarExito('Propiedad en Venta creada correctamente');
                 },
-                error: function() {
+
+                error: function(xhr) {
+
+                    // Restaurar botón
+                    btn.prop('disabled', false);
+                    btn.html(textoOriginal);
+
                     alert('Error al guardar.');
+
+                    console.error(xhr.responseText);
                 }
             });
-        });
 
+        });
         /* ─── GUARDAR: Verano ─────────────────────────────────────────────────── */
         $('#btn_guardar_verano').on('click', function() {
             if (!$('#ve_direccion').val() || !$('#ve_precio_min_enero').val()) {
@@ -1084,7 +1124,8 @@
                             confirmButton: false,
                             timer: 2000
                         }).then(() => {
-                            window.location.href = '{{ url('/propietario/{propietario_id}/detalles') }}';
+                            window.location.href =
+                                '{{ url('/propietario/{propietario_id}/detalles') }}';
                         });
                     },
                     error: function() {
