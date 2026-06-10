@@ -226,10 +226,10 @@ class GraficosController extends Controller
         ];
     }
 
-    /** Años disponibles: desde 2024 hasta año actual + 1 */
+    /** Años disponibles: desde 2026 hasta año actual + 1 */
     private function añosDisponibles(): array
     {
-        $inicio = 2024;
+        $inicio = 2026;
         $fin    = now()->year + 1;
         return range($inicio, $fin);
     }

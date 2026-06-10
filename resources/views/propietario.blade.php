@@ -40,22 +40,35 @@
                                     <tr>
                                         <th style="width: 60px;">#</th>
                                         <th>Nombre del Propietario</th>
+                                        <th style="width: 120px; text-align:center;">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaUa">
                                     @foreach ($propietarios->sortBy('nombre') as $propietario)
                                     <tr class="propietario-fila"
-                                        data-nombre="{{ strtolower($propietario->nombre) }}"
-                                        style="cursor: pointer;"
-                                        onclick="window.location='{{ route('propietario.detalles', $propietario->id) }}'">
+                                        data-nombre="{{ strtolower($propietario->nombre) }}">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>
+                                        <td style="cursor: pointer;"
+                                            onclick="window.location='{{ route('propietario.detalles', $propietario->id) }}'">
                                             <div class="d-flex align-items-center gap-3">
                                                 <div class="prop-avatar-sm">
                                                     {{ strtoupper(substr($propietario->nombre, 0, 1)) }}
                                                 </div>
                                                 <span class="fw-600">{{ $propietario->nombre }}</span>
                                             </div>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <button class="btn btn-sm btn-outline-primary btn-editar"
+                                                data-id="{{ $propietario->id }}"
+                                                title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger btn-eliminar ms-1"
+                                                data-id="{{ $propietario->id }}"
+                                                data-nombre="{{ $propietario->nombre }}"
+                                                title="Eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -166,6 +179,79 @@
     </div>
 </div>
 
+{{-- ====================== MODAL EDITAR PROPIETARIO ====================== --}}
+<div class="modal fade" id="editarPropietario" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editarPropietarioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarPropietarioLabel">Editar Propietario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editId">
+                <div class="container">
+                    <div class="row">
+                        <div class="form-group mb-3">
+                            <label for="editNombre"><b>Nombre</b></label>
+                            <input type="text" class="form-control mt-2" id="editNombre" placeholder="Ej: Pedro Aguilera">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group mb-3 col-6">
+                            <label for="editRut"><b>Rut</b></label>
+                            <input type="text" class="form-control mt-2" id="editRut" placeholder="12.345.678-9" maxlength="12">
+                        </div>
+                        <div class="form-group mb-3 col-6">
+                            <label for="editTelefono"><b>Teléfono</b></label>
+                            <input type="text" class="form-control mt-2" id="editTelefono" placeholder="Ej: 912345678"
+                                maxlength="9" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 9);">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="form-group mb-3">
+                            <label for="editCorreo"><b>Correo</b></label>
+                            <input type="text" class="form-control mt-2" id="editCorreo" placeholder="Ej: pedro@gmail.com">
+                        </div>
+                        <div class="form-group mb-3 col-6">
+                            <label for="editDireccion"><b>Dirección</b></label>
+                            <input type="text" class="form-control mt-2" id="editDireccion" placeholder="Dirección">
+                        </div>
+                        <div class="form-group mb-3 col-6">
+                            <label for="editCiudad"><b>Ciudad</b></label>
+                            <input type="text" class="form-control mt-2" id="editCiudad" placeholder="Ciudad">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn_guardar_editar" class="btn btn-primary">Guardar cambios</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- ====================== MODAL CONFIRMAR ELIMINACIÓN ====================== --}}
+<div class="modal fade" id="modalEliminar" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Eliminar Propietario</h5>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar a <strong id="nombreEliminar"></strong>?</p>
+                <p class="text-muted small">Esta acción no se puede deshacer.</p>
+                <input type="hidden" id="idEliminar">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_confirmar_eliminar" class="btn btn-danger">Sí, eliminar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- ====================== MODAL ÉXITO ====================== --}}
 <div class="modal fade" id="modalAlertaAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -253,6 +339,7 @@ $(document).ready(function () {
         } else { input.value = val; }
     }
     document.getElementById('rutInput').addEventListener('input', function () { formatRut(this); });
+    document.getElementById('editRut').addEventListener('input', function () { formatRut(this); });
 
     /* ─── Datos bancarios ────────────────────────────────────────────── */
     var DatosAgregados = [];
@@ -297,22 +384,22 @@ $(document).ready(function () {
             $(sel).after(`<small class="text-danger error-message">${msg}</small>`);
             valid = false;
         }
-        if (!nombre)   showError('#nombreInput',   'Campo obligatorio');
-        if (!rut)      showError('#rutInput',       'Campo obligatorio');
-        if (!telefono) showError('#telefonoInput',  'Campo obligatorio');
+        if (!nombre)    showError('#nombreInput',    'Campo obligatorio');
+        if (!rut)       showError('#rutInput',        'Campo obligatorio');
+        if (!telefono)  showError('#telefonoInput',   'Campo obligatorio');
         else if (telefono.length !== 9) showError('#telefonoInput', 'Debe tener 9 dígitos');
-        if (!correo)   showError('#correoInput',    'Campo obligatorio');
-        if (!direccion) showError('#direccionInput','Campo obligatorio');
-        if (!ciudad)   showError('#ciudadInput',    'Campo obligatorio');
+        if (!correo)    showError('#correoInput',     'Campo obligatorio');
+        if (!direccion) showError('#direccionInput',  'Campo obligatorio');
+        if (!ciudad)    showError('#ciudadInput',     'Campo obligatorio');
         if (!valid) return;
 
         var formData = new FormData();
-        formData.append('nombre',   nombre);
-        formData.append('rut',      rut);
-        formData.append('telefono', telefono);
-        formData.append('correo',   correo);
-        formData.append('direccion',direccion);
-        formData.append('ciudad',   ciudad);
+        formData.append('nombre',    nombre);
+        formData.append('rut',       rut);
+        formData.append('telefono',  telefono);
+        formData.append('correo',    correo);
+        formData.append('direccion', direccion);
+        formData.append('ciudad',    ciudad);
         if (typeof DatosAgregados !== 'undefined') formData.append('DatosAgregados', JSON.stringify(DatosAgregados));
 
         $.ajax({
@@ -323,22 +410,31 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (res) {
-                // Agregar fila nueva ordenada
+                var nuevoId = res.id ?? '';
+
                 var nuevaFila = `
                     <tr class="propietario-fila"
-                        data-nombre="${nombre.toLowerCase()}"
-                        style="cursor: pointer;"
-                        onclick="window.location='/propietario/${res.id ?? ''}/detalles'">
+                        data-nombre="${nombre.toLowerCase()}">
                         <td></td>
-                        <td>
+                        <td style="cursor: pointer;"
+                            onclick="window.location='/propietario/${nuevoId}/detalles'">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="prop-avatar-sm">${nombre.charAt(0).toUpperCase()}</div>
                                 <span class="fw-600">${nombre}</span>
                             </div>
                         </td>
+                        <td style="text-align:center;">
+                            <button class="btn btn-sm btn-outline-primary btn-editar"
+                                data-id="${nuevoId}" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger btn-eliminar ms-1"
+                                data-id="${nuevoId}" data-nombre="${nombre}" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>`;
 
-                // Insertar en posición alfabética
                 var insertado = false;
                 $('#tablaUa tr.propietario-fila').each(function () {
                     if ($(this).data('nombre') > nombre.toLowerCase()) {
@@ -349,12 +445,16 @@ $(document).ready(function () {
                 });
                 if (!insertado) $('#tablaUa').append(nuevaFila);
 
-                // Renumerar
                 renumerar();
 
+                // Limpiar formulario
+                $('#nombreInput, #rutInput, #telefonoInput, #correoInput, #direccionInput, #ciudadInput').val('');
+                DatosAgregados = [];
+                $('#lista-Datos').empty();
+
                 $('#agregarpropietario').modal('hide');
-                $('#modalAlertaAgregar').modal('show');
                 $('#texto_success').html('El Propietario se ha creado exitosamente.');
+                $('#modalAlertaAgregar').modal('show');
             },
             error: function (jqXHR) {
                 if (jqXHR.status === 409 && jqXHR.responseJSON?.message) {
@@ -362,9 +462,100 @@ $(document).ready(function () {
                 }
             }
         });
+    });
 
-        $('#btn-close').off('click').on('click', function () {
-            $('#modalAlertaAgregar').modal('hide');
+    $('#btn-close').off('click').on('click', function () {
+        $('#modalAlertaAgregar').modal('hide');
+    });
+
+    /* ─── Abrir modal Editar ─────────────────────────────────────────────── */
+    $(document).on('click', '.btn-editar', function (e) {
+        e.stopPropagation();
+        var id = $(this).data('id');
+
+        $.ajax({
+            url: '/propietarios/' + id,
+            type: 'GET',
+            success: function (data) {
+                $('#editId').val(data.id);
+                $('#editNombre').val(data.nombre);
+                $('#editRut').val(data.rut);
+                $('#editTelefono').val(data.telefono);
+                $('#editCorreo').val(data.correo);
+                $('#editDireccion').val(data.direccion);
+                $('#editCiudad').val(data.ciudad);
+                $('#editarPropietario').modal('show');
+            },
+            error: function () {
+                alert('No se pudo cargar el propietario.');
+            }
+        });
+    });
+
+    /* ─── Guardar edición ────────────────────────────────────────────────── */
+    $('#btn_guardar_editar').on('click', function () {
+        var id = $('#editId').val();
+
+        $.ajax({
+            url: '/propietarios/' + id,
+            type: 'POST',
+            data: {
+                _token:    $('meta[name="csrf-token"]').attr('content'),
+                nombre:    $('#editNombre').val().trim(),
+                rut:       $('#editRut').val().trim(),
+                telefono:  $('#editTelefono').val().trim(),
+                correo:    $('#editCorreo').val().trim(),
+                direccion: $('#editDireccion').val().trim(),
+                ciudad:    $('#editCiudad').val().trim(),
+            },
+            success: function (data) {
+                var nuevoNombre = data.nombre;
+                var fila = $('#tablaUa .btn-editar[data-id="' + id + '"]').closest('tr');
+                fila.find('.fw-600').text(nuevoNombre);
+                fila.find('.prop-avatar-sm').text(nuevoNombre.charAt(0).toUpperCase());
+                fila.data('nombre', nuevoNombre.toLowerCase());
+                fila.find('.btn-eliminar').data('nombre', nuevoNombre);
+
+                $('#editarPropietario').modal('hide');
+                $('#texto_success').html('El propietario se ha actualizado exitosamente.');
+                $('#modalAlertaAgregar').modal('show');
+            },
+            error: function () {
+                alert('Error al guardar los cambios.');
+            }
+        });
+    });
+
+    /* ─── Abrir modal Eliminar ───────────────────────────────────────────── */
+    $(document).on('click', '.btn-eliminar', function (e) {
+        e.stopPropagation();
+        $('#idEliminar').val($(this).data('id'));
+        $('#nombreEliminar').text($(this).data('nombre'));
+        $('#modalEliminar').modal('show');
+    });
+
+    /* ─── Confirmar eliminación ──────────────────────────────────────────── */
+    $('#btn_confirmar_eliminar').on('click', function () {
+        var id = $('#idEliminar').val();
+
+        $.ajax({
+            url: '/propietarioestado/' + id,
+            type: 'POST',
+            data: {
+                _method: 'PATCH',
+                _token:  $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function () {
+                $('#tablaUa .btn-eliminar[data-id="' + id + '"]').closest('tr').remove();
+                renumerar();
+
+                $('#modalEliminar').modal('hide');
+                $('#texto_success').html('El propietario ha sido eliminado correctamente.');
+                $('#modalAlertaAgregar').modal('show');
+            },
+            error: function () {
+                alert('Error al eliminar el propietario.');
+            }
         });
     });
 

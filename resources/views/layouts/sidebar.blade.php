@@ -14,31 +14,21 @@
             <div class="d-flex justify-content-center d-lg-none mb-4">
                 <button class="btn btn-warning" type="button" data-bs-toggle="collapse"
                         data-bs-target="#responsiveMenu" aria-expanded="false" aria-controls="responsiveMenu">
-                    <i class="fa-solid fa-bars fa-lg text-white"></i>
+                    Menú
                 </button>
             </div>
 
             <!-- Menú -->
             <div class="collapse d-lg-block" id="responsiveMenu">
 
-                <!-- Inicio -->
-                <li class="nav-item mb-3">
-                    <a href="/dashboard" class="nav-link d-flex align-items-center">
-                        <i class="fa-solid fa-chart-line me-2 text-warning"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li>
-
                 <li class="nav-item mb-3">
                     <a href="/plantilla" class="nav-link d-flex align-items-center">
-                        <i class="fa-solid fa-file-lines me-2 text-warning"></i>
                         <span>Plantilla de Empresa</span>
                     </a>
                 </li>
 
                 <li class="nav-item mb-3">
                     <a href="/propietarios" class="nav-link d-flex align-items-center">
-                        <i class="fa-solid fa-user-tie me-2 text-warning"></i>
                         <span>Propietarios</span>
                     </a>
                 </li>
@@ -47,30 +37,22 @@
                     <a class="nav-link d-flex justify-content-between align-items-center"
                        data-bs-toggle="collapse" href="#propiedades" role="button"
                        aria-expanded="false" aria-controls="propiedades">
-                        <span><i class="fa-solid fa-building me-2 text-warning"></i> Propiedades Disponibles</span>
+                        <span>Propiedades Disponibles</span>
                         <i class="fa-solid fa-chevron-down text-muted"></i>
                     </a>
                     <div class="collapse rounded" id="propiedades">
                         <ul class="nav flex-column ms-3 mt-2">
                             <li class="nav-item">
-                                <a href="/propiedades" class="nav-link">
-                                    <i class="fa-solid fa-building me-2 text-warning"></i> Pro. Marzo a Dic.
-                                </a>
+                                <a href="/propiedades" class="nav-link">Pro. Marzo a Dic.</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/proanocorrido" class="nav-link">
-                                    <i class="fa-solid fa-building me-2 text-warning"></i> Pro. Año Corrido
-                                </a>
+                                <a href="/proanocorrido" class="nav-link">Pro. Año Corrido</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/propiedadesVenta" class="nav-link">
-                                    <i class="fa-solid fa-building me-2 text-warning"></i> Pro. en Venta
-                                </a>
+                                <a href="/propiedadesVenta" class="nav-link">Pro. en Venta</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/verano" class="nav-link">
-                                    <i class="fa-solid fa-sun me-2 text-warning"></i> Pro. de Verano
-                                </a>
+                                <a href="/verano" class="nav-link">Pro. de Verano</a>
                             </li>
                         </ul>
                     </div>
@@ -78,7 +60,6 @@
 
                 <li class="nav-item mb-3">
                     <a href="/graficos" class="nav-link d-flex align-items-center">
-                        <i class="fa-solid fa-chart-line me-2 text-warning"></i>
                         <span>Gráficos de Empresa</span>
                     </a>
                 </li>
@@ -87,17 +68,17 @@
                     <a class="nav-link d-flex justify-content-between align-items-center"
                        data-bs-toggle="collapse" href="#arriendos" role="button"
                        aria-expanded="false" aria-controls="arriendos">
-                        <span><i class="fa-solid fa-key me-2 text-warning"></i> Arriendo Temporal</span>
+                        <span>Arriendo Temporal</span>
                         <i class="fa-solid fa-chevron-down text-muted"></i>
                     </a>
                     <div class="collapse" id="arriendos">
                         <ul class="nav flex-column ms-3 mt-2">
-                            <li class="nav-item"><a href="/arriendos" class="nav-link"><i class="fa-solid fa-key me-2 text-warning"></i> Arriendos</a></li>
-                            <li class="nav-item"><a href="/elementos" class="nav-link"><i class="fa-solid fa-boxes me-2 text-warning"></i> Elementos</a></li>
-                            <li class="nav-item"><a href="/comision" class="nav-link"><i class="fa-solid fa-percent me-2 text-warning"></i> Comisión</a></li>
-                            <li class="nav-item"><a href="/pagos" class="nav-link"><i class="fa-solid fa-money-bill-wave me-2 text-warning"></i> Pagos</a></li>
-                            <li class="nav-item"><a href="/contratos" class="nav-link"><i class="fa-solid fa-file-contract me-2 text-warning"></i> Contratos</a></li>
-                            <li class="nav-item"><a href="/inventario" class="nav-link"><i class="fa-solid fa-cart-flatbed me-2 text-warning"></i> Inventario</a></li>
+                            <li class="nav-item"><a href="/arriendos" class="nav-link">Arriendos</a></li>
+                            <li class="nav-item"><a href="/elementos" class="nav-link">Elementos</a></li>
+                            <li class="nav-item"><a href="/comision" class="nav-link">Comisión</a></li>
+                            <li class="nav-item"><a href="/pagos" class="nav-link">Pagos</a></li>
+                            <li class="nav-item"><a href="/contratos" class="nav-link">Contratos</a></li>
+                            <li class="nav-item"><a href="/inventario" class="nav-link">Inventario</a></li>
                         </ul>
                     </div>
                 </li>
@@ -108,17 +89,16 @@
                        data-bs-toggle="collapse" href="#rrhh" role="button"
                        aria-expanded="{{ request()->is('rrhh/*') ? 'true' : 'false' }}"
                        aria-controls="rrhh">
-                        <span><i class="fa-solid fa-users-gear me-2 text-warning"></i> RRHH</span>
+                        <span>RRHH</span>
                         <i class="fa-solid fa-chevron-down text-muted"></i>
                     </a>
                     <div class="collapse {{ request()->is('rrhh/*') ? 'show' : '' }}" id="rrhh">
                         <ul class="nav flex-column ms-3 mt-2">
                             <li class="nav-item">
                                 <a href="/rrhh/equipo" class="nav-link {{ request()->is('rrhh/equipo') ? 'active-link' : '' }}">
-                                    <i class="fa-solid fa-id-card me-2 text-warning"></i> Equipo de trabajo
+                                    Equipo de trabajo
                                 </a>
                             </li>
-                            
                         </ul>
                     </div>
                 </li>
@@ -132,7 +112,7 @@
         <a class="btn btn-danger rounded-pill w-100 text-white d-flex align-items-center justify-content-center"
            href="{{ route('logout') }}"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt me-2"></i> {{ __('Cerrar Sesión') }}
+            {{ __('Cerrar Sesión') }}
         </a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
     </div>

@@ -83,6 +83,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/cuentaEditar/guardar/{id}', [PropietarioController::class, 'updateCuenta'])->name('DatosBancario.update');
     Route::delete('/cuenta/eliminar/{id_cuenta}',[PropietarioController::class,'eliminarcuenta']);
     Route::post('/Nueva/cuenta2aad', [PropietarioController::class, 'addNuevaCuenta']);
+    Route::post('/propietariosdelete/{id}', [PropietarioController::class, 'delete']);
 
     Route::get('/propietario/{id}/detalles', [PropietarioController::class, 'detalles'])->name('propietario.detalles');
     
@@ -113,9 +114,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Route::post('/propiedad/update/', [PropiedadController::class, 'Proupdate']);
 
     Route::get(' /obtener/propietarioNombre', [PropiedadController::class, 'PropietariosAgregados']);
+    Route::post('/imagen/seccion/{id}', [PropiedadController::class, 'actualizarSeccionImagen']);
 
     Route::post('/editarDetalles', [PropiedadController::class, 'edicionDetalles'])->name('propiedadesDetalles');
-
+    Route::post('/editarDetallesAnoCorrido', [PropiedadController::class, 'edicionDetallesAnoCorrido']);
     Route::delete('/imagen/{idImg}', [PropiedadController::class, 'imgDelete']);
     Route::delete('/video/{idVideo}', [PropiedadController::class, 'videoDelete']);
 
@@ -448,6 +450,7 @@ Route::middleware(['auth', 'trabajador'])->group(function () {
 
     // ////////// RUTAS PROPIEDADES //////////
     Route::get('/trabajador/propiedades', [PropiedadController::class, 'indexTrabajador']);
+    Route::post('/trabajador/imagen/seccion/{id}', [PropiedadController::class, 'actualizarSeccionImagen']);
     Route::post('/trabajador/propiedades', [PropiedadController::class, 'add']);
     Route::get('/trabajador/mostrar/archivo/{id_propiedad}', [PropiedadController::class,'mostrarArchivos']);
     Route::post('/trabajador/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
@@ -547,7 +550,7 @@ Route::middleware(['auth', 'obrero'])->group(function () {
     Route::delete('/obrero/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
     Route::delete('/obrero/propiedad/{id}', [PropiedadController::class, 'eliminarpro']);
     Route::post('/obrero/detallespropiedad/{id_propiedad}', [PropiedadController::class, 'addetalles'])->name('detallespropiedad.addetalles');
-    
+    Route::post('/obrero/imagen/seccion/{id}', [PropiedadController::class, 'actualizarSeccionImagen']);
     Route::get('/obrero/obtener/propietarioNombre', [PropiedadController::class, 'PropietariosAgregados']);
     
     Route::post('/obrero/editarDetalles', [PropiedadController::class, 'edicionDetalles'])->name('propiedadesDetalles');

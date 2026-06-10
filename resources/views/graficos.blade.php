@@ -12,7 +12,6 @@
                 <div class="graf-header">
                     <div>
                         <h1 class="graf-titulo">
-                            <i class="fa-solid fa-chart-line me-2" style="color:#E67E22;"></i>
                             Gráficos de Empresa
                         </h1>
                         <p class="graf-subtitulo">Resumen financiero mensual y anual</p>
@@ -21,10 +20,10 @@
                     {{-- TABS --}}
                     <div class="graf-tabs">
                         <button class="graf-tab active" id="tab-mensual" onclick="mostrarVista('mensual')">
-                            <i class="fa-solid fa-calendar-days me-1"></i> Mensual
+                            Mensual
                         </button>
                         <button class="graf-tab" id="tab-anual" onclick="mostrarVista('anual')">
-                            <i class="fa-solid fa-chart-pie me-1"></i> Anual
+                            Anual
                         </button>
                     </div>
                 </div>
@@ -35,16 +34,18 @@
                 <div id="vista-mensual" class="px-4 py-4">
 
                     {{-- Selector de año --}}
-                    <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
                         <label class="graf-label-año">Año:</label>
-                        <div class="graf-año-selector">
+                        <div class="graf-año-selector" id="mensualAñoSelector">
                             @foreach($años as $a)
                                 <button class="graf-año-btn {{ $a == $año ? 'active' : '' }}"
                                         onclick="cambiarAño({{ $a }})">{{ $a }}</button>
                             @endforeach
                         </div>
+                        <button class="graf-año-add-btn" onclick="agregarAño('mensual')" title="Agregar nuevo año">
+                            + Año
+                        </button>
                         <span class="graf-año-actual">
-                            <i class="fa-solid fa-calendar me-1" style="color:#E67E22;"></i>
                             Mostrando <strong>{{ $año }}</strong>
                         </span>
                     </div>
@@ -57,36 +58,28 @@
                              data-año="{{ $año }}"
                              onclick="abrirDetalleMes({{ $año }}, {{ $numMes }})">
 
-                            {{-- Número de mes --}}
                             <div class="graf-mes-num">{{ str_pad($numMes, 2, '0', STR_PAD_LEFT) }}</div>
-
-                            {{-- Nombre del mes --}}
                             <div class="graf-mes-nombre">{{ $datos['nombre_mes'] }}</div>
 
-                            {{-- Mini resumen --}}
                             @if($datos['tiene_datos'])
                                 <div class="graf-mes-resumen">
                                     <div class="graf-mes-stat ingreso">
-                                        <i class="fa-solid fa-arrow-trend-up"></i>
                                         ${{ number_format($datos['total_ingresos'] / 1000, 0) }}K
                                     </div>
                                     <div class="graf-mes-stat egreso">
-                                        <i class="fa-solid fa-arrow-trend-down"></i>
                                         ${{ number_format($datos['total_egresos'] / 1000, 0) }}K
                                     </div>
                                 </div>
 
-                                {{-- Mini barra de progreso ingresos --}}
                                 <div class="graf-mes-bar-wrap">
                                     @php
-                                        $maxRef = 10000000; // 10M referencia
+                                        $maxRef = 10000000;
                                         $pct = min(100, ($datos['total_ingresos'] / $maxRef) * 100);
                                     @endphp
                                     <div class="graf-mes-bar" style="width: {{ $pct }}%;"></div>
                                 </div>
                             @else
                                 <div class="graf-mes-empty">
-                                    <i class="fa-solid fa-inbox fa-lg mb-1" style="color:#ccc;"></i>
                                     <span>Sin datos aún</span>
                                 </div>
                             @endif
@@ -112,13 +105,10 @@
                                     </div>
                                 @else
                                     <div class="preview-empty">
-                                        <i class="fa-solid fa-inbox fa-lg mb-1" style="color:#444;"></i>
                                         <span>Sin datos</span>
                                     </div>
                                 @endif
-                                <div class="preview-cta">
-                                    <i class="fa-solid fa-magnifying-glass me-1"></i> Click para detalle
-                                </div>
+                                <div class="preview-cta">Click para detalle</div>
                             </div>
 
                         </div>
@@ -140,8 +130,10 @@
                                         onclick="cargarAnual({{ $a }})">{{ $a }}</button>
                             @endforeach
                         </div>
+                        <button class="graf-año-add-btn" onclick="agregarAño('anual')" title="Agregar nuevo año">
+                            + Año
+                        </button>
                         <span class="graf-año-actual" id="anualAñoLabel">
-                            <i class="fa-solid fa-calendar me-1" style="color:#E67E22;"></i>
                             Resumen <strong id="anualAñoTexto">{{ $año }}</strong>
                         </span>
                     </div>
@@ -154,11 +146,9 @@
                     <div id="anual-contenido">
                         <div class="row g-4">
 
-                            {{-- Gráfico de torta Ingresos --}}
                             <div class="col-lg-6">
                                 <div class="graf-chart-card">
                                     <div class="graf-chart-header ingreso">
-                                        <i class="fa-solid fa-arrow-trend-up me-2"></i>
                                         Ingresos Anuales
                                         <span class="graf-year-badge" id="anual-ing-year">{{ $año }}</span>
                                     </div>
@@ -167,17 +157,14 @@
                                         <canvas id="chartAnualIngresos"></canvas>
                                     </div>
                                     <div id="anual-ing-empty" class="graf-empty-state" style="display:none;">
-                                        <i class="fa-solid fa-chart-pie fa-3x mb-3 opacity-20"></i>
                                         <p>Sin datos de ingresos para este año</p>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- Gráfico de torta Egresos --}}
                             <div class="col-lg-6">
                                 <div class="graf-chart-card">
                                     <div class="graf-chart-header egreso">
-                                        <i class="fa-solid fa-arrow-trend-down me-2"></i>
                                         Egresos Anuales
                                         <span class="graf-year-badge" id="anual-egr-year">{{ $año }}</span>
                                     </div>
@@ -186,17 +173,14 @@
                                         <canvas id="chartAnualEgresos"></canvas>
                                     </div>
                                     <div id="anual-egr-empty" class="graf-empty-state" style="display:none;">
-                                        <i class="fa-solid fa-chart-pie fa-3x mb-3 opacity-20"></i>
                                         <p>Sin datos de egresos para este año</p>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- Tabla resumen mensual --}}
                             <div class="col-12">
                                 <div class="graf-chart-card">
                                     <div class="graf-chart-header" style="background: linear-gradient(135deg,#34495E,#2C3E50); color:#fff;">
-                                        <i class="fa-solid fa-table me-2"></i>
                                         Resumen mensual <span id="anual-tabla-year">{{ $año }}</span>
                                     </div>
                                     <div class="table-responsive p-3">
@@ -254,42 +238,34 @@
 
             <div class="modal-body p-4" id="detalleMesBody">
 
-                {{-- Loading --}}
                 <div id="detalle-loading" class="text-center py-5">
                     <div class="spinner-border text-warning" style="width:3rem;height:3rem;"></div>
                     <p class="mt-3 text-muted">Cargando datos…</p>
                 </div>
 
-                {{-- Contenido --}}
                 <div id="detalle-contenido" style="display:none;">
 
-                    {{-- KPIs rápidos --}}
                     <div class="row g-3 mb-4" id="detalleKpis"></div>
 
                     <div class="row g-4">
 
-                        {{-- Gráfico Ingresos --}}
                         <div class="col-12">
                             <div class="graf-chart-card">
                                 <div class="graf-chart-header ingreso">
-                                    <i class="fa-solid fa-arrow-trend-up me-2"></i>
                                     Ingresos del Mes
                                 </div>
                                 <div style="position:relative; height:320px; padding:16px 24px;">
                                     <canvas id="chartDetalleIngresos"></canvas>
                                 </div>
                                 <div id="detalle-ing-empty" class="graf-empty-state" style="display:none;">
-                                    <i class="fa-solid fa-chart-bar fa-3x mb-3 opacity-20"></i>
                                     <p>No hay datos de ingresos para este mes</p>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Gráfico Egresos --}}
                         <div class="col-12">
                             <div class="graf-chart-card">
                                 <div class="graf-chart-header egreso">
-                                    <i class="fa-solid fa-arrow-trend-down me-2"></i>
                                     Egresos del Mes
                                     <span class="badge ms-2 rounded-pill" style="background:rgba(255,255,255,.25);font-size:.72rem;">Próximamente completo</span>
                                 </div>
@@ -297,7 +273,6 @@
                                     <canvas id="chartDetalleEgresos"></canvas>
                                 </div>
                                 <div id="detalle-egr-empty" class="graf-empty-state" style="display:none;">
-                                    <i class="fa-solid fa-chart-bar fa-3x mb-3 opacity-20"></i>
                                     <p>No hay egresos registrados para este mes</p>
                                 </div>
                             </div>
@@ -315,16 +290,47 @@
     </div>
 </div>
 
+{{-- ═══════════════════════════════════════════════════════════════════════ --}}
+{{-- MODAL AGREGAR AÑO --}}
+{{-- ═══════════════════════════════════════════════════════════════════════ --}}
+<div class="modal fade" id="modalAgregarAño" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:380px;">
+        <div class="modal-content" style="border-radius:16px; overflow:hidden; border:none;">
+            <div class="modal-header" style="background:linear-gradient(135deg,#E67E22,#F39C12); color:#fff; border:none;">
+                <h5 class="modal-title mb-0">Agregar nuevo año</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <label class="form-label fw-700" style="font-size:.85rem; color:#666; text-transform:uppercase; letter-spacing:.4px;">
+                    Año a agregar
+                </label>
+                <input type="number"
+                       id="inputNuevoAño"
+                       class="form-control form-control-lg text-center"
+                       style="border-radius:10px; font-size:1.4rem; font-weight:800; letter-spacing:2px; border:2px solid #e0ddd8;"
+                       min="2026"
+                       max="2099"
+                       placeholder="2027">
+                <div id="errorNuevoAño" class="text-danger mt-2" style="font-size:.82rem; display:none;"></div>
+            </div>
+            <div class="modal-footer" style="border:none; padding:0 1.5rem 1.5rem;">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning rounded-pill px-4 text-white fw-700" onclick="confirmarAgregarAño()">
+                    Agregar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
 @section('css')
 @parent
 <style>
-/* ─── Main col ─── */
 .graf-main-col { background: #f0f2f5 !important; }
 
-/* ─── Header ─── */
 .graf-header {
     background: #fff;
     border-bottom: 2px solid #f0ede8;
@@ -344,7 +350,6 @@
 }
 .graf-subtitulo { color: #aaa; font-size: .88rem; margin: 0; }
 
-/* ─── Tabs ─── */
 .graf-tabs { display: flex; gap: 8px; }
 .graf-tab {
     padding: 8px 22px;
@@ -360,7 +365,6 @@
 .graf-tab:hover  { border-color: #E67E22; color: #E67E22; }
 .graf-tab.active { background: #E67E22; border-color: #E67E22; color: #fff; }
 
-/* ─── Selector año ─── */
 .graf-label-año   { font-weight: 700; font-size: .82rem; color: #666; text-transform: uppercase; letter-spacing: .4px; white-space: nowrap; }
 .graf-año-selector { display: flex; gap: 6px; flex-wrap: wrap; }
 .graf-año-btn {
@@ -378,7 +382,21 @@
 .graf-año-btn.active { background: #E67E22; border-color: #E67E22; color: #fff; }
 .graf-año-actual { font-size: .82rem; color: #aaa; }
 
-/* ─── Grid 12 meses ─── */
+/* Botón agregar año */
+.graf-año-add-btn {
+    padding: 5px 14px;
+    border-radius: 16px;
+    border: 2px dashed #E67E22;
+    background: transparent;
+    color: #E67E22;
+    font-size: .8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+}
+.graf-año-add-btn:hover { background: #E67E22; color: #fff; }
+
 .graf-grid-meses {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -388,7 +406,6 @@
 @media (max-width: 768px)  { .graf-grid-meses { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px)  { .graf-grid-meses { grid-template-columns: 1fr; } }
 
-/* ─── Card mensual ─── */
 .graf-mes-card {
     background: #fff;
     border-radius: 16px;
@@ -422,7 +439,6 @@
     margin-bottom: 10px;
 }
 
-/* Mini stats en card */
 .graf-mes-resumen { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
 .graf-mes-stat {
     font-size: .72rem;
@@ -436,11 +452,9 @@
 .graf-mes-stat.ingreso { background: #eafaf1; color: #27AE60; }
 .graf-mes-stat.egreso  { background: #fdf2f2; color: #E74C3C; }
 
-/* Mini barra */
 .graf-mes-bar-wrap { height: 4px; background: #f0ede8; border-radius: 4px; overflow: hidden; margin-top: 4px; }
 .graf-mes-bar      { height: 100%; background: linear-gradient(90deg, #E67E22, #F39C12); border-radius: 4px; transition: width .8s ease; }
 
-/* Empty state en card */
 .graf-mes-empty {
     display: flex;
     flex-direction: column;
@@ -452,14 +466,12 @@
     font-size: .75rem;
 }
 
-/* ─── Hover preview ─── */
-/* ─── Hover preview ─── */
 .graf-mes-preview {
     display: none;
     position: absolute;
     top: 0;
     left: calc(100% + 10px);
-    width: 200px;                          /* ancho fijo compacto */
+    width: 200px;
     background: #1a1a2e;
     border-radius: 12px;
     padding: 12px;
@@ -485,15 +497,10 @@
 .preview-canvas {
     border-radius: 6px;
     width: 100% !important;
-    height: 70px !important;       /* altura fija pequeña */
+    height: 70px !important;
     margin-bottom: 8px;
 }
-.preview-totales {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    margin-bottom: 6px;
-}
+.preview-totales { display: flex; flex-direction: column; gap: 3px; margin-bottom: 6px; }
 .preview-total-item {
     font-size: .68rem;
     color: #bbb;
@@ -519,7 +526,6 @@
     padding: 10px 0;
 }
 
-/* ─── Chart cards ─── */
 .graf-chart-card {
     background: #fff;
     border-radius: 16px;
@@ -561,7 +567,6 @@
     text-align: center;
 }
 
-/* ─── Tabla anual ─── */
 .graf-table { border-collapse: separate; border-spacing: 0 4px; }
 .graf-table thead th {
     background: #f0ede8;
@@ -590,7 +595,6 @@
 .graf-table tbody tr:hover td    { background: #fafaf8; }
 .fw-700 { font-weight: 700 !important; }
 
-/* ─── Modal ─── */
 .graf-modal { border-radius: 16px; overflow: hidden; border: none; }
 .graf-modal-header { background: linear-gradient(135deg, #1a1a2e, #2c3e50); color: #fff; padding: 20px 24px; }
 .graf-modal-icon {
@@ -600,7 +604,6 @@
     font-size: 1.1rem; color: #fff;
 }
 
-/* ─── KPI boxes ─── */
 .graf-kpi {
     background: #fff;
     border-radius: 12px;
@@ -612,7 +615,6 @@
 .graf-kpi-value { font-size: 1.15rem; font-weight: 800; color: #1a1a2e; }
 .graf-kpi-ico   { font-size: 1.4rem; opacity: .7; }
 
-/* ─── Sidebar sticky (heredado) ─── */
 .pla-sidebar-col {
     position: sticky; top: 0; height: 100vh;
     overflow-y: auto; flex-shrink: 0;
@@ -627,29 +629,26 @@
 @section('javascript')
 @parent
 <script>
-// ─── Config colores ──────────────────────────────────────────────────────────
 const COLORES_ING = ['#E67E22','#2980B9','#27AE60','#8E44AD','#16A085','#D4AC0D'];
 const COLORES_EGR = ['#E74C3C','#C0392B','#922B21','#641E16','#4A235A','#154360'];
 
 const LABELS_ING = [
-    'Adm 10%',
-    'Arriendos (cant.)',
-    'Arriendos ($)',
-    'Ventas (cant.)',
-    'Ventas ($)',
-    'Obras Menores',
-    'Arr. Temporal',
-    'Arr. Temp. Aseo'
+    'Adm 10%','Arriendos (cant.)','Arriendos ($)',
+    'Ventas (cant.)','Ventas ($)','Obras Menores',
+    'Arr. Temporal','Arr. Temp. Aseo'
 ];
 const LABELS_EGR = ['SII','KUTT','Sueldos','Cotizaciones','Contador','Otros'];
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// Años disponibles en sesión (mínimo desde 2026)
+let añosDisponibles = @json(array_values(array_filter($años, fn($a) => $a >= 2026)));
+if (añosDisponibles.length === 0) añosDisponibles = [2026];
+
 function money(n) {
     if (n === null || n === undefined) return '$ 0';
     return '$ ' + Number(n).toLocaleString('es-CL', { maximumFractionDigits: 0 });
 }
 
-// ─── Cambiar entre vistas ─────────────────────────────────────────────────────
+// ─── Cambiar entre vistas ──────────────────────────────────────────────────────
 function mostrarVista(vista) {
     document.getElementById('vista-mensual').style.display = vista === 'mensual' ? 'block' : 'none';
     document.getElementById('vista-anual').style.display   = vista === 'anual'   ? 'block' : 'none';
@@ -662,18 +661,83 @@ function mostrarVista(vista) {
     }
 }
 
-// ─── Cambiar año (mensual) ────────────────────────────────────────────────────
+// ─── Cambiar año (mensual) ─────────────────────────────────────────────────────
 function cambiarAño(año) {
     window.location.href = '{{ route("graficos.mensual") }}?año=' + año;
 }
 
-// ─── Mini chart en hover preview ─────────────────────────────────────────────
+// ─── Agregar año ───────────────────────────────────────────────────────────────
+let _vistaDestino = 'mensual';
+
+function agregarAño(vista) {
+    _vistaDestino = vista;
+    const siguiente = añosDisponibles.length > 0
+        ? Math.max(...añosDisponibles) + 1
+        : 2026;
+    document.getElementById('inputNuevoAño').value = siguiente;
+    document.getElementById('errorNuevoAño').style.display = 'none';
+    $('#modalAgregarAño').modal('show');
+}
+
+function confirmarAgregarAño() {
+    const input = document.getElementById('inputNuevoAño');
+    const errorEl = document.getElementById('errorNuevoAño');
+    const año = parseInt(input.value);
+
+    errorEl.style.display = 'none';
+
+    if (!año || año < 2026 || año > 2099) {
+        errorEl.textContent = 'Ingresa un año válido entre 2026 y 2099.';
+        errorEl.style.display = 'block';
+        return;
+    }
+    if (añosDisponibles.includes(año)) {
+        errorEl.textContent = 'Ese año ya existe en el selector.';
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    // Agregar al array y ordenar
+    añosDisponibles.push(año);
+    añosDisponibles.sort((a, b) => a - b);
+
+    // Agregar botón al selector mensual
+    _agregarBtnAño('mensualAñoSelector', año, () => cambiarAño(año));
+    // Agregar botón al selector anual
+    _agregarBtnAño('anualAñoSelector', año, () => cargarAnual(año));
+
+    $('#modalAgregarAño').modal('hide');
+
+    // Navegar al nuevo año
+    if (_vistaDestino === 'mensual') {
+        cambiarAño(año);
+    } else {
+        cargarAnual(año);
+    }
+}
+
+function _agregarBtnAño(selectorId, año, fn) {
+    const container = document.getElementById(selectorId);
+    // Insertar en orden
+    const botones = Array.from(container.querySelectorAll('.graf-año-btn'));
+    const nuevoBtn = document.createElement('button');
+    nuevoBtn.className = 'graf-año-btn';
+    nuevoBtn.textContent = año;
+    nuevoBtn.onclick = fn;
+
+    const siguiente = botones.find(b => parseInt(b.textContent) > año);
+    if (siguiente) {
+        container.insertBefore(nuevoBtn, siguiente);
+    } else {
+        container.appendChild(nuevoBtn);
+    }
+}
+
+// ─── Mini chart en hover preview ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.preview-canvas').forEach(canvas => {
         const ing = JSON.parse(canvas.dataset.ingresos || '[]');
         const egr = JSON.parse(canvas.dataset.egresos  || '[]');
-
-        // Simplificado: solo muestra el total ingresado vs total egresado
         const totalIng = ing.reduce((a,b) => a + (parseFloat(b)||0), 0);
         const totalEgr = egr.reduce((a,b) => a + (parseFloat(b)||0), 0);
 
@@ -693,14 +757,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => money(ctx.raw) } } },
-                scales: { x: { ticks: { color: '#aaa', font: { size: 9 } }, grid: { display: false } },
-                          y: { display: false, beginAtZero: true } }
+                scales: {
+                    x: { ticks: { color: '#aaa', font: { size: 9 } }, grid: { display: false } },
+                    y: { display: false, beginAtZero: true }
+                }
             }
         });
     });
 });
 
-// ─── Modal Detalle Mes ────────────────────────────────────────────────────────
+// ─── Modal Detalle Mes ─────────────────────────────────────────────────────────
 let chartDetIng = null;
 let chartDetEgr = null;
 
@@ -711,7 +777,7 @@ function abrirDetalleMes(año, mes) {
     const nombresMes = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio',
                         'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-    document.getElementById('detalleMesTitulo').textContent   = nombresMes[mes] + ' ' + año;
+    document.getElementById('detalleMesTitulo').textContent    = nombresMes[mes] + ' ' + año;
     document.getElementById('detalleMesSubtitulo').textContent = 'Ingresos y Egresos del mes';
 
     $('#modalDetalleMes').modal('show');
@@ -721,7 +787,7 @@ function abrirDetalleMes(año, mes) {
         .then(d => renderDetalleMes(d))
         .catch(() => {
             document.getElementById('detalle-loading').innerHTML =
-                '<p class="text-danger"><i class="fa-solid fa-triangle-exclamation me-2"></i>Error al cargar datos</p>';
+                '<p class="text-danger">Error al cargar datos</p>';
         });
 }
 
@@ -729,7 +795,6 @@ function renderDetalleMes(d) {
     document.getElementById('detalle-loading').style.display   = 'none';
     document.getElementById('detalle-contenido').style.display = 'block';
 
-    // ── KPIs ──
     document.getElementById('detalleKpis').innerHTML = `
         <div class="col-sm-6 col-lg-3">
             <div class="graf-kpi d-flex align-items-center gap-3">
@@ -768,7 +833,6 @@ function renderDetalleMes(d) {
             </div>
         </div>`;
 
-    // ── Gráfico Ingresos ──
     const ing = d.ingresos;
     const datosIng = [
         ing.adm_grafico        ?? 0,
@@ -783,102 +847,72 @@ function renderDetalleMes(d) {
 
     const totalIng = datosIng.reduce((a,b)=>a+b, 0);
     const emptyIng = totalIng === 0;
-
     document.getElementById('detalle-ing-empty').style.display = emptyIng ? 'flex' : 'none';
-
     if (chartDetIng) chartDetIng.destroy();
     const cvIng = document.getElementById('chartDetalleIngresos');
     cvIng.style.display = emptyIng ? 'none' : 'block';
-
     if (!emptyIng) {
         chartDetIng = new Chart(cvIng.getContext('2d'), {
             type: 'bar',
             data: {
                 labels: LABELS_ING,
-                datasets: [{
-                    label: 'Monto',
-                    data:  datosIng,
+                datasets: [{ label: 'Monto', data: datosIng,
                     backgroundColor: COLORES_ING.map(c => c + 'CC'),
-                    borderColor:     COLORES_ING,
-                    borderWidth: 2,
-                    borderRadius: 8,
-                }]
+                    borderColor: COLORES_ING, borderWidth: 2, borderRadius: 8 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ' ' + money(ctx.raw) } }
-                },
-                scales: {
-                    x: { ticks: { font: { size: 11 } }, grid: { display: false } },
-                    y: { beginAtZero: true, ticks: { callback: v => money(v) } }
-                }
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + money(ctx.raw) } } },
+                scales: { x: { ticks: { font: { size: 11 } }, grid: { display: false } },
+                          y: { beginAtZero: true, ticks: { callback: v => money(v) } } }
             }
         });
     }
 
-    // ── Gráfico Egresos ──
     const egr = d.egresos;
     const datosEgr = [egr.egr_sii??0, egr.egr_kutt??0, egr.egr_sueldos??0,
                       egr.egr_cotizaciones??0, egr.egr_contador??0, egr.egr_otros??0];
     const totalEgr = datosEgr.reduce((a,b)=>a+b, 0);
     const emptyEgr = totalEgr === 0;
-
     document.getElementById('detalle-egr-empty').style.display = emptyEgr ? 'flex' : 'none';
-
     if (chartDetEgr) chartDetEgr.destroy();
     const cvEgr = document.getElementById('chartDetalleEgresos');
     cvEgr.style.display = emptyEgr ? 'none' : 'block';
-
     if (!emptyEgr) {
         chartDetEgr = new Chart(cvEgr.getContext('2d'), {
             type: 'bar',
             data: {
                 labels: LABELS_EGR,
-                datasets: [{
-                    label: 'Monto',
-                    data:  datosEgr,
+                datasets: [{ label: 'Monto', data: datosEgr,
                     backgroundColor: COLORES_EGR.map(c => c + 'CC'),
-                    borderColor:     COLORES_EGR,
-                    borderWidth: 2,
-                    borderRadius: 8,
-                }]
+                    borderColor: COLORES_EGR, borderWidth: 2, borderRadius: 8 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ' ' + money(ctx.raw) } }
-                },
-                scales: {
-                    x: { ticks: { font: { size: 11 } }, grid: { display: false } },
-                    y: { beginAtZero: true, ticks: { callback: v => money(v) } }
-                }
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + money(ctx.raw) } } },
+                scales: { x: { ticks: { font: { size: 11 } }, grid: { display: false } },
+                          y: { beginAtZero: true, ticks: { callback: v => money(v) } } }
             }
         });
     }
 }
 
-// ─── Vista Anual ──────────────────────────────────────────────────────────────
+// ─── Vista Anual ───────────────────────────────────────────────────────────────
 let chartAnualIng = null;
 let chartAnualEgr = null;
 let añoAnualActual = {{ $año }};
 
 function cargarAnual(año) {
     añoAnualActual = año;
-    document.getElementById('anualAñoTexto').textContent  = año;
+    document.getElementById('anualAñoTexto').textContent    = año;
     document.getElementById('anual-tabla-year').textContent = año;
 
-    // Marcar botón activo
     document.querySelectorAll('#anualAñoSelector .graf-año-btn').forEach(btn => {
         btn.classList.toggle('active', parseInt(btn.textContent) === año);
     });
 
-    document.getElementById('anual-loading').style.display    = 'block';
-    document.getElementById('anual-contenido').style.display  = 'none';
+    document.getElementById('anual-loading').style.display   = 'block';
+    document.getElementById('anual-contenido').style.display = 'none';
 
     fetch(`/graficos/anual/${año}`)
         .then(r => r.json())
@@ -893,32 +927,24 @@ function renderAnual(d) {
     const ti = d.totales_ingresos;
     const te = d.totales_egresos;
 
-    // ── Torta Ingresos ──
-    const labelsIng  = ['Adm 10%','Arriendos $','Ventas $','Obras Men.','Arr. Temp.','Aseo Temp.'];
+    const labelsIng   = ['Adm 10%','Arriendos $','Ventas $','Obras Men.','Arr. Temp.','Aseo Temp.'];
     const datosIngPie = [
-        ti.adm_grafico         ?? 0,
-        ti.arriendos_pesos     ?? 0,
-        ti.ventas_pesos        ?? 0,
-        ti.obras_menores_pesos ?? 0,
-        ti.arriendo_temp_pesos ?? 0,
-        ti.arriendo_temp_aseo  ?? 0,
+        ti.adm_grafico ?? 0, ti.arriendos_pesos ?? 0, ti.ventas_pesos ?? 0,
+        ti.obras_menores_pesos ?? 0, ti.arriendo_temp_pesos ?? 0, ti.arriendo_temp_aseo ?? 0,
     ];
-    const totalIngAnual = datosIngPie.reduce((a,b)=>a+b,0);
+    const totalIngAnual = datosIngPie.reduce((a,b)=>a+b, 0);
     document.getElementById('anual-ing-total').textContent = money(totalIngAnual);
     document.getElementById('anual-ing-year').textContent  = d.año;
 
     const emptyIng = totalIngAnual === 0;
     document.getElementById('anual-ing-empty').style.display = emptyIng ? 'flex' : 'none';
     document.querySelector('#chartAnualIngresos').parentElement.style.display = emptyIng ? 'none' : 'block';
-
     if (chartAnualIng) chartAnualIng.destroy();
     if (!emptyIng) {
         chartAnualIng = new Chart(document.getElementById('chartAnualIngresos').getContext('2d'), {
             type: 'doughnut',
-            data: {
-                labels: labelsIng,
-                datasets: [{ data: datosIngPie, backgroundColor: COLORES_ING.map(c=>c+'CC'), borderColor: COLORES_ING, borderWidth: 2 }]
-            },
+            data: { labels: labelsIng, datasets: [{ data: datosIngPie,
+                backgroundColor: COLORES_ING.map(c=>c+'CC'), borderColor: COLORES_ING, borderWidth: 2 }] },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: {
@@ -929,26 +955,22 @@ function renderAnual(d) {
         });
     }
 
-    // ── Torta Egresos ──
-    const labelsEgr  = ['SII','KUTT','Sueldos','Cotizaciones','Contador','Otros'];
+    const labelsEgr   = ['SII','KUTT','Sueldos','Cotizaciones','Contador','Otros'];
     const datosEgrPie = [te.egr_sii??0, te.egr_kutt??0, te.egr_sueldos??0,
                          te.egr_cotizaciones??0, te.egr_contador??0, te.egr_otros??0];
-    const totalEgrAnual = datosEgrPie.reduce((a,b)=>a+b,0);
+    const totalEgrAnual = datosEgrPie.reduce((a,b)=>a+b, 0);
     document.getElementById('anual-egr-total').textContent = money(totalEgrAnual);
     document.getElementById('anual-egr-year').textContent  = d.año;
 
     const emptyEgr = totalEgrAnual === 0;
     document.getElementById('anual-egr-empty').style.display = emptyEgr ? 'flex' : 'none';
     document.querySelector('#chartAnualEgresos').parentElement.style.display = emptyEgr ? 'none' : 'block';
-
     if (chartAnualEgr) chartAnualEgr.destroy();
     if (!emptyEgr) {
         chartAnualEgr = new Chart(document.getElementById('chartAnualEgresos').getContext('2d'), {
             type: 'doughnut',
-            data: {
-                labels: labelsEgr,
-                datasets: [{ data: datosEgrPie, backgroundColor: COLORES_EGR.map(c=>c+'CC'), borderColor: COLORES_EGR, borderWidth: 2 }]
-            },
+            data: { labels: labelsEgr, datasets: [{ data: datosEgrPie,
+                backgroundColor: COLORES_EGR.map(c=>c+'CC'), borderColor: COLORES_EGR, borderWidth: 2 }] },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: {
@@ -959,7 +981,6 @@ function renderAnual(d) {
         });
     }
 
-    // ── Tabla mensual ──
     const nombresMes = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio',
                         'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     let filas = '';

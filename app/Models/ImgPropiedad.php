@@ -17,6 +17,6 @@ class ImgPropiedad extends Model
         'nombre',
         'link',
         'id_propiedad',
+        'seccion',
     ];
-    
 }
