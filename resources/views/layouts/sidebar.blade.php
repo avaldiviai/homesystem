@@ -21,14 +21,6 @@
             <!-- Menú -->
             <div class="collapse d-lg-block" id="responsiveMenu">
 
-                <!-- Inicio -->
-                <li class="nav-item mb-3">
-                    <a href="/dashboard" class="nav-link d-flex align-items-center">
-                        <i class="fa-solid fa-chart-line me-2 text-warning"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li>
-
                 <li class="nav-item mb-3">
                     <a href="/plantilla" class="nav-link d-flex align-items-center">
                         <i class="fa-solid fa-file-lines me-2 text-warning"></i>
@@ -84,6 +76,13 @@
                 </li>
 
                 <li class="nav-item mb-3">
+                    <a href="/arriendos" class="nav-link d-flex align-items-center">
+                        <i class="fa-solid fa-key me-2 text-warning"></i>
+                        <span>Arriendo Temporal</span>
+                    </a>
+                </li>
+
+                {{-- <li class="nav-item mb-3">
                     <a class="nav-link d-flex justify-content-between align-items-center"
                        data-bs-toggle="collapse" href="#arriendos" role="button"
                        aria-expanded="false" aria-controls="arriendos">
@@ -100,7 +99,7 @@
                             <li class="nav-item"><a href="/inventario" class="nav-link"><i class="fa-solid fa-cart-flatbed me-2 text-warning"></i> Inventario</a></li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <!-- ── RRHH ── -->
                 <li class="nav-item mb-3">

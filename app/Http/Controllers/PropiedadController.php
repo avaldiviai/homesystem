@@ -310,7 +310,7 @@ class PropiedadController extends Controller
 
         $new_precios = new Precios;
         $new_precios->diciembre = $request->diciembre;
-        $new_precios->tipo_moneda = $request->tipo_moneda;
+        // $new_precios->tipo_moneda = $request->tipo_moneda;
         $new_precios->ano_corrido = $request->ano_corrido;
         $new_precios->id_propiedad = $new_propiedad->id;
         $new_precios->tipo_propiedad = 3;
