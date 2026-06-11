@@ -13,149 +13,141 @@
                         </div>
      
                         <div class="col-lg-12">
-                            <div class="row shadow mb-4"
-                                style="background-color:#E67E22; border-radius: .9rem; margin-bottom: 20px;">                                <div class="col-lg-12 mb-3">
+                            <div class="row shadow mb-4" style="background-color:#E67E22; border-radius: .9rem; margin-bottom: 20px;">
+                                <div class="col-lg-12 mb-3">
                                     <div class="p-3 mb-1">
                                         <div class="col-lg-12 text-center mb-1">
                                             <div class="col-lg-4 bg-black px-3 py-2 rounded-pill shadow" style="max-width: 400px;">
-                                                <h4 class="m-0 text-white">
-                                                    Detalle de la Propiedad
-                                                </h4>
+                                                <h4 class="m-0 text-white">Detalle de la Propiedad</h4>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            
-
+                        
+                                {{-- FILA 1: Dirección | Condominio | Ciudad --}}
+                                <div class="col-md-5 mb-3">
+                                    <label class="text-white fw-bold">Dirección</label>
+                                    <input type="text" class="form-control" id="direccion" value="{{ $propiedadVe->direccion }}" placeholder="Ej: Av. del Mar 123">
+                                </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="text-white" for="precio_min_enero">Precio mínimo enero</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control" id="precio_min_enero" name="precio_min_enero" 
-                                            value="{{ $propiedadVe->precio_min_enero }}" placeholder="Ej: 380.000" required
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
+                                    <label class="text-white fw-bold">Condominio</label>
+                                    <input type="text" class="form-control" id="condominio" name="condominio" value="{{ $propiedadVe->condominio }}" placeholder="Ingrese el condominio">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="text-white fw-bold">Ciudad</label>
+                                    <input type="text" class="form-control" id="ciudad" value="{{ $propiedadVe->ciudad }}" placeholder="Ej: La Serena">
+                                </div>
+                        
+                                {{-- FILA 2: Edificio (Torre) | N° Depto | N° Estac | Piso | Sector --}}
+                                <div class="col-md-3 mb-3">
+                                    <label class="text-white fw-bold">Edificio / Torre</label>
+                                    <input type="text" class="form-control" id="torre" name="torre" value="{{ $propiedadVe->torre }}" placeholder="Ej: Torre A">
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="text-white fw-bold">N° Depto</label>
+                                    <input type="text" class="form-control" id="num_apartamento" name="num_apartamento" value="{{ $propiedadVe->num_apartamento }}" placeholder="Ej: 802">
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="text-white fw-bold">N° Estacionamiento</label>
+                                    <input type="number" class="form-control" id="num_estaciona" name="num_estaciona" value="{{ $detalle->num_estaciona }}" placeholder="Ej: 15">
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="text-white fw-bold">Piso</label>
+                                    <input type="text" class="form-control" id="piso" name="piso" value="{{ $propiedadVe->piso }}" placeholder="Ej: 8">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="text-white fw-bold">Sector</label>
+                                    <input type="text" class="form-control" id="sector" name="sector" value="{{ $propiedadVe->sector }}" placeholder="Ej: Las Brisas">
+                                </div>
+                        
+                                {{-- FILA 3: Precios Enero | Precios Febrero | Propietarios --}}
+                                {{-- ENERO --}}
+                                <div class="col-md-4 mb-3">
+                                    <div class="p-3 rounded" style="background-color: rgba(0,0,0,0.15);">
+                                        <label class="text-white fw-bold d-block text-center mb-2">
+                                            <i class="bi bi-sun-fill me-1"></i> ENERO
+                                        </label>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <label class="text-white small">Precio Mínimo</label>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" id="precio_min_enero" name="precio_min_enero"
+                                                        value="{{ $propiedadVe->precio_min_enero }}" placeholder="380.000"
+                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="text-white small">Precio Máximo</label>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" id="precio_max_enero" name="precio_max_enero"
+                                                        value="{{ $propiedadVe->precio_max_enero }}" placeholder="500.000"
+                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
+                        
+                                {{-- FEBRERO --}}
                                 <div class="col-md-4 mb-3">
-                                    <label  class="text-white" for="precio_max_enero">Precio Máximo Enero</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control" id="precio_max_enero" name="precio_max_enero" 
-                                            value="{{ $propiedadVe->precio_max_enero }}" placeholder="Ej: 380.000" required
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
+                                    <div class="p-3 rounded" style="background-color: rgba(0,0,0,0.15);">
+                                        <label class="text-white fw-bold d-block text-center mb-2">
+                                            <i class="bi bi-sun me-1"></i> FEBRERO
+                                        </label>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <label class="text-white small">Precio Mínimo</label>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" id="precio_min_febrero" name="precio_min_febrero"
+                                                        value="{{ $propiedadVe->precio_min_febrero }}" placeholder="350.000"
+                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="text-white small">Precio Máximo</label>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" id="precio_max_febrero" name="precio_max_febrero"
+                                                        value="{{ $propiedadVe->precio_max_febrero }}" placeholder="450.000"
+                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
+                        
+                                {{-- PROPIETARIOS --}}
                                 <div class="col-md-4 mb-3">
-                                    <label class="text-white" for="precio_min_febrero">Precio Mínimo Febrero</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control" id="precio_min_febrero" name="precio_min_febrero" 
-                                            value="{{ $propiedadVe->precio_min_febrero }}" placeholder="Ej: 380.000" required
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label class="text-white" for="precio_max_febrero">Precio Máximo Febrero</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control" id="precio_max_febrero" name="precio_max_febrero" 
-                                            value="{{ $propiedadVe->precio_max_febrero }}" placeholder="Ej: 380.000" required
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 mb-3">
-                                    <label  class="text-white" for="direccion">Direccion</label>
-                                    <input type="text" id="direccion" class="form-control" 
-                                        value="{{ $propiedadVe->direccion }}">
-                                </div>
-                                <div class="col-lg-4 mb-3">
-                                    <label class="text-white" for="ciudad">Ciudad</label>
-                                    <input type="text" id="ciudad" class="form-control" 
-                                        value="{{ $propiedadVe->ciudad }}">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label class="text-white" for="torre">Torre</label>
-                                    <input type="text" class="form-control" id="torre" 
-                                        name="torre" value="{{ $propiedadVe->torre }}"
-                                        placeholder="Ingrese la torre">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label  class="text-white" for="num_apartamento">N° de Departamento</label>
-                                    <input type="text" class="form-control" id="num_apartamento" 
-                                        name="num_apartamento" value="{{ $propiedadVe->num_apartamento }}"
-                                        placeholder="Ingrese el numero">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label  class="text-white" for="piso">Piso</label>
-                                    <input type="text" class="form-control" id="piso" 
-                                        name="piso" value="{{ $propiedadVe->piso }}"
-                                        placeholder="Ingrese el piso">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label  class="text-white" for="sector">Sector</label>
-                                    <input type="text" class="form-control" id="sector" 
-                                        name="sector" value="{{ $propiedadVe->sector }}"
-                                        placeholder="Ingrese el sector">
-                                </div>
-
-                                <!-- Campo Condominio -->
-                                <div class="col-md-4 mb-3">
-                                    <label class="text-white" for="condominio">Condominio</label>
-                                    <input type="text" class="form-control" id="condominio" 
-                                        name="condominio" value="{{ $propiedadVe->condominio }}"
-                                        placeholder="Ingrese el condominio">
-                                </div>
-
-                                <!-- Propietarios -->
-                                <div class="col-md-4 mb-3">
-                                    <label  class="text-white" for="propietarioInput">Propietarios</label>
-                                    <div class="d-flex justify-content-between">
-                                        <select id="propietarioInput" class="form-select me-2">
-                                            <option disabled selected value="0">Seleccione un propietario
-                                            </option>
-                                            @foreach ($new_Propietarios as $propietario)
-                                                <option value="{{ $propietario->id }}">
-                                                    {{ $propietario->nombre }}</option>
-                                            @endforeach
-                                        </select>
-                                        <button class="btn btn-primary"
-                                            id="agregar-propietario">Agregar</button>
-                                    </div>
-                                    <ul class="text-uppercase mt-4 m-1 p-1 m-4" id="lista-agregados">
-                                        <!-- Aquí se agregarán los propietarios seleccionados dinámicamente -->
-                                    </ul>
-                                </div>
-
-                                <!-- Lista de todos los propietarios -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="p-3 mb-3">
-                                        <div class="row mb-3 mt-4 p-2 mb-2 shadow"
-                                            style="background-color: #FFE2B2; border-radius: .9rem;">
-                                            <label class="d-block"><b>Todos los Propietarios</b></label>
+                                    <div class="p-3 rounded h-100" style="background-color: rgba(0,0,0,0.15);">
+                                        <label class="text-white fw-bold d-block text-center mb-2">
+                                            <i class="bi bi-person-fill me-1"></i> Propietarios
+                                        </label>
+                                        <div class="d-flex gap-2 mb-2">
+                                            <select id="propietarioInput" class="form-select form-select-sm">
+                                                <option disabled selected value="0">Seleccione propietario</option>
+                                                @foreach ($new_Propietarios as $propietario)
+                                                    <option value="{{ $propietario->id }}">{{ $propietario->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                            <button class="btn btn-sm btn-light" id="agregar-propietario" style="white-space:nowrap;">
+                                                <i class="bi bi-plus-lg"></i>
+                                            </button>
+                                        </div>
+                                        {{-- Lista propietarios actuales --}}
+                                        <div style="max-height: 100px; overflow-y: auto;">
                                             @foreach ($propietarios as $prop)
-                                                <div class="col-lg-12 propietario-item">
-                                                    <div class="input-group m-1" style="max-width: auto;">
-                                                        <span class="input-group-text">
-                                                            <i class="fa-solid fa-user-tie"></i>
-                                                        </span>
-                                                        <input type="text" class="form-control"
-                                                            value="{{ $prop->propietario->nombre }}" readonly>
-                                                        <span class="input-group-text">
-                                                            <a href="javascript:void(0)"
-                                                                class="delete-propietario"
-                                                                data-id="{{ $prop->id }}">
-                                                                <i class="fas fa-trash-alt fa-lg"
-                                                                    style="color: red;"></i>
-                                                            </a>
-                                                        </span>
-                                                    </div>
+                                                <div class="d-flex align-items-center justify-content-between mb-1 px-2 py-1 rounded" style="background:rgba(255,255,255,0.15);">
+                                                    <span class="text-white small"><i class="fa-solid fa-user-tie me-1"></i>{{ $prop->propietario->nombre }}</span>
+                                                    <a href="javascript:void(0)" class="delete-propietario text-white" data-id="{{ $prop->id }}">
+                                                        <i class="fas fa-trash-alt fa-sm"></i>
+                                                    </a>
                                                 </div>
                                             @endforeach
                                         </div>
+                                        <ul class="text-uppercase mt-2 p-0 m-0" id="lista-agregados" style="list-style:none;"></ul>
                                     </div>
                                 </div>
                             </div>
@@ -175,152 +167,150 @@
                                         </div>
                                         <!-- Primera Fila -->
                                         <div class="row mb-3">
-                                            <div class="form-group text-white text-center col-lg-4">
-                                                <label for="ubicacion" class="text-white d-block mb-2">Ubicación</label>
-                                                
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" 
-                                                        name="ubicacion" id="playa" value="playa"
-                                                        {{ $propiedadVe->ubicacion == 'playa' ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="playa">Playa</label>
-                                                </div>
-
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" 
-                                                        name="ubicacion" id="centro" value="centro"
-                                                        {{ $propiedadVe->ubicacion == 'centro' ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="centro">Centro</label>
-                                                </div>
-
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" 
-                                                        name="ubicacion" id="ambos" value="ambos"
-                                                        {{ $propiedadVe->ubicacion == 'ambos' ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="ambos">Ambos</label>
+                                            {{-- Ubicación --}}
+                                            <div class="col-md-3 mb-3">
+                                                <label class="text-white fw-bold">Ubicación</label>
+                                                <div class="d-flex gap-3 mt-1">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="ubicacion" id="playa" value="playa" {{ $propiedadVe->ubicacion == 'playa' ? 'checked' : '' }}>
+                                                        <label class="form-check-label text-white" for="playa">Playa</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="ubicacion" id="centro" value="centro" {{ $propiedadVe->ubicacion == 'centro' ? 'checked' : '' }}>
+                                                        <label class="form-check-label text-white" for="centro">Centro</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="ubicacion" id="ambos" value="ambos" {{ $propiedadVe->ubicacion == 'ambos' ? 'checked' : '' }}>
+                                                        <label class="form-check-label text-white" for="ambos">Ambos</label>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div class="form-group col-lg-4">
-                                                <label for="cantidad_personas" class=" text-white">Cantidad de
-                                                    Personas</label>
+                                            {{-- N° Personas --}}
+                                            <div class="form-group col-lg-2">
+                                                <label for="cantidad_personas" class="text-white">N° Personas</label>
                                                 <input type="number" class="form-control" id="cantidad_personas"
-                                                    name="cantidad_personas"
-                                                    value="{{ $propiedadVe->personas }}"
-                                                    placeholder="Ingrese la cantidad de personas">
+                                                    name="cantidad_personas" value="{{ $propiedadVe->personas }}"
+                                                    placeholder="Ej: 6">
                                             </div>
 
-                                            <div class="form-group col-lg-4">
-                                                <label for="dormitorios" class=" text-white">Dormitorios</label>
-                                                <input type="text" class="form-control " id="dormitorios" 
+                                            {{-- Dormitorios --}}
+                                            <div class="form-group col-lg-2">
+                                                <label for="dormitorios" class="text-white">Dormitorios</label>
+                                                <input type="text" class="form-control" id="dormitorios"
                                                     name="dormitorios" value="{{ $propiedadVe->dormitorios }}"
-                                                    placeholder="Ingrese el número de dormitorios">
+                                                    placeholder="Ej: 2">
                                             </div>
-                                            <div class="form-group col-lg-4">
-                                                <label for="baños" class=" text-white">Baños</label>
-                                                <input type="text" class="form-control " id="baños" 
+
+                                            {{-- Baños --}}
+                                            <div class="form-group col-lg-2">
+                                                <label for="baños" class="text-white">Baños</label>
+                                                <input type="text" class="form-control" id="baños"
                                                     name="baños" value="{{ old('baños', $propiedadVe->baños) }}"
-                                                    placeholder="Ingrese el número de baños">
+                                                    placeholder="Ej: 1">
                                             </div>
-                                            <div class="form-group col-lg-4">
-                                                <label for="tipo_piso" class=" text-white">Tipo de Piso</label>
-                                                <select class="form-select" id="tipo_piso" 
-                                                    name="tipo_piso">
+
+                                            {{-- Tipo de Piso --}}
+                                            <div class="form-group col-lg-3">
+                                                <label for="tipo_piso" class="text-white">Tipo de Piso</label>
+                                                <select class="form-select" id="tipo_piso" name="tipo_piso">
                                                     <option selected disabled>Seleccione un tipo de piso</option>
-                                                    <option value="cerámico"
-                                                        {{ $propiedadVe->Tpiso_dormitorios == 'Cerámico' ? 'selected' : '' }}>
-                                                        Cerámico</option>
-                                                    <option value="flotante"
-                                                        {{ $propiedadVe->Tpiso_dormitorios == 'Flotante' ? 'selected' : '' }}>
-                                                        Flotante</option>
-                                                    <option value="alfombrado"
-                                                        {{ $propiedadVe->Tpiso_dormitorios == 'Alfombrado' ? 'selected' : '' }}>
-                                                        Alfombrado</option>
-                                                    <option value="porcelanato"
-                                                        {{ $propiedadVe->Tpiso_dormitorios == 'porcelanato' ? 'selected' : '' }}>
-                                                        Porcelanato</option>
+                                                    <option value="cerámico"    {{ $propiedadVe->Tpiso_dormitorios == 'Cerámico'    ? 'selected' : '' }}>Cerámico</option>
+                                                    <option value="flotante"    {{ $propiedadVe->Tpiso_dormitorios == 'Flotante'    ? 'selected' : '' }}>Flotante</option>
+                                                    <option value="alfombrado"  {{ $propiedadVe->Tpiso_dormitorios == 'Alfombrado'  ? 'selected' : '' }}>Alfombrado</option>
+                                                    <option value="porcelanato" {{ $propiedadVe->Tpiso_dormitorios == 'porcelanato' ? 'selected' : '' }}>Porcelanato</option>
                                                 </select>
                                             </div>
 
-                                            <div class="form-group col-lg-4">
-                                                <label for="tipo_cocina" class=" text-white">Tipo de
-                                                    Cocina</label>
-                                                <select class="form-select" id="tipo_cocina" 
-                                                    name="tipo_cocina">
+                                            {{-- Tipo de Cocina --}}
+                                            <div class="form-group col-lg-3 mt-3">
+                                                <label for="tipo_cocina" class="text-white">Tipo de Cocina</label>
+                                                <select class="form-select" id="tipo_cocina" name="tipo_cocina">
                                                     <option selected disabled>Seleccione un tipo de cocina</option>
-                                                    <option value="America"
-                                                        {{ $propiedadVe->tipo_cocina == 'America' ? 'selected' : '' }}>
-                                                        America</option>
-                                                    <option value="semi Americana"
-                                                        {{ $propiedadVe->tipo_cocina == 'semi Americana' ? 'selected' : '' }}>
-                                                        Semi Americana</option>
+                                                    <option value="Americana"        {{ $propiedadVe->tipo_cocina == 'Americana'        ? 'selected' : '' }}>Americana</option>
+                                                    <option value="semi Americana" {{ $propiedadVe->tipo_cocina == 'semi Americana' ? 'selected' : '' }}>Semi Americana</option>
+                                                    <option value="independiente"  {{ $propiedadVe->tipo_cocina == 'independiente'  ? 'selected' : '' }}>Independiente</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-lg-4">
-                                                <label for="equipado" class=" text-white">Equipado para</label>
-                                                <input type="text" class="form-control " id="equipado" 
+
+                                            {{-- Equipado para --}}
+                                            <div class="form-group col-lg-3 mt-3">
+                                                <label for="equipado" class="text-white">Equipado para</label>
+                                                <input type="text" class="form-control" id="equipado"
                                                     name="equipado" value="{{ $propiedadVe->equipado }}"
-                                                    placeholder="Ingrese detalles de equipado para">
-                                            </div>
-                                            
-                                            <div class="form-group col-lg-4">
-                                                <label for="valor_adicional" class=" text-white ">Valor
-                                                    Adicional (Mascota)</label>
-                                                <input type="text" class="form-control " id="valor_adicional"
-                                                    name="valor_adicional"
-                                                    value="{{ $propiedadVe->valor_adicional }}"
-                                                    placeholder="Ingrese el valor adicional">
-                                            </div>
-                                            <div class="form-group col-lg-4">
-                                                <label for="num_estaciona" class="text-white">N° Estacionamiento</label>
-                                                <input type="number" class="form-control" id="num_estaciona" 
-                                                    name="num_estaciona"
-                                                    value="{{ $detalle->num_estaciona }}"
-                                                    placeholder="Ingrese el número de estacionamiento">
+                                                    placeholder="Ej: Familia">
                                             </div>
 
-                                            <div class="col-lg-6 text-white">
-                                                <div class="form-group">
-                                                    <label for="inventariodoc" class="">Inventario</label>
-                                                    <input type="file" id="inventariodoc" class="form-control mb-2">
-
-                                                    @if(isset($detalle->inventario) && $detalle->inventario != '')
-                                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
-                                                            <div class="d-flex align-items-center">
-                                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($detalle->inventario) }}</span>
-                                                            </div>
-                                                            <a href="{{ asset($detalle->inventario) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                                Ver
-                                                            </a>
-                                                        </div>
-                                                    @else
-                                                        <div class="text-muted fst-italic small mt-2">
-                                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i> <span class="text-white">Sin documento</span>
-                                                        </div>
-                                                    @endif
+                                            {{-- Valor Adicional (Mascota) --}}
+                                            <div class="form-group col-lg-3 mt-3">
+                                                <label for="valor_adicional" class="text-white">Valor Adicional (Mascota)</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="text" class="form-control" id="valor_adicional"
+                                                        name="valor_adicional" value="{{ $propiedadVe->valor_adicional }}"
+                                                        placeholder="Ej: 20.000">
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-6 text-white">
+                                            {{-- Inventario --}}
+                                            <div class="col-lg-6 text-white mt-3">
                                                 <div class="form-group">
-                                                    <label for="actadoc" class="">Acta de Entrega</label>
-                                                    <input type="file" id="actadoc" class="form-control mb-2">
-
-                                                    @if(isset($detalle->acta_entrega) && $detalle->acta_entrega != '')
-                                                        <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
-                                                            <div class="d-flex align-items-center">
-                                                                <i class="fas fa-file-alt text-primary me-2"></i>
-                                                                <span class="text-truncate" style="max-width: 140px;">{{ basename($detalle->acta_entrega) }}</span>
+                                                    <label for="inventariodoc">Inventario</label>
+                                                    <div class="d-flex gap-2 mb-2">
+                                                        <input type="file" id="inventariodoc" class="form-control">
+                                                        <button type="button" class="btn btn-success" id="btn_guardar_inventario"
+                                                            data-id="{{ $propiedadVe->id }}">
+                                                            <i class="fas fa-save"></i> Guardar
+                                                        </button>
+                                                    </div>
+                                                    <div id="preview_inventario">
+                                                        @if(isset($detalle->inventario) && $detalle->inventario != '')
+                                                            <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                                    <span class="text-truncate" style="max-width: 140px;">{{ basename($detalle->inventario) }}</span>
+                                                                </div>
+                                                                <a href="{{ asset($detalle->inventario) }}" target="_blank"
+                                                                    class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
                                                             </div>
-                                                            <a href="{{ asset($detalle->acta_entrega) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
-                                                                Ver
-                                                            </a>
-                                                        </div>
-                                                    @else
-                                                        <div class="text-muted fst-italic small mt-2">
-                                                            <i class="fas fa-exclamation-circle me-1 text-warning"></i> <span class="text-white">Sin documento</span>
-                                                        </div>
-                                                    @endif
+                                                        @else
+                                                            <div class="text-muted fst-italic small mt-2">
+                                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                                                <span class="text-white">Sin documento</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- Acta de Entrega --}}
+                                            <div class="col-lg-6 text-white mt-3">
+                                                <div class="form-group">
+                                                    <label for="actadoc">Acta de Entrega</label>
+                                                    <div class="d-flex gap-2 mb-2">
+                                                        <input type="file" id="actadoc" class="form-control">
+                                                        <button type="button" class="btn btn-success" id="btn_guardar_acta"
+                                                            data-id="{{ $propiedadVe->id }}">
+                                                            <i class="fas fa-save"></i> Guardar
+                                                        </button>
+                                                    </div>
+                                                    <div id="preview_acta">
+                                                        @if(isset($detalle->acta_entrega) && $detalle->acta_entrega != '')
+                                                            <div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="fas fa-file-alt text-primary me-2"></i>
+                                                                    <span class="text-truncate" style="max-width: 140px;">{{ basename($detalle->acta_entrega) }}</span>
+                                                                </div>
+                                                                <a href="{{ asset($detalle->acta_entrega) }}" target="_blank"
+                                                                    class="btn btn-sm btn-outline-primary rounded-pill">Ver</a>
+                                                            </div>
+                                                        @else
+                                                            <div class="text-muted fst-italic small mt-2">
+                                                                <i class="fas fa-exclamation-circle me-1 text-warning"></i>
+                                                                <span class="text-white">Sin documento</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -610,17 +600,40 @@
                                 <div class="row">
                                     <div class="col-lg-12 p-2">
                                         <div class="d-flex flex-wrap align-items-center justify-content-center">
-                                            @if ($detalle && $detalle->video)
-                                                <div class="position-relative m-1">
-                                                    <video width="100%" height="300" controls loop muted autoplay playsinline 
-                                                        style="width: 100%; display: block; margin-bottom: 5px;">
-                                                        <source src="{{ asset($detalle->video) }}" type="video/mp4">
-                                                        Tu navegador no soporta la etiqueta de video.
-                                                    </video>
-                                                    <a href="javascript:void(0)" data-id="{{ $detalle->id }}" class="position-absolute delete-video" 
-                                                        style="top: 30px; right: 10px; background: rgba(255, 255, 255, 0.8); padding: 15px; border-radius: .5rem;">
-                                                        <i class="fas fa-trash-alt fa-lg" style="color: red;"></i>
-                                                    </a>
+                                            @if ($detalle && $detalle->videos && $detalle->videos->count())
+                                                <div class="row" style="max-height: 400px; overflow-y: auto;">
+                                                    @foreach ($detalle->videos as $video)
+                                                        @php
+                                                            $videoPath = str_replace('/storage/', '', $video->link);
+                                                            $streamUrl = url('/stream-video/' . $videoPath);
+                                                        @endphp
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="card shadow-sm border-0 rounded">
+                                                                <video 
+                                                                    controls 
+                                                                    style="width:100%; height:200px; object-fit:cover; cursor:pointer;"
+                                                                    onclick="abrirVideoCompleto('{{ $streamUrl }}')"
+                                                                >
+                                                                    <source src="{{ $streamUrl }}" type="video/mp4">
+                                                                    Tu navegador no soporta el video.
+                                                                </video>
+                                                                <div class="card-body text-center p-2">
+                                                                    <button 
+                                                                        class="btn btn-sm btn-primary me-1"
+                                                                        onclick="abrirVideoCompleto('{{ $streamUrl }}')"
+                                                                    >
+                                                                        <i class="fas fa-expand"></i> Pantalla completa
+                                                                    </button>
+                                                                    <button 
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="confirmarEliminarVideo({{ $video->id }})"
+                                                                    >
+                                                                        <i class="fas fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
                                             @else
                                                 <div class="text-center text-white p-3">
@@ -639,7 +652,16 @@
                                                 Arrastra aquí tu video o haz clic para seleccionarlo
                                             </div>
                                             <input class="form-control" type="file" name="videos" id="videos" accept="video/*" style="display: none;">
-                                    </div>
+                                        </div>
+                                        <div id="videoProgressContainer" style="display:none; margin-top:10px;">
+                                        <div style="background:#e9ecef; border-radius:5px; overflow:hidden;">
+                                                <div id="videoProgressBar" style="
+                                                    width:0%; height:25px; background:#007bff;
+                                                    text-align:center; color:white; line-height:25px;
+                                                    transition: width 0.3s ease;
+                                                ">0%</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -686,16 +708,17 @@
                                                     @csrf
                                                     <div class="mb-3 row">
                                                         <div class="col-md-6">
-                                                            <label for="id_verano" class="form-label">Propiedad de
-                                                                Verano</label>
-                                                            <select class="form-select" id="id_verano" name="id_verano"
-                                                                required>
-                                                                
+                                                            <label for="id_verano" class="form-label">Propiedad de Verano</label>
+                                                            <select class="form-select" id="id_verano" name="id_verano" required disabled>
                                                                 @foreach ($proverano as $verano)
-                                                                    <option value="{{ $verano->id }}">
-                                                                        {{ $verano->torre }} - #{{$verano->num_apartamento}}</option>
+                                                                    <option value="{{ $verano->id }}"
+                                                                        {{ $verano->id == $propiedadVe->id ? 'selected' : '' }}>
+                                                                        {{ $verano->torre }} - #{{ $verano->num_apartamento }}
+                                                                    </option>
                                                                 @endforeach
                                                             </select>
+                                                            {{-- Campo hidden para que el valor se envíe igual aunque el select esté disabled --}}
+                                                            <input type="hidden" name="id_verano" value="{{ $propiedadVe->id }}">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="color" class="form-label">Seleccione un
@@ -705,18 +728,27 @@
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
-                                                        <div class="col-md-6">
-                                                            <label for="inicio" class="form-label">Fecha de
-                                                                Inicio</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="inicio" name="inicio" required>
+                                                        <div class="col-md-3">
+                                                            <label class="form-label fw-bold">Fecha Inicio</label>
+                                                            <input type="date" class="form-control" id="inicio_fecha" required>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <label for="fin" class="form-label">Fecha de Fin</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="fin" name="fin">
+                                                        <div class="col-md-3">
+                                                            <label class="form-label fw-bold">Hora Inicio</label>
+                                                            <input type="time" class="form-control" id="inicio_hora" value="14:00" required>
                                                         </div>
+                                                        <div class="col-md-3">
+                                                            <label class="form-label fw-bold">Fecha Fin</label>
+                                                            <input type="date" class="form-control" id="fin_fecha" required>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label class="form-label fw-bold">Hora Fin</label>
+                                                            <input type="time" class="form-control" id="fin_hora" value="12:00" required>
+                                                        </div>
+                                                        {{-- Campos hidden que se llenan automáticamente --}}
+                                                        <input type="hidden" id="inicio">
+                                                        <input type="hidden" id="fin">
                                                     </div>
+
                                                     <div class="mb-3 row">
                                                         <!-- Campo Cantidad de Días -->
                                                         <div class="col-md-6">
@@ -883,122 +915,131 @@
 
                             <div class="modal fade" id="modalEditarEventoedit" tabindex="-1" role="dialog"
                                 aria-labelledby="modalEditarEventoeditLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="modalEditarEventoeditLabel">Editar Evento</h4>
-                                            <!-- Botón de cerrar modal con "X" -->
-                                            <button type="button" class="Close" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true"></span>
-                                            </button>
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content"
+                                        style="background-color:rgb(250, 184, 97); border-radius: .9rem; margin-bottom: 20px;">
+                                        <div class="modal-header border-0">
+                                            <h4 class="modal-title fw-bold" id="modalEditarEventoeditLabel">Editar Evento</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                         </div>
+
                                         <div class="modal-body">
                                             <form id="formEditarEvento">
-                                            <div class="mb-3 row">
-                                                        <div class="col-md-6">
-                                                            <label for="id_veranoedit" class="form-label">Propiedad de
-                                                                Verano</label>
-                                                            <select class="form-select" id="id_veranoedit" name="id_veranoedit"
-                                                                required>
-                                                                @foreach ($proverano as $verano)
-                                                                    <option value="{{ $verano->id }}">
-                                                                        {{ $verano->torre }} - #{{$verano->num_apartamento}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <!-- <div class="col-md-6">
-                                                            <label for="colorPickeredit" class="form-label">Seleccione un
-                                                                Color</label>
-                                                            <input type="coloredit" id="colorPickeredit" name="colorPickeredit"
-                                                                class="form-control form-control-color" value="#ff0000" />
-                                                        </div> -->
+                                                {{-- Fila 1: Propiedad --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-6">
+                                                        <label for="id_veranoedit" class="form-label fw-bold">Propiedad de Verano</label>
+                                                        <select class="form-select" id="id_veranoedit" name="id_veranoedit" required disabled>
+                                                            @foreach ($proverano as $verano)
+                                                                <option value="{{ $verano->id }}"
+                                                                    {{ $verano->id == $propiedadVe->id ? 'selected' : '' }}>
+                                                                    {{ $verano->torre }} - #{{ $verano->num_apartamento }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <input type="hidden" name="id_veranoedit" value="{{ $propiedadVe->id }}">
                                                     </div>
-                                                    <div class="mb-3 row">
-                                                        <div class="col-md-6">
-                                                            <label for="inicioedit" class="form-label">Fecha de
-                                                                Inicio</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="inicioedit" name="inicioedit" required>
-                                                                
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="finedit" class="form-label">Fecha de Fin</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="finedit" name="finedit">
+                                                    <!---<div class="col-md-6">
+                                                        <label for="colorPickeredit" class="form-label fw-bold">Seleccione un Color</label>
+                                                        <input type="color" id="colorPickeredit" name="colorPickeredit"
+                                                            class="form-control form-control-color" value="#ff0000" />
+                                                    </div> --->
+                                                </div>
+
+                                                {{-- Fila 2: Fechas y Horas --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Fecha Inicio</label>
+                                                        <input type="date" class="form-control" id="inicioedit_fecha" required>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Hora Inicio</label>
+                                                        <input type="time" class="form-control" id="inicioedit_hora" value="14:00">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Fecha Fin</label>
+                                                        <input type="date" class="form-control" id="finedit_fecha" required>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label fw-bold">Hora Fin</label>
+                                                        <input type="time" class="form-control" id="finedit_hora" value="12:00">
+                                                    </div>
+                                                    <input type="hidden" id="inicioedit">
+                                                    <input type="hidden" id="finedit">
+                                                </div>
+
+                                                {{-- Fila 3: Días y Monto diario --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-6">
+                                                        <label for="diaedit" class="form-label fw-bold">Cantidad de Días</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">
+                                                                <i class="fa-solid fa-calendar-days"></i>
+                                                            </span>
+                                                            <input type="number" class="form-control" id="diaedit"
+                                                                name="diaedit" min="1" max="1000000" required readonly>
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3 row">
-                                                        <!-- Campo Cantidad de Días -->
-                                                        <div class="col-md-6">
-                                                            <label for="diaedit" class="form-label">Cantidad de
-                                                                Días</label>
+                                                    <div class="col-md-6">
+                                                        <label for="diarioedit" class="form-label fw-bold">Monto diario</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                            <input type="number" class="form-control" id="diarioedit"
+                                                                name="diarioedit" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Fila 4: Total, Aseo, 10% --}}
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-4">
+                                                        <label for="totaledit" class="form-label fw-bold">Monto del Arriendo</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                            <input type="number" class="form-control" id="totaledit" name="totaledit" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 text-center">
+                                                        <label class="form-label fw-bold d-block">¿Tiene Aseo?</label>
+                                                        <div class="mt-1">
+                                                            <input type="radio" name="aseoCheckedit" id="aseoSiedit" value="si">
+                                                            <label for="aseoSiedit">Sí</label>
+                                                            &nbsp;
+                                                            <input type="radio" name="aseoCheckedit" id="aseoNoedit" value="no">
+                                                            <label for="aseoNoedit">No</label>
+                                                        </div>
+                                                        <div id="camposAseoedit" class="mt-2" style="display: none;">
+                                                            <label class="form-label fw-bold">Detalles del Aseo</label>
                                                             <div class="input-group">
-                                                                <span class="input-group-text">
-                                                                    <i class="fa-solid fa-calendar-days"></i>
-                                                                </span>
-                                                                <input type="number" class="form-control" id="diaedit"
-                                                                    name="diaedit" min="1" max="1000000" required
-                                                                    readonly>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Campo Monto del Arriendo -->
-                                                        <div class="col-md-6">
-                                                            <label for="diarioedit" class="form-label">Monto diario</label>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text">$</span>
-                                                                <input type="number" class="form-control" id="diarioedit"
-                                                                    name="diarioedit" required>
+                                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                                <input type="text" class="form-control" id="montoInputedit"
+                                                                    placeholder="Ingrese monto" name="montoInputedit">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        <div class="mb-3 row">
-                                                            <!-- Campo Monto del Arriendo -->
-                                                            <div class="col-md-4">
-                                                                <label for="totaledit" class="form-label">Monto del Arriendo</label>
-                                                                <div class="input-group">
-                                                                    <span class="input-group-text">$</span>
-                                                                    <input type="number" class="form-control" id="totaledit" name="totaledit" required>
-                                                                </div>
-                                                            </div>
 
-                                                            <!-- Campo ¿Tiene Aseo? en el medio -->
-                                                            <div class="col-md-4 text-center">
-                                                                <label for="aseoCheckedit">¿Tiene Aseo?</label>
-                                                                <div class="mt-2">
-                                                                    <input type="radio" name="aseoCheckedit" id="aseoSiedit" value="si">
-                                                                    <label for="aseoSi">Sí</label>
-                                                                    <input type="radio" name="aseoCheckedit" id="aseoNoedit" value="no">
-                                                                    <label for="aseoNoedit">No</label>
-                                                                </div>
-                                                                <div id="camposAseoedit" class="form-group mt-2" style="display: none;">
-                                                                    <label class="mt-2">Detalles del Aseo</label>
-                                                                    <div class="input-group">
-                                                                        <span class="input-group-text">$</span>
-                                                                        <input type="text" class="form-control" id="montoInputedit" placeholder="Ingrese monto" name="montoInputedit">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Campo 10% del Monto -->
-                                                            <div class="col-md-4">
-                                                                <label for="porcentajeedit" class="form-label">10% del Monto</label>
-                                                                <div class="input-group">
-                                                                    <span class="input-group-text">$</span>
-                                                                    <input type="text" class="form-control" id="porcentajeedit" name="porcentajeedit" readonly>
-                                                                </div>
+                                                    <div class="col-md-4">
+                                                        <label for="porcentajeedit" class="form-label fw-bold">10% del Monto</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                            <input type="text" class="form-control" id="porcentajeedit"
+                                                                name="porcentajeedit" readonly>
                                                         </div>
+                                                    </div>
+                                                </div>
+
                                             </form>
                                         </div>
-                                        <div class="modal-footer">
-                                            <!-- Botón de cancelar que cierra el modal -->
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal" id="cerrar_modaledit">Cancelar</button>
-                                            <!-- Botón de guardar cambios -->
-                                            <button class="btn btn-primary" id="guardarCambiosedit">Guardar
-                                                Cambios</button>
+
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-danger px-4" id="cerrar_modaledit"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <button class="btn btn-success px-4" id="guardarCambiosedit">
+                                                <i class="fas fa-save me-1"></i> Guardar Cambios
+                                            </button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -1266,6 +1307,24 @@
         </div>
     </div>
 
+    <!-- Modal video pantalla completa -->
+    <div class="modal fade" id="modalVideoCompleto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content bg-black border-0">
+                <div class="modal-header border-0 p-2">
+                    <button type="button" class="btn-close btn-close-white ms-auto" 
+                        data-bs-dismiss="modal" onclick="detenerVideo()">
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <video id="videoCompleto" controls autoplay 
+                        style="width:100%; max-height:80vh;">
+                        <source id="videoCompletoSrc" src="" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -1423,7 +1482,7 @@
         });
 
         $("#cerrar_modaledit").click(function() {
-            $("#modalEditarEventoedit").modal('hide');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditarEventoedit')).hide();
         });
 
         $(".portada").on('click', function(event) {
@@ -1677,9 +1736,9 @@
                         });
                     },
                     error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        $("#loadingOverlay").fadeOut(); // Ocultar overlay en caso de error
-                        alert('Error al procesar la solicitud');
+                        $("#loadingOverlay").fadeOut();
+                        var msg = xhr.responseJSON ? xhr.responseJSON.error + ' — línea ' + xhr.responseJSON.line : error;
+                        alert('Error: ' + msg);
                     }
                 });
 
@@ -1694,8 +1753,47 @@
         const videoInput = document.getElementById('videos');
 
         // Hacer clic en el área abre el selector de archivos
-        videoDropArea.addEventListener('click', () => {
-            videoInput.click();
+        // Reemplaza el evento click del videoDropArea por esto:
+        videoDropArea.addEventListener('click', () => videoInput.click());
+
+        videoInput.addEventListener('change', function() {
+            if (this.files[0]) {
+                const formData = new FormData();
+                formData.append('videos', this.files[0]);
+                formData.append('Id', '{{ $propiedadVe->id }}');
+                formData.append('_token', '{{ csrf_token() }}');
+
+                // Mostrar barra de progreso
+                const progressContainer = document.getElementById('videoProgressContainer');
+                const progressBar = document.getElementById('videoProgressBar');
+                progressContainer.style.display = 'block';
+                progressBar.style.width = '0%';
+                progressBar.textContent = '0%';
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/propiedades_verano_video', true);
+
+                xhr.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        const pct = Math.round((e.loaded / e.total) * 100);
+                        progressBar.style.width = pct + '%';
+                        progressBar.textContent = pct + '%';
+                    }
+                };
+
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        progressBar.style.backgroundColor = '#28a745';
+                        progressBar.textContent = '✓ Video guardado';
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        progressBar.style.backgroundColor = '#dc3545';
+                        progressBar.textContent = 'Error al subir';
+                    }
+                };
+
+                xhr.send(formData);
+            }
         });
 
         // Manejar el evento de soltar archivos
@@ -1734,6 +1832,12 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+            eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+        displayEventTime: false, // No mostrar hora en vista mensual
         locale: 'es',
         firstDay: 1,
         buttonText: { today: 'Hoy', month: 'Mes', week: 'Semana', day: 'Día' },
@@ -1760,63 +1864,126 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Al enviar el formulario
 
-            $("#guardarevent").on('click', function(event){
-                event.preventDefault();
-                console.log("funcionando con exito");
+            $("#guardarevent").off('click').on('click', function(e) {
+                e.preventDefault();
 
-                var id_verano = document.getElementById('id_verano').value;
-                var inicio = document.getElementById('inicio').value;
-                var fin = document.getElementById('fin').value;
-                var total = document.getElementById('total').value; // Obtener el total
-                var porcentaje = document.getElementById('porcentaje').value; // Obtener el porcentaje
-                var color = document.getElementById('colorPicker').value; // Obtener el color
-                var dia = document.getElementById('dia').value; // Obtener el día
-                var precio_dia = document.getElementById('diario').value; // Obtener el día
-                var editar = document.getElementById('editar'); // le saque el value
-                var eliminar = document.getElementById('eliminar'); //  le saque el value
-                var monto = document.getElementById('montoInput').value; // Obtener el monto
+                // 1. Combinar fecha+hora en los hidden
+                var fechaInicio = $('#inicio_fecha').val();
+                var horaInicio  = $('#inicio_hora').val() || '14:00';
+                var fechaFin    = $('#fin_fecha').val();
+                var horaFin     = $('#fin_hora').val() || '12:00';
 
+                if (!fechaInicio || !fechaFin) {
+                    alert('Debe seleccionar fecha de inicio y fecha de fin.');
+                    return;
+                }
+
+                // 2. Llenar hidden ANTES de leer
+                $('#inicio').val(fechaInicio + 'T' + horaInicio);
+                $('#fin').val(fechaFin + 'T' + horaFin);
+
+                // 3. Leer todos los valores
+                var id_verano  = $('#id_verano').val();
+                var inicio     = $('#inicio').val();
+                var fin        = $('#fin').val();
+                var total      = $('#total').val();
+                var porcentaje = $('#porcentaje').val();
+                var color      = $('#colorPicker').val();
+                var dia        = $('#dia').val();
+                var precio_dia = $('#diario').val();
+                var monto      = $('#montoInput').val();
+
+                console.log('Enviando:', {id_verano, inicio, fin, total, precio_dia, dia});
+
+                // 4. Validar que los campos requeridos no estén vacíos
+                if (!id_verano || !inicio || !fin || !total || !precio_dia) {
+                    alert('Complete todos los campos obligatorios.');
+                    return;
+                }
+
+                // 5. Enviar
                 $.ajax({
                     url: '/calendar/events',
                     type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     data: {
-                        id_verano: id_verano,
-                        inicio: inicio,
-                        fin: fin,
-                        total: total,
+                        id_verano:  id_verano,
+                        inicio:     inicio,
+                        fin:        fin,
+                        total:      total,
                         porcentaje: porcentaje,
-                        color: color,
-                        dia: dia,
+                        color:      color,
+                        dia:        dia,
                         precio_dia: precio_dia,
-                        editar: editar,
-                        eliminar: eliminar,
-                        monto: monto,
+                        monto:      monto,
                     },
                     success: function(response) {
-                        $("#addEventModal").modal('hide'); // Ocultar el modal de eventos
+                        $("#addEventModal").modal('hide');
+                        calendar.refetchEvents();  // recargar calendario
                         $('#modalSuccess').modal('show');
-
-                        // $("#modalError").modal('show'); // Mostrar el modal de éxito
-                        // calendar.refetchEvents(); // Refrescar eventos si es necesario
                     },
                     error: function(xhr) {
-                        console.log(xhr);
-                        $("#modalError").modal('show'); // Mostrar el modal de error
+                        console.log('Error completo:', xhr.responseJSON);
+                        var msg = (xhr.responseJSON && xhr.responseJSON.message)
+                            ? xhr.responseJSON.message
+                            : 'Error al guardar. Revisa la consola.';
+                        $('#texto_error').text(msg);
+                        var modalErr = new bootstrap.Modal(document.getElementById('modalerror'));
+                        modalErr.show();
                     }
                 });
             });
             $("#close_guardar_arriendo_verano").click(function() {
-                $("#modalSuccess").modal('hide');
-                location.reload();
+                var modalS = bootstrap.Modal.getInstance(document.getElementById('modalSuccess'));
+                if (modalS) modalS.hide();
+                calendar.refetchEvents();
             });
 
             // Ver los eventos en la fecha actual
             document.getElementById('verFechasBtn').addEventListener('click', function() {
-                showEventsOnDate(new Date().toISOString().slice(0, 10)); // Fecha actual
+                showAllEvents();
             });
+
+            function showAllEvents() {
+                var idVerano = getIdVeranoFromURL();
+                
+                axios.get('/calendar/events', {
+                    params: { id_verano: idVerano }
+                })
+                .then(function(response) {
+                    eventsOnDate.innerHTML = '';
+                    if (response.data.length === 0) {
+                        eventsOnDate.innerHTML = '<tr><td colspan="9" class="text-center">No hay arriendos registrados.</td></tr>';
+                    } else {
+                        response.data.forEach(function(event) {
+                            var row = `
+                            <tr>
+                                <td>${event.torre} - #${event.condominio}</td>
+                                <td>${event.start}</td>
+                                <td>${event.end}</td>
+                                <td>${event.dia}</td>
+                                <td>$${new Intl.NumberFormat('es-CL').format(event.diario)}</td>
+                                <td>$${new Intl.NumberFormat('es-CL').format(event.monto || 0)}</td>
+                                <td>$${new Intl.NumberFormat('es-CL').format(event.total)}</td>
+                                <td>$${new Intl.NumberFormat('es-CL').format(event.total * 0.10)}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm editarEvento" data-id="${event.id}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm eliminarEvento" data-id="${event.id}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>`;
+                            eventsOnDate.innerHTML += row;
+                        });
+                    }
+                    eventDateModal.show();
+                })
+                .catch(function(error) {
+                    console.error('Error cargando eventos:', error);
+                });
+            }
 
             // Función para mostrar los eventos de una fecha específica
             
@@ -1886,15 +2053,34 @@ document.addEventListener('DOMContentLoaded', function() {
                         dateType:'json',
                         success: function(respuesta) {
                             console.log('respuesta', respuesta);
-                            $('#modalEditarEventoedit').modal('show');
+                            var modalEditar = new bootstrap.Modal(document.getElementById('modalEditarEventoedit'));
+                            modalEditar.show();
 
                             $('#guardarCambiosedit').data('id', idevento);
-                            $("#inicioedit").val(respuesta.inicio);
-                            $("#finedit").val(respuesta.fin);
+                            // Separar fecha y hora del inicio
+                            var inicioDate = respuesta.inicio ? respuesta.inicio.split('T') : ['', ''];
+                            var finDate    = respuesta.fin    ? respuesta.fin.split('T')    : ['', ''];
+
+                            // Si viene con espacio en lugar de T (formato de MySQL)
+                            if (respuesta.inicio && respuesta.inicio.includes(' ')) {
+                                inicioDate = respuesta.inicio.split(' ');
+                                finDate    = respuesta.fin.split(' ');
+                            }
+
+                            $('#inicioedit_fecha').val(inicioDate[0]);
+                            $('#inicioedit_hora').val(inicioDate[1] ? inicioDate[1].substring(0, 5) : '14:00');
+                            $('#finedit_fecha').val(finDate[0]);
+                            $('#finedit_hora').val(finDate[1] ? finDate[1].substring(0, 5) : '12:00');
+
+                            // Actualizar hidden
+                            $('#inicioedit').val(respuesta.inicio);
+                            $('#finedit').val(respuesta.fin);
                             $("#diaedit").val(respuesta.dia);
                             $("#diarioedit").val(respuesta.precio_dia);
                             $("#montoInputedit").val(respuesta.monto);
                             $("#id_veranoedit").val(respuesta.id_verano);
+                            // Después de cargar los demás campos
+                            
 
                             // Verificar si el monto es null
                             if (respuesta.monto === null) {
@@ -1931,8 +2117,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 });
             });
+            // Combinar fecha+hora en edit
+            function actualizarCamposHiddenEdit() {
+                var fi = $('#inicioedit_fecha').val();
+                var hi = $('#inicioedit_hora').val() || '14:00';
+                var ff = $('#finedit_fecha').val();
+                var hf = $('#finedit_hora').val() || '12:00';
+                if (fi) $('#inicioedit').val(fi + 'T' + hi);
+                if (ff) $('#finedit').val(ff + 'T' + hf);
+            }
+
+            ['inicioedit_fecha','inicioedit_hora','finedit_fecha','finedit_hora'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.addEventListener('change', actualizarCamposHiddenEdit);
+            });
+
             $('#guardarCambiosedit').on('click', function() {
 
+                actualizarCamposHiddenEdit();
+    
                 var idevento = $(this).data('id');
 
                 var inicio = $("#inicioedit").val();
@@ -1942,6 +2145,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var total = $("#totaledit").val();
                 var monto = $("#montoInputedit").val();
                 var id_verano = $("#id_veranoedit").val();
+                
 
                 var arg = {
                     id: idevento,
@@ -1952,6 +2156,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     monto: monto,
                     id_verano: id_verano,
                     total: total,
+                
                 }
                 console.log('argumentos',arg);
                 
@@ -2039,6 +2244,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
+        
+            // Combinar fecha y hora en los campos hidden
+            function actualizarCamposHidden() {
+                var fechaInicio = document.getElementById('inicio_fecha').value;
+                var horaInicio  = document.getElementById('inicio_hora').value  || '14:00';
+                var fechaFin    = document.getElementById('fin_fecha').value;
+                var horaFin     = document.getElementById('fin_hora').value     || '12:00';
+
+                if (fechaInicio) {
+                    document.getElementById('inicio').value = fechaInicio + 'T' + horaInicio;
+                }
+                if (fechaFin) {
+                    document.getElementById('fin').value = fechaFin + 'T' + horaFin;
+                }
+                calcularDias();
+            }
+
+            ['inicio_fecha', 'inicio_hora', 'fin_fecha', 'fin_hora'].forEach(function(id) {
+                document.getElementById(id).addEventListener('change', actualizarCamposHidden);
+            });
 
             // Cerrar modal de éxito al hacer clic en la X
             document.getElementById('close_success').addEventListener('click', function() {
@@ -2205,7 +2430,114 @@ document.addEventListener('DOMContentLoaded', function() {
 
         });
 
+       // Guardar Inventario
+        $('#btn_guardar_inventario').on('click', function() {
+            var id = $(this).data('id');
+            var file = $('#inventariodoc')[0].files[0];
+            if (!file) { alert('Seleccione un archivo primero.'); return; }
+            var formData = new FormData();
+            formData.append('inventario', file);
+            formData.append('Id', id);
+            $.ajax({
+                url: '/property/update/' + id,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: formData,
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                success: function(response) {
+                    $('#successModal').modal('show');
+                    $('#texto_success').text('Inventario guardado correctamente');
 
+                    // Actualizar visualmente el bloque de inventario
+                    var nombreArchivo = file.name;
+                    $('#preview_inventario').html(
+                        '<div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">' +
+                            '<div class="d-flex align-items-center">' +
+                                '<i class="fas fa-file-alt text-primary me-2"></i>' +
+                                '<span class="text-truncate" style="max-width: 140px;">' + nombreArchivo + '</span>' +
+                            '</div>' +
+                        '</div>'
+                    );
+                },
+                error: function() { alert('Error al guardar el inventario.'); }
+            });
+        });
+
+        // Guardar Acta de Entrega
+        $('#btn_guardar_acta').on('click', function() {
+            var id = $(this).data('id');
+            var file = $('#actadoc')[0].files[0];
+            if (!file) { alert('Seleccione un archivo primero.'); return; }
+            var formData = new FormData();
+            formData.append('acta', file);
+            formData.append('Id', id);
+            $.ajax({
+                url: '/property/update/' + id,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: formData,
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                success: function(response) {
+                    $('#successModal').modal('show');
+                    $('#texto_success').text('Acta de entrega guardada correctamente');
+
+                    // Actualizar visualmente el bloque de acta
+                    var nombreArchivo = file.name;
+                    $('#preview_acta').html(
+                        '<div class="card shadow-sm border rounded p-2 d-flex justify-content-between align-items-center">' +
+                            '<div class="d-flex align-items-center">' +
+                                '<i class="fas fa-file-alt text-primary me-2"></i>' +
+                                '<span class="text-truncate" style="max-width: 140px;">' + nombreArchivo + '</span>' +
+                            '</div>' +
+                        '</div>'
+                    );
+                },
+                error: function() { alert('Error al guardar el acta.'); }
+            });
+        });
+
+        function abrirVideoCompleto(url) {
+            const video = document.getElementById('videoCompleto');
+            const source = document.getElementById('videoCompletoSrc');
+            source.src = url;
+            video.load();
+            video.play();
+            const modal = new bootstrap.Modal(document.getElementById('modalVideoCompleto'));
+            modal.show();
+        }
+
+        function detenerVideo() {
+            const video = document.getElementById('videoCompleto');
+            video.pause();
+            video.currentTime = 0;
+        }
+
+        // Detener video al cerrar modal con la X
+        document.getElementById('modalVideoCompleto').addEventListener('hidden.bs.modal', function() {
+            detenerVideo();
+        });
+
+        function confirmarEliminarVideo(id) {
+            if (confirm('¿Seguro que quieres eliminar este video?')) {
+                $.ajax({
+                    url: '/video-verano/' + id,  // usa tu ruta existente de eliminar
+                    type: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    success: function() {
+                        $('#successModal').modal('show');
+                        $('#texto_success').text('Video eliminado correctamente');
+                        $('#successModal').on('hidden.bs.modal', function() {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        alert('Error al eliminar el video');
+                    }
+                });
+            }
+        }
         // // fin chek
     </script>
 
@@ -2330,6 +2662,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         .btn:hover {
             opacity: 0.8;
+        }
+        /* Quitar flechas de inputs type number */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
         }
     </style>
 @endsection

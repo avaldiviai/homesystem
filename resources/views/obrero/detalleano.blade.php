@@ -402,7 +402,7 @@
                                 <input type="file" class="form-control" id="mantenimientodoc" name="mantenciones[0][doc]">
                             </div>
                             <div class="col-lg-12 text-end">
-                                <button type="button" data-id="{{$detalles->id}}" class="btn btn-primary" id="agregar-mantencion">Agregar Mantención</button>
+                                <button type="button" data-id="{{$detalles->id}}" class="btn btn-primary" id="agregar-mantencion">Agregar Mantenimiento</button>
                                 <!-- <button type="button" class="btn btn-success" id="guardar-mantenciones">Guardar Mantenciones Agregadas</button> -->
                             </div>
                             <div class="col-lg-12 mt-3">
@@ -457,7 +457,7 @@
                                                     <a class="btn btn-danger btn_man_delete" data-id="{{$mante->id}}">
                                                         <i class="fa-solid fa-trash-can"></i>
                                                     </a>
-                                                    <a href="{{ asset('storage/public/' . $mante->doc) }}" target="t_blank" download class="btn btn-primary ms-2">
+                                                    <a href="{{ asset('storage/' . $mante->doc) }}" target="_blank" download class="btn btn-primary ms-2">
                                                         <i class="fas fa-download"></i>
                                                     </a>
                                                 </td>
@@ -2528,7 +2528,11 @@
             formData.append('fecha', fecha);
             formData.append('meses', meses);
             formData.append('proxima', proxima);
-            formData.append('doc', $("#mantenimientodoc")[0].files[0]);
+
+            const docFile = $("#mantenimientodoc")[0].files[0];
+            if (docFile) {
+                formData.append('doc', docFile);
+            }
 
             $.ajax({
                 url: '/obrero/guardar/mantenciones',
@@ -2543,8 +2547,9 @@
                     var nuevaMantencion = response.data;
 
                     // Generar el enlace al documento, si existe uno
-                    var docEnlace = nuevaMantencion.doc ? `<a href="/storage/public/${nuevaMantencion.doc}" target="_blank">Ver Documento</a>` : 'No Disponible';
-
+                    var docEnlace = nuevaMantencion.doc 
+                        ? `<a href="/storage/${nuevaMantencion.doc}" target="_blank" class="btn btn-sm btn-primary">Ver Documento</a>` 
+                        : 'No Disponible';
                     // Crear una nueva fila de tabla
                     var nuevaFila = `
                     <tbody>
@@ -2571,7 +2576,7 @@
                 },
                 error: (xhr, status, error) => {
                     console.error("Error:", error);
-                    alert("Error al guardar la mantención.");
+                    alert("Error al guardar el mantenimiento.");
                 }
             });
         });

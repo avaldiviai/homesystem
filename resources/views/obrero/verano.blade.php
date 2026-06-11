@@ -199,8 +199,9 @@
                             <label for="tipo_cocina">Tipo de cocina</label>
                             <select class="form-select" id="tipo_cocina">
                             <option selected disabled > Selecione un tipo de cocina</option>    
-                            <option value="America">America</option>
+                            <option value="Americana">Americana</option>
                             <option value="semi Americana">semi Americana</option>
+                            <option value="independiente">Independiente</option>
                             </select>
                         </div>
                             <div class="col-md-4 mb-3">

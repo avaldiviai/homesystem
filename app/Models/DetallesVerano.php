@@ -24,6 +24,7 @@ class DetallesVerano extends Model
         'quinchos',
         'sala_multiuso',
         'terraza',
+        'gimnasio',
         'id_verano',
         'status',
       

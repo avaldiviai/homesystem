@@ -16,6 +16,7 @@ return new class extends Migration
 
             $table->string('nombre');
             $table->string('link');
+            $table->string('seccion')->nullable();
 
             $table->unsignedBigInteger('id_propiedad')->nullable(false);
             $table->foreign('id_propiedad')->references('id')->on('propiedads');

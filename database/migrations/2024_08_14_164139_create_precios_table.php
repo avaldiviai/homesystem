@@ -26,7 +26,8 @@ return new class extends Migration
 
             $table->string('tipo_propiedad');
             $table->string('estado');
-
+            
+            $table->string('tipo_moneda', 3)->default('CLP');
 
             $table->unsignedBigInteger('id_propiedad');
             $table->foreign('id_propiedad')->references('id')->on('propiedads');

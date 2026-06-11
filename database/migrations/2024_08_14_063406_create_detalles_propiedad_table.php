@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detalles_propiedad', function (Blueprint $table) {
             $table->id();
 
-            $table->date('ano_construccion')->nullable();
+            $table->year('ano_construccion')->nullable();
             $table->integer('piso')->nullable();
             $table->integer('dormitorios')->nullable();
             $table->integer('banos')->nullable();

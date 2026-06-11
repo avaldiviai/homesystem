@@ -141,14 +141,30 @@
                                         </h5>
                                     </div>
                                 </div>
+                                
                                 <div class="form-group col-lg-4">
-                                    <label for="precioInput"><b>Precio Propiedad</b></label>
+                                    <label class="form-label"><b>Precio Propiedad</b></label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control mt-2" id="precioInput"
-                                            placeholder="Ej: $380.000" value="$"
-                                            oninput="this.value = '$' + this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.').replace(/^(\$\$)/, '$');" required>
+                                        <input type="text"
+                                            class="form-control mt-2"
+                                            id="precioInput"
+                                            placeholder="Precio"
+                                            oninput="formatearMiles(this)"
+                                            required>
+
+                                        <div class="input-group-text mt-2">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                    class="custom-control-input "
+                                                    id="switchUF">
+                                                <label class="custom-control-label" for="switchUF"></label>
+                                            </div>
+                                            <span id="monedaTexto" class="ms-2 fw-bold">CLP</span>
+                                        </div>
                                     </div>
+                                    <input type="hidden" id="tipo_moneda" value="CLP">
                                 </div>
+                            
 
                                 <div class="form-group col-lg-4">
                                     <label for="direccionInput" class="form-label"><b>Dirección de Propiedad</b></label>
@@ -164,12 +180,12 @@
                                 </div>
 
                                 <div class="form-group col-lg-4">
-                                    <label for="numeroCasaInput"><b>N° Casa / Departamento</b></label>
+                                    <label for="numeroCasaInput" class="form-label"><b>N° Casa / Departamento</b></label>
                                     <input type="text" class="form-control mt-2"
                                         id="numeroCasaInput"placeholder="Ej: 55" required>
                                 </div>
                                 <div class="form-group col-lg-4">
-                                    <label for="rolInput"><b>Rol</b></label>
+                                    <label for="rolInput" class="form-label"><b>Rol</b></label>
                                     <input type="text" class="form-control mt-2" id="rolInput"
                                         placeholder="Ej: 4308-25" required>
                                 </div>
@@ -536,10 +552,13 @@
                                                 <div class="col-12">
                                                     <div class="row">
                                                         <div class="form-group col-12 col-lg-6">
-                                                            <label for="ano_construccion" class="form-label"><b>Año
-                                                                    Construcción</b></label>
-                                                            <input type="date" class="form-control"
-                                                                id="ano_construccion" name="ano_construccion">
+                                                            <label for="ano_construccion" class="form-label">Año de Construcción</label>
+                                                            <select id="ano_construccion" class="form-control"  name="ano_construccion" required>
+                                                                <option value="">Seleccione año</option>
+                                                                @for ($y = date('Y'); $y >= 1970; $y--)
+                                                                    <option value="{{ $y }}">{{ $y }}</option>
+                                                                @endfor
+                                                            </select>
                                                         </div>
                                                         <div class="form-group col-12 col-lg-6">
                                                             <label for="piso" class="form-label"><b>Piso</b></label>
@@ -576,32 +595,35 @@
                                                     <select class="form-select" name="orientacion" id="orientacion">
                                                         <option value="" disabled selected>Seleccionar una opción
                                                         </option>
-                                                        <option value="Oriente">Oriente</option>
-                                                        <option value="Poniente">Poniente</option>
-                                                        <option value="Norte">Norte</option>
+                                                        <option value="N">Norte</option>
+                                                        <option value="NE">Noreste</option>
+                                                        <option value="E">Oriente (Este)</option>
+                                                        <option value="SE">Sureste</option>
+                                                        <option value="S">Sur</option>
+                                                        <option value="SO">Suroeste</option>
+                                                        <option value="O">Poniente (Oeste)</option>
+                                                        <option value="NO">Noroeste</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="form-group col-12 col-lg-6">
-                                                    <label for="cocina" class="form-label"><b>Cocina</b></label>
+                                                    <label for="cocina" class="form-label"><b>Tipo de conexión</b></label>
                                                     <select class="form-select" name="cocina" id="cocina">
                                                         <option value="" disabled selected>Seleccione una opción
                                                         </option>
-                                                        <option value="Eléctrica">Eléctrica</option>
-                                                        <option value="Gas">Gas</option>
-                                                        <option value="Conexión Gas">Conexión Gas</option>
+                                                        <option value="Eléctrica">Conexión eléctrica</option>
+                                                        <option value="Gas">Gas cilindro</option>
+                                                        <option value="Conexión Gas">Conexión cañeria</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="form-group col-12 col-lg-6">
                                                     <label for="logia" class="form-label"><b>Logia</b></label>
                                                     <select class="form-select" name="logia" id="logia">
-                                                        <option value="" disabled selected>Seleccione una opción
-                                                        </option>
-                                                        <option value="1">1</option>
-                                                        <!-- <option value="1 1/2">1 1/2</option> -->
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
+                                                        <option value="" disabled selected>Seleccione una opción</option>
+                                                        <option value="1">Si</option>
+                                                        <option value="2">No</option>
+                                                        <option value="3">Conexión para lavadora</option>
                                                     </select>
                                                 </div>
 
@@ -612,8 +634,17 @@
                                                         <option value="" disabled selected>Seleccione una opción
                                                         </option>
                                                         <option value="Calefont">Calefont</option>
-                                                        <option value="Thermo">Thermo</option>
+                                                        <option value="Termo">Termo</option>
                                                         <option value="Caldera">Caldera</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-12 col-lg-6 d-none" id="wrap_tipo_cocina_depto">
+                                                    <label for="tipo_cocina_depto" class="form-label"><b>Tipo de cocina (Depto)</b></label>
+                                                    <select class="form-select" name="tipo_cocina_depto" id="tipo_cocina_depto">
+                                                        <option value="" disabled selected>Seleccione una opción</option>
+                                                        <option value="Encimera">Encimera</option>
+                                                        <option value="Vitroceramica">Vitrocerámica</option>
+                                                        <input type="hidden" id="modal_tipo_propiedad">
                                                     </select>
                                                 </div>
                                             </div>
@@ -870,7 +901,7 @@
                         </form> -->
                     </div>
                 
-            </div>
+                </div>
             </div>
             <div class="modal-footer" style="background-color: #FFE2B2;">
                 <button type="button" id="btn_agregardetalle"
@@ -938,7 +969,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Agregar Mantenciones</h5>
+                        <h5 class="modal-title">Agregar Mantenimientos</h5>
                         <button type="button" class="btn-close" id="" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -962,7 +993,7 @@
                                         <input type="number" class="form-control " id="cadamantenimiento" placeholder="Ingrese la cantidad de meses para la mantención" required>
                                     </div>
                                     <div class="col-lg-12 text-end">
-                                        <button type="button" class="btn btn-primary" id="agregar-mantencion">Agregar Mantención</button>
+                                        <button type="button" class="btn btn-primary" id="agregar-mantencion">Agregar Mantenimiento</button>
                                     </div>
                                 </div>
                             </div>
@@ -1268,7 +1299,12 @@
                     const files = e.dataTransfer.files;
                     showPreview(files);
                 });
-
+                
+                let tipoMoneda = 'CLP';
+        
+                $("#switchUF").on("change", function () {
+                    tipoMoneda = this.checked ? 'UF' : 'CLP';
+                });
                 //Boton agregar arriendo
                 $("#btn_agregar").on('click', function(event) {
                     event.preventDefault();
@@ -1294,6 +1330,8 @@
                     var derechos_aseo = $("input[name='derechos_aseo']:checked").val();
                     var exclusividad = $("input[name='exclusividad']:checked").val();
                     var sello_verde = $("input[name='sello_verde']:checked").val();
+                    var tipo_moneda = tipoMoneda;
+
 
                     var monto = $("#montoInput").val();
                     var rol_est = $("#rolInputestacionamiento").val();
@@ -1331,6 +1369,7 @@
                     formData.append('derechos_aseo', derechos_aseo);
                     formData.append('exclusividad', exclusividad);
                     formData.append('sello_verde', sello_verde);
+                    formData.append('tipo_moneda', tipo_moneda);
 
                     formData.append('monto', monto);
                     formData.append('rol_est', rol_est);
@@ -1416,11 +1455,11 @@
                 ////MOSTRAR MODAL DE DETALLES ///
                 $(document).ready(function() {
                     let idPropiedad;
+                    let tipoVivienda;
 
                     $(".detalle-propiedad").on('click', function(event) {
                         event.preventDefault();
-                        idPropiedad = $(this).data('id'); // Obtén el ID del botón presionado
-                        console.log('propiedad: ' + idPropiedad);
+                        idPropiedad = $(this).data('id');
                         $("#Detalle_Propiedad").modal('show');
                     });
 
@@ -1920,7 +1959,7 @@
                         // Actualizar la lista visual
                         actualizarListaMantenciones();
                     } else {
-                        alert("Por favor, complete todos los campos antes de agregar una mantención.");
+                        alert("Por favor, complete todos los campos antes de agregar un mantenimiento.");
                     }
                 });
 
@@ -2025,7 +2064,55 @@
                     }
                 });
             });
+            function formatearMiles(input) {
+                // Obtener el valor actual sin caracteres no numéricos
+                let valor = input.value.replace(/\D/g, '');
+                
+                // Aplicar el formato de separador de miles
+                let valorFormateado = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                
+                // Asignar el valor formateado al campo
+                input.value = valorFormateado;
+            }
+            function toggleTipoCocinaDepto() {
+                const tipo = String($("#modal_tipo_propiedad").val() || '').toLowerCase();
+                const esDepto = (tipo === 'departamento' || tipo === 'depto');
 
+                if (esDepto) {
+                    $("#wrap_tipo_cocina_depto").removeClass("d-none");
+                    $("#tipo_cocina_depto").prop("required", true);
+                } else {
+                    $("#wrap_tipo_cocina_depto").addClass("d-none");
+                    $("#tipo_cocina_depto").prop("required", false).val("");
+                }
+
+            }
+
+
+            $(document).ready(function () {
+
+                // Cuando se abra el modal, ya debe venir seteado modal_tipo_propiedad desde el click
+                $("#Detalle_Propiedad").on("shown.bs.modal", function () {
+                    toggleTipoCocinaDepto();
+                });
+
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+
+                const switchUF = document.getElementById('switchUF');
+                const monedaTexto = document.getElementById('monedaTexto');
+
+                function actualizarMoneda() {
+                    monedaTexto.innerText = switchUF.checked ? 'UF' : 'CLP';
+                }
+
+                // Estado inicial
+                actualizarMoneda();
+
+                // Al cambiar el switch
+                switchUF.addEventListener('change', actualizarMoneda);
+            });
         </script>
     @endsection
     @section('css')
