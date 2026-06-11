@@ -17,20 +17,17 @@
                             Gestión de documentos, totales mensuales y resumen financiero
                         </p>
                     </div>
-
-                    {{-- ══════════════════════════════════════════════════════════════ --}}
-                    {{-- ── SECCIÓN DE PLANILLAS (filas: Info | Documentos | Total Mes) --}}
-                    {{-- ══════════════════════════════════════════════════════════════ --}}
+                    {{-- SECCIÓN  --}}
                     <div class="px-4 py-4">
 
-                        {{-- ─ Cabecera de columnas ─ --}}
+                        {{-- Cabecera de columnas --}}
                         <div class="pla-row-header d-none d-lg-grid mb-2">
                             <div class="pla-col-label"><i class="fa-solid fa-tag me-1"></i> Seccion</div>
                             <div class="pla-col-label"><i class="fa-solid fa-folder-open me-1"></i> Documentos</div>
                             <div class="pla-col-label"><i class="fa-solid fa-calculator me-1"></i> Total Mes</div>
                         </div>
 
-                        {{-- FILA 1 – 10% Administración --}}
+                        {{-- FILA 1 – Arriendo --}}
                         <div class="pla-row mb-3" data-tipo="1">
 
                             {{-- Col 1: Info --}}
@@ -54,11 +51,12 @@
                                 </div>
                                 <div class="pla-actions mt-2">
                                     <button class="pla-abtn pla-abtn--filled btn-agregar" data-tipo="1"
-                                        style="background:#E67E22;">
+                                        data-titulo="Arriendos" data-color="#E67E22" style="background:#E67E22;">
                                         <i class="fa-solid fa-plus"></i> Agregar
                                     </button>
                                     <button class="pla-abtn btn-ver" data-tipo="1"
-                                        style="border-color:#E67E22; color:#E67E22;">
+                                        style="border-color:#E67E22; color:#E67E22;" data-titulo="Arriendos"
+                                        data-color="#E67E22">
                                         <i class="fa-solid fa-eye"></i> Ver
                                     </button>
                                 </div>
@@ -67,12 +65,9 @@
                             {{-- Col 3: Total Mes --}}
                             <div class="pla-cell pla-cell--total">
                                 <div class="pla-total-inner">
-                                    <div class="pla-tlabel">Total ingresado</div>
-                                    <div class="pla-tvalue-raw" id="tv-raw-1">$ 0</div>
-                                    <div class="pla-tsep"></div>
-                                    <div class="pla-tlabel" style="color:#E67E22;">10% → Gráfico</div>
+                                    <div class="pla-tlabel">Total Acumulado</div>
                                     <div class="pla-tvalue" id="tv-1" style="color:#E67E22;">$ 0</div>
-                                    <div class="pla-tnota">Valor que se graficará</div>
+                                    <div class="pla-tnota">Suma de Arriendos</div>
                                 </div>
                                 <div class="pla-to-chart">
                                     <i class="fa-solid fa-arrow-right"></i> al gráfico
@@ -84,7 +79,7 @@
                         <div class="pla-divider"></div>
 
                         {{-- FILA 2 – Arriendos Mensuales --}}
-                       
+
                         <div class="pla-row mb-3" data-tipo="2">
 
                             <div class="pla-cell pla-cell--info" style="border-left-color:#2980B9;">
@@ -105,11 +100,11 @@
                                     <span style="font-size:.78rem;color:#aaa;">Sin archivos aún</span>
                                 </div>
                                 <div class="pla-actions mt-2">
-                                    <button class="pla-abtn pla-abtn--filled btn-agregar" data-tipo="2"
-                                        style="background:#2980B9;">
+                                    <button class="pla-abtn pla-abtn--filled btn-agregar" data-tipo="2" data-titulo="Aseos"
+                                        data-color="#2980B9" style="background:#2980B9;">
                                         <i class="fa-solid fa-plus"></i> Agregar
                                     </button>
-                                    <button class="pla-abtn btn-ver" data-tipo="2"
+                                    <button class="pla-abtn btn-ver" data-tipo="2" data-titulo="Aseos" data-color="#2980B9"
                                         style="border-color:#2980B9; color:#2980B9;">
                                         <i class="fa-solid fa-eye"></i> Ver
                                     </button>
@@ -130,63 +125,64 @@
                         </div><!-- /fila 2 -->
 
                         <div class="pla-divider"></div>
-                    {{-- SECCIÓN GRÁFICOS --}}
-                    <div class="px-4 pb-4">
-                        <div class="pla-chart-card">
+                        {{-- SECCIÓN GRÁFICOS --}}
+                        <div class="px-4 pb-4">
+                            <div class="pla-chart-card">
 
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
-                                <div>
-                                    <h5 class="fw-700 mb-0" style="color:#1a1a2e;">
-                                        <i class="fa-solid fa-chart-pie me-2" style="color:#E67E22;"></i>
-                                        Resumen Financiero Mensual
-                                    </h5>
-                                    <small class="text-muted">Basado en los totales ingresados por planilla</small>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+                                    <div>
+                                        <h5 class="fw-700 mb-0" style="color:#1a1a2e;">
+                                            <i class="fa-solid fa-chart-pie me-2" style="color:#E67E22;"></i>
+                                            Resumen Financiero Mensual
+                                        </h5>
+                                        <small class="text-muted">Basado en los totales ingresados por planilla</small>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="pla-toggle active" id="btn-pie" onclick="cambiarGrafico('pie')">
+                                            <i class="fa-solid fa-chart-pie me-1"></i> Pastel
+                                        </button>
+                                        <button class="pla-toggle" id="btn-bar" onclick="cambiarGrafico('bar')">
+                                            <i class="fa-solid fa-chart-bar me-1"></i> Barras
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="d-flex gap-2">
-                                    <button class="pla-toggle active" id="btn-pie" onclick="cambiarGrafico('pie')">
-                                        <i class="fa-solid fa-chart-pie me-1"></i> Pastel
-                                    </button>
-                                    <button class="pla-toggle" id="btn-bar" onclick="cambiarGrafico('bar')">
-                                        <i class="fa-solid fa-chart-bar me-1"></i> Barras
-                                    </button>
+
+                                {{-- Mini totales sobre gráfico --}}
+                                <div class="row g-3 mb-4" id="grafico-totales"></div>
+
+                                <div style="border-top:1px solid #f0ede8; margin-bottom:24px;"></div>
+
+                                <div style="position:relative; height:340px;">
+                                    <canvas id="graficoConsolidado"></canvas>
                                 </div>
+
+                                <div id="grafico-empty" class="text-center text-muted py-5" style="display:none;">
+                                    <i class="fa-solid fa-chart-pie fa-3x mb-3 opacity-25"></i>
+                                    <p class="mb-1 fw-600">Sin datos para mostrar</p>
+                                    <p class="mb-0" style="font-size:.85rem;">Agrega documentos con totales mensuales
+                                        para
+                                        ver el gráfico.</p>
+                                </div>
+
                             </div>
-
-                            {{-- Mini totales sobre gráfico --}}
-                            <div class="row g-3 mb-4" id="grafico-totales"></div>
-
-                            <div style="border-top:1px solid #f0ede8; margin-bottom:24px;"></div>
-
-                            <div style="position:relative; height:340px;">
-                                <canvas id="graficoConsolidado"></canvas>
-                            </div>
-
-                            <div id="grafico-empty" class="text-center text-muted py-5" style="display:none;">
-                                <i class="fa-solid fa-chart-pie fa-3x mb-3 opacity-25"></i>
-                                <p class="mb-1 fw-600">Sin datos para mostrar</p>
-                                <p class="mb-0" style="font-size:.85rem;">Agrega documentos con totales mensuales para
-                                    ver el gráfico.</p>
-                            </div>
-
                         </div>
-                    </div>
 
-                </div><!-- /flex-grow-1 -->
-                @include('layouts.footer')
-            </div>
-            {{-- <div class="col d-flex flex-column vh-100" style="padding:0;">
+                    </div><!-- /flex-grow-1 -->
+                    @include('layouts.footer')
+                </div>
+                {{-- <div class="col d-flex flex-column vh-100" style="padding:0;">
                 <div class="flex-grow-1">
                     {{-- Contenido --}}
-            <div class="container-fluid">
+                {{-- <div class="container-fluid">
                 <div class="row">
                     <div class="col-6 text-uppercase"
                         style="text-align: start; margin-top: 40px; margin-bottom: 20px; margin-start: 30px;color:black">
                         <h1>Arriendos</h1>
                     </div>
                 </div>
-            </div>
-            {{-- Tabla de arriendos --}}
-            <div class="container-fluid">
+                    </div>
+                {{-- Tabla de arriendos --}}
+                {{-- <div class="container-fluid">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-md-4 mb-4">
                         <div class="input-group mx-2" style="max-width: 400px;">
@@ -212,7 +208,6 @@
                                 <th>Arrendatario</th>
                                 <th>Propiedad</th>
                                 <th>Inicio de Arriendo</th>
-                                {{-- <th>Fecha Devolucion</th> --}}
                                 <th>Fecha Pago</th>
                                 <th>Valor Arriendo</th>
                                 <th>Comision</th>
@@ -227,7 +222,7 @@
                                     <td>{{ $arriendo->propiedad->tipo_vivienda }} -
                                         {{ $arriendo->propiedad->direccion }}</td>
                                     <td>{{ $arriendo->fecha_entrega }}</td>
-                                    {{-- <td>{{ $arriendo->fecha_devolucion }}</td> --}}
+                                    
                                     <td>{{ $arriendo->fecha_pago }}</td>
                                     <td>$ {{ $arriendo->valor_real }}</td>
                                     <td>{{ $arriendo->comision->porcentaje }}</td>
@@ -244,17 +239,14 @@
                         </tbody>
                     </table>
                 </div>
+            </div> --}}
             </div>
         </div>
-        @include('layouts.footer')
-    </div> --}}
-    </div>
-    </div>
 
-    {{-- SECCION DE MODALES --}}
+        {{-- SECCION DE MODALES --}}
 
-    <!-- Modal agregar nuevo arriendo-->
-    <div class="modal fade" id="agregarArriendo" tabindex="-1" data-bs-backdrop="static"
+        <!-- Modal agregar nuevo arriendo-->
+        {{-- <div class="modal fade" id="agregarArriendo" tabindex="-1" data-bs-backdrop="static"
         aria-labelledby="agregarArriendoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -395,28 +387,21 @@
             </div>
         </div>
         </form>
-    </div>
-    <ul class="text-uppercase mt-4" id="lista-Datos">
+    </div> --}}
+        {{-- <ul class="text-uppercase mt-4" id="lista-Datos">
         <!-- Lista de documentos cargados -->
-    </ul>
-    <div class="modal-footer">
+    </ul> --}}
+        {{-- <div class="modal-footer">
 
         <div class="col-md-12 d-flex justify-content-end">
             <button type="button" id="btn_agregar" class="btn btn-primary m-2">Guardar</button>
             <button type="button" id="btn_cerrar_agregar" class="btn btn-danger m-2"
                 data-bs-dismiss="modal">Cerrar</button>
         </div>
+    </div> --}}
     </div>
-    </div>
-    </div>
-    </form>
-    </div>
-    </div>
-    </div>
-    </div>
-
     <!-- Modal editar arriendo-->
-    <div class="modal fade" id="editarArriendo" tabindex="-1" data-bs-backdrop="static" tabindex="-1"
+    {{-- <div class="modal fade" id="editarArriendo" tabindex="-1" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="editarArriendoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content modal-lg">
@@ -438,7 +423,6 @@
                                             <option value="{{ $pro->id }}">{{ $pro->tipo_vivienda }} -
                                                 {{ $pro->direccion }}</option>
                                         @endforeach
-                                        {{-- <option value="otros">Otros</option> --}}
                                     </select>
                                 </div>
 
@@ -503,7 +487,7 @@
                                         @foreach ($arrendatario as $arren)
                                             <option value="{{ $arren->id }}">{{ $arren->nombre }}</option>
                                         @endforeach
-                                        {{-- <option value="otros">Otros</option> --}}
+                                        
                                     </select>
                                 </div>
                                 <div class="form-group mb-3 col-4">
@@ -514,7 +498,7 @@
                                             <option value="{{ $com->id }}">{{ $com->porcentaje }}
                                             </option>
                                         @endforeach
-                                        {{-- <option value="otros">Otros</option> --}}
+                                     
                                     </select>
                                 </div>
                                 <div class="form-group mb-3 col-lg-4">
@@ -541,10 +525,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Modal Editar contrato-->
-    <div class="modal fade" id="ModificarArchivoModal" tabindex="-1" aria-labelledby="ModificarArchivoLabel"
+    {{-- <div class="modal fade" id="ModificarArchivoModal" tabindex="-1" aria-labelledby="ModificarArchivoLabel"
         aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
@@ -621,120 +605,173 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <div class="modal fade" id="modalAgregarPlanilla" tabindex="-1">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content border-0">
+
+                <div class="modal-header text-white" id="headerAgregar" style="background:#E67E22;">
+
+                    <div>
+                        <h4 class="mb-0">
+                            Agregar - <span id="tituloAgregar"></span>
+                        </h4>
+                    </div>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <form id="formPlanilla" enctype="multipart/form-data">
+
+                    @csrf
+
+                    <input type="hidden" name="tipo" id="tipo_planilla">
+
+                    <div class="modal-body">
+
+                        <div class="row">
+
+                            <div class="col-md-4">
+
+                                <label class="form-label fw-bold">
+                                    FECHA
+                                </label>
+
+                                <input type="date" name="fecha" class="form-control" required>
+
+                            </div>
+
+                            <div class="col-md-8">
+
+                                <label class="form-label fw-bold">
+                                    ARCHIVOS
+                                </label>
+
+                                <input type="file" name="archivos[]" multiple class="form-control" required>
+
+                                <small class="text-muted">
+                                    xlsx, xls, csv, pdf
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mt-4">
+
+                            <label class="form-label fw-bold">
+                                TOTAL MES ($)
+                            </label>
+
+                            <input type="text" name="total_mes" id="total_mes" class="form-control"
+                                placeholder="Ej: 1.250.000">
+
+                        </div>
+
+                        <div class="mt-3 text-warning">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            Se utilizará este valor para los gráficos.
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button type="submit" class="btn text-white" id="btnGuardarPlanilla">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <!-- modal exito -->
-    <div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="successLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="background: rgba(0, 0, 0, 0.0); border: none; width: 700px;">
-                <div class="modal-header alert alert-success" role="alert" style="border: none;">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-2">
-                                <lord-icon src="https://cdn.lordicon.com/oqdmuxru.json" trigger="loop" delay="2000"
-                                    style="width:70px;height:70px"></lord-icon>
-                            </div>
-                            <div class="col-8 d-flex justify-content-center align-items-center">
-                                <p id="texto_success" class="text-uppercase">Datos Guardados con exito
-                                </p>
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn-close d-flex justify-content-end"
-                                    id="close_success"></button>
-                            </div>
-                        </div>
+    <div class="modal fade" id="modalVerPlanilla" tabindex="-1">
+
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <div class="modal-content border-0">
+
+                <div class="modal-header text-white" id="headerVer" style="background:#E67E22;">
+
+                    <div>
+
+                        <h4 class="mb-0">
+                            <span id="tituloVer"></span>
+                        </h4>
+
+                        <small>
+                            Historial completo
+                        </small>
+
                     </div>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
+                    </button>
+
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- modal error -->
-    <div class="modal fade" id="modalerror" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modalerrorLabel" aria-hidden="true">
-        <div class="modal-dialog"> <!-- Centrado en la pantalla -->
-            <div class="modal-content" style="background: rgba(0, 0, 0, 0.0); border: none; width: 700px;">
-                <div class="modal-header alert alert-danger" role="alert" style="border: none;">
-                    <div class="container">
-                        <div class="row">
-                            <!-- Icono de error animado -->
-                            <div class="col-2">
-                                <lord-icon src="https://cdn.lordicon.com/jnzhohhs.json" trigger="loop" delay="2000"
-                                    style="width:70px;height:70px">
-                                </lord-icon>
-                            </div>
-                            <!-- Mensaje de error centrado -->
-                            <div class="col-8 d-flex justify-content-center align-items-center">
-                                <p id="texto_error" class="text-uppercase text-center m-0">Ha Ocurrido un Error al
-                                    Guardar.</p>
-                            </div>
-                            <!-- Botón de cierre -->
-                            <div class="col-2 d-flex justify-content-end align-items-center">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                    id="cerrar_error"></button>
-                            </div>
-                        </div>
+
+                <div class="modal-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>#</th>
+                                    <th>Fecha</th>
+                                    <th>Archivo</th>
+                                    <th>Total Mes</th>
+                                    <th width="150">
+                                        Acciones
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="tablaPlanillas">
+
+                            </tbody>
+
+                        </table>
+
                     </div>
+
                 </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+
+                        Cerrar
+
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-    </div>
-    <!-- modal info -->
-    <div class="modal fade" id="modalinfo" tabindex="-1" aria-labelledby="modalinfoLabel" aria-hidden="true"
-        data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-lg">
-            <div class="alert alert-danger d-flex align-items-center" id="alerta" role="alert">
-                <div class="modal-content" style="background-color: rgb(0,0,0,0.0); border:none">
-                    <h5 class="m-4 text-uppercase text-center">¿Seguro/a que quieres eliminar Arriendo?</h2>
-                        <div class="modalfooter d-flex justify-content-center">
-                            <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" id="confirmDelete" class="btn btn-secondary m-2">Eliminar</button>
-                        </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="eliminarContratoModal" tabindex="-1" aria-labelledby="eliminarContratoLabel"
-        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-lg">
-            <div class="alert alert-danger d-flex align-items-center" id="alerta" role="alert">
-                <div class="modal-content" style="background-color: rgb(0,0,0,0.0); border:none">
-                    <h5 class="m-4 text-uppercase text-center">¿Seguro/a que quieres eliminar el contrato?</h2>
-                        <div class="modalfooter d-flex justify-content-center">
-                            <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" id="confirmarEliminarContratoBtn"
-                                class="btn btn-secondary m-2">Eliminar</button>
-                        </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- modal exito -->
-    <div class="modal fade" id="modalexito" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modalexitoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="background: rgba(0, 0, 0, 0.0); border: none; width: 700px;">
-                <div class="modal-header alert alert-success" role="alert" style="border: none;">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-2">
-                                <lord-icon src="https://cdn.lordicon.com/oqdmuxru.json" trigger="loop" delay="2000"
-                                    style="width:70px;height:70px"></lord-icon>
-                            </div>
-                            <div class="col-8 d-flex justify-content-center align-items-center">
-                                <p id="texto_success" class="text-uppercase">Datos Guardados con exito
-                                </p>
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn-close d-flex justify-content-end"
-                                    id="close_success_exito"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
 @section('css')
@@ -1280,6 +1317,58 @@
                 }
             })
             console.log('Listo para trabajar');
+
+            $(document).on('click', '.btn-agregar', function() {
+
+                let tipo = $(this).data('tipo');
+                let titulo = $(this).data('titulo');
+                let color = $(this).data('color');
+
+                $('#tipo_planilla').val(tipo);
+
+                $('#tituloAgregar').text(titulo);
+
+                $('#headerAgregar').css('background', color);
+
+                $('#btnGuardarPlanilla').css('background', color);
+
+                $('#modalAgregarPlanilla').modal('show');
+
+            });
+
+            $(document).on('click', '.btn-ver', function() {
+
+                let titulo = $(this).closest('.pla-row')
+                    .find('.pla-cell-title')
+                    .text();
+
+                let color = $(this).css('color');
+
+                $('#tituloVer').text(titulo);
+                $('#headerVer').css('background', color);
+
+                let modal = new bootstrap.Modal(
+                    document.getElementById('modalVerPlanilla')
+                );
+
+                modal.show();
+            });
+
+            $(document).on('click', '.btn-ver', function() {
+
+                let tipo = $(this).data('tipo');
+                let titulo = $(this).data('titulo');
+                let color = $(this).data('color');
+
+                $('#tituloVer').text(titulo);
+
+                $('#headerVer').css('background', color);
+
+                cargarPlanillas(tipo);
+
+                $('#modalVerPlanilla').modal('show');
+
+            });
 
             ////////////////////////////BUSCADOR/////////////////////////
             $("#buscador_cnn").on("keyup", function() {
