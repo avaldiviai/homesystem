@@ -14,12 +14,14 @@ class Arrendatario extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'nombre',
-        'rut',
-        'telefono',
-        'correo',
-        'direccion',        
-        'ciudad',
-        'estado',
-    ];
+    'nombre',
+    'rut',
+    'telefono',
+    'correo',
+    'direccion',
+    'ciudad',
+    'estado',
+    'profesion',
+    'fecha_pago',
+];
 }

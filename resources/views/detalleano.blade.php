@@ -169,19 +169,34 @@
                             <div class="col-lg-12 mb-3">
                                 <label class="fw-bold small">Valor actual del arriendo</label>
                                 <input type="number" id="valor_arriendo" class="form-control form-control-sm"
-                                       value="{{ $precios->ano_corrido ?? '' }}" placeholder="Ej: 450000">
+                                    value="{{ $precios->ano_corrido ?? '' }}" placeholder="Ej: 450000">
+                            </div>
+                            {{-- 👇 CAMPOS NUEVOS --}}
+                            <div class="col-lg-6 mb-3">
+                                <label class="fw-bold small">Gastos Comunes</label>
+                                <input type="number" id="gastos_comunes" class="form-control form-control-sm"
+                                    value="{{ $arriendos->first()->gastos_comunes ?? '' }}" placeholder="Ej: 50000">
                             </div>
                             <div class="col-lg-6 mb-3">
+                                <label class="fw-bold small">Valor Real</label>
+                                <input type="number" id="valor_real" class="form-control form-control-sm"
+                                    value="{{ $arriendos->first()->valor_real ?? '' }}" placeholder="Ej: 500000">
+                            </div>
+                            {{-- 👆 CAMPOS NUEVOS --}}
+                            <div class="col-lg-6 mb-3">
                                 <label class="fw-bold small">Fecha inicio arriendo</label>
-                                <input type="date" id="fecha_inicio" class="form-control form-control-sm" value="2025-08-17">
+                                <input type="date" id="fecha_inicio" class="form-control form-control-sm"
+                                    value="{{ $arriendos->first()->fecha_entrega ?? '' }}">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="fw-bold small">Próximo reajuste</label>
-                                <input type="date" id="proximo_reajuste" class="form-control form-control-sm" value="2026-08-17">
+                                <input type="date" id="proximo_reajuste" class="form-control form-control-sm"
+                                    value="{{ $arriendos->first()->fecha_reajuste ?? '' }}">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="fw-bold small">Reajuste automático</label>
-                                <input type="text" class="form-control form-control-sm" value="Se reajusta cada 1 año automáticamente" readonly>
+                                <input type="text" class="form-control form-control-sm"
+                                    value="Se reajusta cada 1 año automáticamente" readonly>
                             </div>
                         </div>
 
@@ -251,13 +266,28 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6 text-dark">
+                                    {{-- EMPRESA + NÚMERO LUZ --}}
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label>Empresa Luz</label>
+                                        <input type="text" id="empresa_luzedit" class="form-control form-control-sm" value="{{ $detalles->empresa_luz }}">
+                                    </div>
                                     <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
                                         <label>N° Cliente Luz</label>
                                         <input type="text" id="numero_luzedit" class="form-control form-control-sm" value="{{ $detalles->numero_luz }}">
                                     </div>
+                                    {{-- EMPRESA + NÚMERO AGUA --}}
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label>Empresa Agua</label>
+                                        <input type="text" id="empresa_aguaedit" class="form-control form-control-sm" value="{{ $detalles->empresa_agua }}">
+                                    </div>
                                     <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
                                         <label>N° Cliente Agua</label>
                                         <input type="text" id="numero_aguaedit" class="form-control form-control-sm" value="{{ $detalles->numero_agua }}">
+                                    </div>
+                                    {{-- EMPRESA + NÚMERO GAS --}}
+                                    <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
+                                        <label>Empresa Gas</label>
+                                        <input type="text" id="empresa_gasedit" class="form-control form-control-sm" value="{{ $detalles->empresa_gas }}">
                                     </div>
                                     <div class="mb-2 p-2 rounded shadow-sm" style="background-color:#F5DEB3;">
                                         <label>N° Cliente Gas</label>
@@ -304,19 +334,19 @@
                             <div class="col-lg-6 mb-3">
                                 <label>Amoblado</label>
                                 <div class="btn-group btn-group-sm w-100 shadow-sm">
-                                    <input type="radio" class="btn-check" name="am_op" id="am_si">
+                                    <input type="radio" class="btn-check" name="am_op" id="am_si" {{ ($detallespropiedad->amoblado ?? '') == 'si' ? 'checked' : '' }}>
                                     <label class="btn btn-dark" for="am_si">SÍ</label>
-                                    <input type="radio" class="btn-check" name="am_op" id="am_no" checked>
+                                    <input type="radio" class="btn-check" name="am_op" id="am_no" {{ ($detallespropiedad->amoblado ?? 'no') != 'si' ? 'checked' : '' }}>
                                     <label class="btn btn-dark" for="am_no">NO</label>
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label>Elementos Entregados</label>
-                                <input type="text" id="elementos_entregados" class="form-control form-control-sm">
+                                <input type="text" id="elementos_entregados" class="form-control form-control-sm" value="{{ $detallespropiedad->elementos_entregados ?? '' }}">
                             </div>
                             <div class="col-lg-12">
                                 <label>Observaciones adicionales</label>
-                                <textarea id="observaciones_caracteristicas" class="form-control form-control-sm" rows="2"></textarea>
+                                <textarea id="observaciones_caracteristicas" class="form-control form-control-sm" rows="2">{{ $detallespropiedad->observaciones ?? '' }}</textarea>
                             </div>
                         </div>
 
@@ -350,14 +380,15 @@
                             <div class="col-lg-6 mb-3">
                                 <label>Profesión u Oficio</label>
                                 <input type="text" id="profesion_arrendatario" class="form-control form-control-sm"
+                                       value="{{ $arrendatario->profesion ?? '' }}"
                                        placeholder="Ej: Ingeniero, Contador...">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label>Fecha de Pago</label>
                                 <select id="fecha_pago" class="form-select form-select-sm">
-                                    <option value="" disabled selected>Seleccione día hábil</option>
+                                    <option value="" disabled {{ !($arrendatario->fecha_pago ?? null) ? 'selected' : '' }}>Seleccione día hábil</option>
                                     @for($d = 1; $d <= 28; $d++)
-                                        <option value="{{ $d }}">Día {{ $d }}</option>
+                                        <option value="{{ $d }}" {{ ($arrendatario->fecha_pago ?? 0) == $d ? 'selected' : '' }}>Día {{ $d }}</option>
                                     @endfor
                                 </select>
                                 <small class="text-white-50" style="font-size:.75rem;">Día hábil del mes de pago</small>
@@ -365,32 +396,8 @@
 
                             <div class="col-lg-12 mt-2 mb-2">
                                 <div class="col-lg-5 bg-black text-white text-center rounded-pill shadow">
-                                    <h5 class="mb-0 py-1">Servicios Básicos</h5>
+                                    <h5 class="mb-0 py-1">Archivos de Información</h5>
                                 </div>
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                <label>Empresa Luz</label>
-                                <input type="text" id="empresa_luz_arr" class="form-control form-control-sm" placeholder="Ej: CGE">
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                <label>N° Cliente Luz</label>
-                                <input type="text" id="numero_luz_arr" class="form-control form-control-sm" placeholder="Ej: 123456789">
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                <label>Empresa Agua</label>
-                                <input type="text" id="empresa_agua_arr" class="form-control form-control-sm" placeholder="Ej: Aguas del Valle">
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                <label>N° Cliente Agua</label>
-                                <input type="text" id="numero_agua_arr" class="form-control form-control-sm" placeholder="Ej: 987654321">
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                <label>Empresa Gas</label>
-                                <input type="text" id="empresa_gas_arr" class="form-control form-control-sm" placeholder="Ej: Abastible">
-                            </div>
-                            <div class="col-lg-4 mb-3">
-                                <label>N° Cliente Gas</label>
-                                <input type="text" id="numero_gas_arr" class="form-control form-control-sm" placeholder="Ej: 456789123">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label>Adjuntar Información Cliente</label>
@@ -427,6 +434,10 @@
                                             <label class="label-mantenimiento">Persona a Cargo</label>
                                             <input type="text" id="persona_cargo_nueva" class="form-control input-mantenimiento" placeholder="Ej: Juan Pérez">
                                         </div>
+                                        <div class="mb-3">
+                                            <label class="label-mantenimiento">Próxima Mantención</label>
+                                            <input type="date" id="proxima_mantencion_nueva" class="form-control input-mantenimiento">
+                                        </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
@@ -436,16 +447,16 @@
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="mb-3">
-                                            <label class="label-mantenimiento">Archivo</label>
+                                            <label class="label-mantenimiento">Archivo (doc/pdf)</label>
                                             <input type="file" id="archivo_trabajo" class="form-control archivo-mantenimiento">
                                         </div>
                                         <div class="mb-3">
                                             <label class="label-mantenimiento">Fotos</label>
-                                            <input type="file" multiple id="fotos_trabajo" class="form-control archivo-mantenimiento">
+                                            <input type="file" multiple id="fotos_trabajo" class="form-control archivo-mantenimiento" accept="image/*">
                                         </div>
                                         <div class="mb-3">
                                             <label class="label-mantenimiento">Videos</label>
-                                            <input type="file" multiple id="videos_trabajo" class="form-control archivo-mantenimiento">
+                                            <input type="file" multiple id="videos_trabajo" class="form-control archivo-mantenimiento" accept="video/*">
                                         </div>
                                         <div class="d-flex justify-content-end mt-3">
                                             <button type="button" id="btn_agregar_trabajo" class="btn btn-dark rounded-pill px-4">
@@ -679,16 +690,33 @@ $(document).ready(function () {
     // TRABAJOS DE MANTENIMIENTO
     // ============================================================
     var trabajosAgregados = [];
+    // Guardar archivos por índice de trabajo
+    var trabajosArchivos = [];
 
     $('#btn_agregar_trabajo').on('click', function () {
-        var tipo = $('#tipo_trabajo').val().trim();
-        var fecha = $('#fecha_mantencion_nueva').val();
+        var tipo        = $('#tipo_trabajo').val().trim();
+        var fecha       = $('#fecha_mantencion_nueva').val();
         var personaCargo = $('#persona_cargo_nueva').val().trim();
         var descripcion = $('#descripcion_trabajo_nueva').val().trim();
-        if (!tipo || !fecha || !descripcion) { alert('Por favor completa al menos el Tipo, Fecha y Descripción.'); return; }
-        trabajosAgregados.push({ tipo, fecha, persona_cargo: personaCargo, descripcion });
+        var proxima     = $('#proxima_mantencion_nueva').val();
+
+        if (!tipo || !fecha || !descripcion) {
+            alert('Por favor completa al menos el Tipo, Fecha y Descripción.');
+            return;
+        }
+
+        // Guardar referencia a los archivos del input en este momento
+        var archivos = {
+            archivo: $('#archivo_trabajo')[0].files[0] || null,
+            fotos:   Array.from($('#fotos_trabajo')[0].files),
+            videos:  Array.from($('#videos_trabajo')[0].files),
+        };
+
+        trabajosAgregados.push({ tipo, fecha, persona_cargo: personaCargo, descripcion, proxima });
+        trabajosArchivos.push(archivos);
+
         renderizarTrabajos();
-        $('#tipo_trabajo, #fecha_mantencion_nueva, #persona_cargo_nueva, #descripcion_trabajo_nueva').val('');
+        $('#tipo_trabajo, #fecha_mantencion_nueva, #persona_cargo_nueva, #descripcion_trabajo_nueva, #proxima_mantencion_nueva').val('');
         $('#archivo_trabajo, #fotos_trabajo, #videos_trabajo').val('');
     });
 
@@ -696,17 +724,25 @@ $(document).ready(function () {
         var $cont = $('#lista_trabajos');
         $cont.empty();
         if (trabajosAgregados.length === 0) return;
-        var $tabla = $('<div class="table-responsive"><table class="table table-bordered table-sm bg-white text-dark rounded"><thead class="table-dark text-center"><tr><th>#</th><th>Tipo</th><th>Fecha</th><th>Persona a Cargo</th><th>Descripción</th><th>Eliminar</th></tr></thead><tbody id="tbody_trabajos"></tbody></table></div>');
+        var $tabla = $('<div class="table-responsive"><table class="table table-bordered table-sm bg-white text-dark rounded"><thead class="table-dark text-center"><tr><th>#</th><th>Tipo</th><th>Fecha</th><th>Persona a Cargo</th><th>Descripción</th><th>Próxima</th><th>Archivos</th><th>Eliminar</th></tr></thead><tbody id="tbody_trabajos"></tbody></table></div>');
         trabajosAgregados.forEach(function(t, i) {
+            var arch = trabajosArchivos[i];
+            var totalArchivos = (arch.archivo ? 1 : 0) + arch.fotos.length + arch.videos.length;
             var $fila = $('<tr>');
             $fila.append($('<td class="text-center">').text(i + 1));
             $fila.append($('<td>').text(t.tipo));
             $fila.append($('<td class="text-center">').text(t.fecha));
             $fila.append($('<td class="text-center">').text(t.persona_cargo || '—'));
             $fila.append($('<td>').text(t.descripcion));
+            $fila.append($('<td class="text-center">').text(t.proxima || '—'));
+            $fila.append($('<td class="text-center">').text(totalArchivos > 0 ? totalArchivos + ' archivo(s)' : '—'));
             $fila.append($('<td class="text-center">').append(
                 $('<button type="button" class="btn btn-danger btn-sm rounded-pill">').html('<i class="fas fa-trash-alt"></i>')
-                    .on('click', function() { trabajosAgregados.splice(i, 1); renderizarTrabajos(); })
+                    .on('click', function() {
+                        trabajosAgregados.splice(i, 1);
+                        trabajosArchivos.splice(i, 1);
+                        renderizarTrabajos();
+                    })
             ));
             $tabla.find('#tbody_trabajos').append($fila);
         });
@@ -714,7 +750,7 @@ $(document).ready(function () {
     }
 
     // ============================================================
-    // GUARDAR CAMBIOS — solo campos que existen en esta vista
+    // GUARDAR CAMBIOS
     // ============================================================
     $('#guardarCambios').off().on('click', function(e) {
         e.preventDefault();
@@ -728,32 +764,59 @@ $(document).ready(function () {
         formData.append('ciudad',          $('#ciudadedit').val());
         formData.append('rol',             $('#roledit').val());
         formData.append('tipo_vivienda',   $('#viviendaedit').val());
+
+        // Servicios básicos — empresa + número (CORREGIDO: ahora se envían las empresas)
+        formData.append('empresa_luz',     $('#empresa_luzedit').val());
         formData.append('numero_luz',      $('#numero_luzedit').val());
+        formData.append('empresa_agua',    $('#empresa_aguaedit').val());
         formData.append('numero_agua',     $('#numero_aguaedit').val());
+        formData.append('empresa_gas',     $('#empresa_gasedit').val());
         formData.append('numero_gas',      $('#numero_gasedit').val());
 
         // Características
-        formData.append('dormitorios',     $('#dormitorios_edit').val());
-        formData.append('banos',           $('#banos_edit').val());
-        formData.append('mt2_total',       $('#mt2_total_edit').val());
-        formData.append('estacionamiento', $('#numeroEstacionamientoInput').val());
-        formData.append('bodega',          $('#numeroBodegaInput').val());
-        formData.append('amoblado',        $('#am_si').is(':checked') ? 'si' : 'no');
+        formData.append('dormitorios',               $('#dormitorios_edit').val());
+        formData.append('banos',                     $('#banos_edit').val());
+        formData.append('mt2_total',                 $('#mt2_total_edit').val());
+        formData.append('estacionamiento',           $('#numeroEstacionamientoInput').val());
+        formData.append('bodega',                    $('#numeroBodegaInput').val());
+        formData.append('amoblado',                  $('#am_si').is(':checked') ? 'si' : 'no');
+        formData.append('elementos_entregados',      $('#elementos_entregados').val());      // CORREGIDO
+        formData.append('observaciones',             $('#observaciones_caracteristicas').val()); // CORREGIDO
 
+        
         // Resumen arriendo
-        formData.append('valor_arriendo',  $('#valor_arriendo').val());
+        formData.append('valor_arriendo',   $('#valor_arriendo').val());
+        formData.append('gastos_comunes',   $('#gastos_comunes').val());   
+        formData.append('valor_real',       $('#valor_real').val());      
+        formData.append('fecha_inicio',     $('#fecha_inicio').val());
+        formData.append('proximo_reajuste', $('#proximo_reajuste').val());
 
         // Arrendatario
         formData.append('nombre_arrendatario',   $('#nombre_arrendatario').val());
         formData.append('rut_arrendatario',      $('#rut_arrendatario').val());
         formData.append('telefono_arrendatario', $('#telefono_arrendatario').val());
         formData.append('correo_arrendatario',   $('#correo_arrendatario').val());
+        formData.append('profesion_arrendatario', $('#profesion_arrendatario').val()); // CORREGIDO
+        formData.append('fecha_pago',            $('#fecha_pago').val());              // CORREGIDO
 
         // Propietarios nuevos
         formData.append('PropietariosAgregados', JSON.stringify(PropietariosAgregados));
 
-        // Trabajos
+        // Trabajos — metadatos JSON
         formData.append('trabajos', JSON.stringify(trabajosAgregados));
+
+        // Archivos de cada trabajo (CORREGIDO: ahora se envían)
+        trabajosArchivos.forEach(function(arch, i) {
+            if (arch.archivo) {
+                formData.append('trabajo_archivo_' + i, arch.archivo);
+            }
+            arch.fotos.forEach(function(f, fi) {
+                formData.append('trabajo_fotos_' + i + '[]', f);
+            });
+            arch.videos.forEach(function(v, vi) {
+                formData.append('trabajo_videos_' + i + '[]', v);
+            });
+        });
 
         // Sección imágenes
         formData.append('imagenes_seccion', $('#seccion-subir').val());
@@ -782,28 +845,28 @@ $(document).ready(function () {
             contentType: false
         })
         .done(function() {
-    $('#overlay-spinner').hide();
-    $('#overlay-icono').show();
-    $('#overlay-texto').text('¡Cambios guardados correctamente!');
-    setTimeout(function() {
-        $('#loadingOverlay').hide();
-        $('#overlay-spinner').show();
-        $('#overlay-icono').hide();
-        $('#overlay-texto').text('Guardando cambios...');
-    }, 2000);
-})
-.fail(function(xhr) {
-    $('#overlay-spinner').hide();
-    $('#overlay-icono').html('<i class="fas fa-times-circle fa-3x text-danger"></i>').show();
-    var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Error al guardar. Intente nuevamente.';
-    $('#overlay-texto').text(msg);
-    setTimeout(function() {
-        $('#loadingOverlay').hide();
-        $('#overlay-spinner').show();
-        $('#overlay-icono').html('<i class="fas fa-check-circle fa-3x text-success"></i>').hide();
-        $('#overlay-texto').text('Guardando cambios...');
-    }, 3000);
-});
+            $('#overlay-spinner').hide();
+            $('#overlay-icono').show();
+            $('#overlay-texto').text('¡Cambios guardados correctamente!');
+            setTimeout(function() {
+                $('#loadingOverlay').hide();
+                $('#overlay-spinner').show();
+                $('#overlay-icono').hide();
+                $('#overlay-texto').text('Guardando cambios...');
+            }, 2000);
+        })
+        .fail(function(xhr) {
+            $('#overlay-spinner').hide();
+            $('#overlay-icono').html('<i class="fas fa-times-circle fa-3x text-danger"></i>').show();
+            var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Error al guardar. Intente nuevamente.';
+            $('#overlay-texto').text(msg);
+            setTimeout(function() {
+                $('#loadingOverlay').hide();
+                $('#overlay-spinner').show();
+                $('#overlay-icono').html('<i class="fas fa-check-circle fa-3x text-success"></i>').hide();
+                $('#overlay-texto').text('Guardando cambios...');
+            }, 3000);
+        });
     });
 
     // ============================================================

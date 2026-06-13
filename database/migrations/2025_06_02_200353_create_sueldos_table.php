@@ -6,28 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('sueldos', function (Blueprint $table) {
             $table->id();
 
-            $table->string('sueldos');
-            $table->text('documentos');
+            $table->decimal('total_mes', 15, 2)->nullable();   // monto del sueldo
+            $table->string('nombre_archivo')->nullable();       // nombre original del archivo
+            $table->string('documento')->nullable();            // ruta guardada
             $table->date('fecha');
 
-            $table->unsignedBigInteger('id_user')->nullable(false);
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('sueldos');

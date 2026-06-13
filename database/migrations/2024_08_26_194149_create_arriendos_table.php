@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('arriendos', function (Blueprint $table) {
             $table->id();
 
-            $table->date('fecha_devolucion')->nullable(true);
+            $table->date('fecha_devolucion')->nullable();
             $table->date('fecha_entrega')->nullable(false);
+            $table->date('fecha_reajuste')->nullable();
             $table->string('valor_arriendo')->nullable();
             $table->string('mes_garantia')->nullable();
-            $table->string('gastos_comunes')->nullable(false);
-            $table->string('valor_real')->nullable(false);
-            $table->string('reajuste_ipc')->nullable;
-            $table->date('fecha_pago')->nullable(false);
+            $table->string('gastos_comunes')->nullable();
+            $table->string('valor_real')->nullable();
+            $table->string('reajuste_ipc')->nullable();
+            // fecha_pago eliminada — vive en la tabla arrendatarios
             $table->tinyInteger('estado')->nullable(false);
 
             $table->unsignedBigInteger('id_propiedad')->nullable(false);
@@ -30,10 +31,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_arrendatario')->nullable(false);
             $table->foreign('id_arrendatario')->references('id')->on('arrendatarios');
 
-            $table->unsignedBigInteger('id_comision')->nullable(false);
+            $table->unsignedBigInteger('id_comision')->nullable();
             $table->foreign('id_comision')->references('id')->on('comisions');
 
-            $table->unsignedBigInteger('id_estadopagos')->nullable(false);
+            $table->unsignedBigInteger('id_estadopagos')->nullable();
             $table->foreign('id_estadopagos')->references('id')->on('estado_pagos');
 
             $table->timestamps();

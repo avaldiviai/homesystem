@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('correo')->nullable();
             $table->string('direccion')->nullable();
             $table->string('ciudad')->nullable();
+            $table->string('profesion')->nullable();
+            $table->unsignedTinyInteger('fecha_pago')->nullable();
 
             $table->tinyInteger('estado')->nullable(false);
 

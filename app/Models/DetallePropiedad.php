@@ -9,15 +9,15 @@ class DetallePropiedad extends Model
 {
     use HasFactory;
 
-    protected $table = 'detalles_propiedad'; // Especifica la tabla
+    protected $table = 'detalles_propiedad';
 
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'año_construccion',
+        'ano_construccion',
         'piso',
         'dormitorios',
-        'baños',
+        'banos',
         'orientacion',
         'cocina',
         'logia',
@@ -36,6 +36,15 @@ class DetallePropiedad extends Model
         'sala_multiuso',
         'gimnasio',
         'ciclovia',
+        'area_verde',
+        'piscina',
+        'gasto_comun',
+        'descripcion',
+        'tipo_propiedad',
+        'id_propiedad',
+        'amoblado',
+        'elementos_entregados',
+        'observaciones',
     ];
 
     public function propiedad()

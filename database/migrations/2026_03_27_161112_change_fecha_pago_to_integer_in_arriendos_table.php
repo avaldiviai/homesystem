@@ -7,24 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * fecha_pago fue eliminada de la tabla arriendos.
+     * Ese campo vive en la tabla arrendatarios.
+     * Esta migración se deja vacía para no romper el historial de migraciones.
      */
     public function up(): void
     {
-        Schema::table('arriendos', function (Blueprint $table) {
-            // Cambiamos de DATE a INTEGER para que acepte solo el número del día
-            $table->integer('fecha_pago')->change(); 
-        });
+        // No se hace nada: fecha_pago no existe en arriendos.
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('arriendos', function (Blueprint $table) {
-            // Por si necesitas revertir, lo devolvemos a DATE
-            $table->date('fecha_pago')->change();
-        });
+        // No se hace nada.
     }
 };

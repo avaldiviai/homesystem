@@ -233,40 +233,49 @@
 
                         <div class="pla-divider"></div>
 
-                        {{-- ════════════════════════════════════════════════════════════ --}}
-                        {{-- FILA 5 – Sueldos (próximamente) --}}
-                        {{-- ════════════════════════════════════════════════════════════ --}}
-                        <div class="pla-row pla-row--disabled mb-3">
+                        {{-- ════════════════════════════════════════════════════════════════════════ --}}
+{{-- FILA 5 – Sueldos                                                        --}}
+{{-- ════════════════════════════════════════════════════════════════════════ --}}
+<div class="pla-row mb-3">
 
-                            <div class="pla-cell pla-cell--info" style="border-left-color:#95A5A6;">
-                                <div class="pla-cell-icon" style="background:#95A5A6;">
-                                    <i class="fa-solid fa-money-check-dollar"></i>
-                                </div>
-                                <div>
-                                    <div class="pla-cell-title" style="color:#95A5A6;">Sueldos</div>
-                                    <div class="pla-cell-sub">Próximamente disponible</div>
-                                </div>
-                                <span class="badge rounded-pill ms-auto"
-                                    style="background:#BDC3C7; color:#fff; font-size:.7rem;">Pendiente</span>
-                            </div>
+    <div class="pla-cell pla-cell--info" style="border-left-color:#16A085;">
+        <div class="pla-cell-icon" style="background:#16A085;">
+            <i class="fa-solid fa-money-check-dollar"></i>
+        </div>
+        <div>
+            <div class="pla-cell-title">Sueldos</div>
+            <div class="pla-cell-sub">Gestión de sueldos por colaborador</div>
+        </div>
+        <span class="badge rounded-pill ms-auto"
+              style="background:#16A085; color:#fff; font-size:.7rem;">Activo</span>
+    </div>
 
-                            <div class="pla-cell pla-cell--docs">
-                                <div class="pla-doc-zone pla-doc-zone--disabled"
-                                    style="flex-direction:column; align-items:center; justify-content:center;">
-                                    <i class="fa-solid fa-lock fa-xl mb-1" style="color:#BDC3C7;"></i>
-                                    <span style="font-size:.78rem;color:#BDC3C7;">Disponible próximamente</span>
-                                </div>
-                            </div>
+    <div class="pla-cell pla-cell--docs">
+        <div class="pla-doc-zone" style="flex-direction:column; align-items:center; justify-content:center;">
+            <i class="fa-solid fa-users fa-xl mb-1" style="color:#16A085; opacity:.4;"></i>
+            <span style="font-size:.78rem; color:#aaa;">Acceso por colaborador</span>
+        </div>
+        <div class="pla-actions mt-2">
+            <a href="{{ route('sueldos.index') }}"
+               class="pla-abtn pla-abtn--filled"
+               style="background:#16A085; text-decoration:none; color:#fff;">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Ir a Sueldos
+            </a>
+        </div>
+    </div>
 
-                            <div class="pla-cell pla-cell--total">
-                                <div class="pla-total-inner">
-                                    <div class="pla-tlabel">Total acumulado</div>
-                                    <div class="pla-tvalue" style="color:#BDC3C7;">$ —</div>
-                                    <div class="pla-tnota">No disponible aún</div>
-                                </div>
-                            </div>
+    <div class="pla-cell pla-cell--total">
+        <div class="pla-total-inner">
+            <div class="pla-tlabel">Total acumulado</div>
+            <div class="pla-tvalue" style="color:#16A085;" id="tv-sueldos">$ —</div>
+            <div class="pla-tnota">Cargando…</div>
+        </div>
+        <div class="pla-to-chart">
+            <i class="fa-solid fa-arrow-right" style="color:#16A085;"></i> al gráfico
+        </div>
+    </div>
 
-                        </div><!-- /fila 5 -->
+</div><!-- /fila 5 -->
 
                         <div class="pla-divider"></div>
 
@@ -1662,6 +1671,15 @@
             }).always(() => {
                 [1, 2, 3, 4, 6].forEach(t => refreshCard(t));
             });
+        });
+        // ── Cargar total global de sueldos en la fila 5 ──
+        $.get('/sueldos/listar', function(res) {
+            if (res && res.totales) {
+                const total = res.totales.reduce((a, b) => a + b.total, 0);
+                $('#tv-sueldos').text(money(total));
+                $('#tv-sueldos').closest('.pla-cell--total')
+                    .find('.pla-tnota').text('Suma de todos los colaboradores');
+            }
         });
     </script>
 @endsection

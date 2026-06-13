@@ -8,14 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Sueldos extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'sueldos',
-        'id_user',
-    ];
+
     protected $table = 'sueldos';
+
+    protected $fillable = [
+    'total_mes',
+    'nombre_archivo',
+    'documento',
+    'fecha',
+    'id_user',
+];
+
+    protected $casts = [
+        'total_mes' => 'decimal:2',
+        'fecha'     => 'date:Y-m-d',
+    ];
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'id_user');
+        return $this->belongsTo(User::class, 'id_user');
     }
 }

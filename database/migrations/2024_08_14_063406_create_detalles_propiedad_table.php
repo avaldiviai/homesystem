@@ -40,12 +40,18 @@ return new class extends Migration
             $table->string('piscina')->nullable();
             $table->integer('gasto_comun')->nullable();
             $table->string('descripcion')->nullable();
+
+            // nuevos campos
+            $table->string('amoblado', 10)->nullable();
+            $table->text('elementos_entregados')->nullable();
+            $table->text('observaciones')->nullable();
+
             // identificar el tipo de propiedad
             $table->integer('tipo_propiedad');
-            
+
             $table->unsignedBigInteger('id_propiedad');
             $table->foreign('id_propiedad')->references('id')->on('propiedads');
-            
+
             $table->timestamps();
         });
     }

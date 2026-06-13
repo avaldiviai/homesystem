@@ -248,13 +248,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/usuarios/add_usuarios', [UserController::class, 'addUsuario']);
     Route::get('/usuarios/editar/{idUsuario}', [UserController::class, 'datosUsuario']);
     Route::post('/usuarios/add_editar_usuario', [UserController::class, 'addEditUsuario']);
-    Route::delete('/usuarios/eliminar/{idUsuario}', [UserController::class, 'eliminarUsuario']);
-
-    //////////////////////////////// SUELDOS USUARIOS ////////////////////////
-    Route::get('/sueldos', [UserController::class, 'indexSueldos']);
-    Route::post('/usuarios/asignar_sueldo', [UserController::class, 'asignarSueldo']);
-    Route::get('/sueldo_editar/{id}', [UserController::class, 'sueldosEdit']);
-    Route::post('/sueldos/add_editar_sueldos', [UserController::class, 'GuardarSueldosEdit']);
+    Route::delete('/usuarios/eliminar/{idUsuario}',[UserController::class,'eliminarUsuario']);
+  
+    
+    //////////////////////////////// SUELDOS ////////////////////////
+        Route::get('/sueldos',                  [UserController::class, 'indexSueldos'])    ->name('sueldos.index');
+        Route::get('/sueldos/listar',           [UserController::class, 'listarSueldos'])   ->name('sueldos.listar');
+        Route::post('/sueldos/verificar',       [UserController::class, 'verificarSueldo']) ->name('sueldos.verificar');
+        Route::post('/usuarios/asignar_sueldo', [UserController::class, 'asignarSueldo']);
+        Route::post('/sueldos/editar',          [UserController::class, 'GuardarSueldosEdit']);
+        Route::delete('/sueldos/eliminar/{id}', [UserController::class, 'eliminarSueldo']);
 
 
     ////////////////////////////////INVENTARIO/////////////////////////////
