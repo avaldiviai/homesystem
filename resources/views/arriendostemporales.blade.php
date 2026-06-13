@@ -1282,6 +1282,11 @@
                 let titulo = $(this).data('titulo');
                 let color = $(this).data('color');
 
+                let hoy = new Date().toISOString().split('T')[0];
+
+                $('input[name="fecha"]').val(hoy);
+
+
                 $('#tipo_planilla').val(tipo);
                 $('#tituloAgregar').text(titulo);
                 $('#headerAgregar').css('background', color);
