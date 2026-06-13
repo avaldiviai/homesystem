@@ -174,7 +174,7 @@
                                     <input type="text" class="form-control" id="direccionInput" placeholder="Ej: Calle #123" required>
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">
-                                    <label for="CiudadInput">Cuidad de la propiedad</label>
+                                    <label for="CiudadInput">Ciudad de la propiedad</label>
                                     <input type="text" class="form-control" id="CiudadInput" placeholder="Nombre de la Ciudad" required>
                                 </div>
                                 <div class="form-group col-lg-4">

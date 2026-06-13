@@ -14,124 +14,173 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users  = User::all();
         $cargos = Cargo::all();
 
         return view('users', compact('users', 'cargos'));
     }
-    
-    public function addUsuario(Request $request){
-        
-        $new_User = new User();
-        $new_User->name = $request->nombre;
-        $new_User->email = $request->correo;
+
+    public function addUsuario(Request $request)
+    {
+        $new_User           = new User();
+        $new_User->name     = $request->nombre;
+        $new_User->email    = $request->correo;
         $new_User->password = Hash::make($request->contraseña);
         $new_User->id_cargo = $request->cargo;
-        // $new_User->estado = 1;
         $new_User->save();
-        
-        return Response()->json(['nuevo_usuario'=>$new_User]);
-        
+
+        return response()->json(['nuevo_usuario' => $new_User]);
     }
-    
-    public function datosUsuario($idUsuario){
+
+    public function datosUsuario($idUsuario)
+    {
         $usuarios = User::where('id', $idUsuario)->first();
-        
-        return response()->json([
-            'usuarios' => $usuarios,
-        ]);
+
+        return response()->json(['usuarios' => $usuarios]);
     }
-    
-    public function addEditUsuario(Request $request){
-        
-        $idUsuario = $request->idUsuario;
-        
-        $user_edit = User::where('id', $idUsuario)->first();
-        $user_edit->name = $request->nombre;
-        $user_edit->email = $request->correo;
+
+    public function addEditUsuario(Request $request)
+    {
+        $user_edit          = User::where('id', $request->idUsuario)->first();
+        $user_edit->name    = $request->nombre;
+        $user_edit->email   = $request->correo;
         $user_edit->id_cargo = $request->cargo;
-        // $user_edit->estado = 1;
         $user_edit->save();
 
-        return Response()->json([
-            'usuario_editado' => $user_edit,
-        ]);
+        return response()->json(['usuario_editado' => $user_edit]);
     }
 
     public function eliminarUsuario($idUsuario)
     {
-        $usuario = User::find($idUsuario)->delete();
-        
-        return Response()->json(['usuario' => 'Usuario Eliminado Exitosamente']);
-    }
-    ######################################  SUELDOS  ###################################
-    
-    public function indexSueldos(){
+        User::find($idUsuario)->delete();
 
-        $sueldos = Sueldos::all();
-        $users = User::all();
-        $cargos = Cargo::all();
-
-        return view('sueldos', compact('users', 'cargos','sueldos'));
+        return response()->json(['usuario' => 'Usuario Eliminado Exitosamente']);
     }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  SUELDOS
+    //  Columnas reales en BD: id | total_mes | nombre_archivo | documento
+    //                          | fecha | id_user | created_at | updated_at
+    // ══════════════════════════════════════════════════════════════════════════
+
+    public function indexSueldos()
+    {
+        $usuarios = User::orderBy('name')->get(['id', 'name', 'email']);
+
+        return view('planillas.sueldos', compact('usuarios'));
+    }
+
+    // GET /sueldos/listar
+    public function listarSueldos()
+    {
+        $totales = Sueldos::with('user:id,name')
+            ->selectRaw('id_user, SUM(total_mes) as suma_total')
+            ->groupBy('id_user')
+            ->get()
+            ->map(fn($r) => [
+                'id_user' => $r->id_user,
+                'nombre'  => optional($r->user)->name ?? 'Usuario',
+                'total'   => (float) $r->suma_total,
+            ]);
+
+        return response()->json(['ok' => true, 'totales' => $totales]);
+    }
+
+    // POST /sueldos/verificar
+    public function verificarSueldo(Request $request)
+    {
+        $request->validate([
+            'id_user'  => 'required|exists:users,id',
+            'password' => 'required|string',
+        ]);
+
+        $user = User::findOrFail($request->id_user);
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['ok' => false, 'msg' => 'Contraseña incorrecta.'], 401);
+        }
+
+        $sueldos = Sueldos::where('id_user', $user->id)
+            ->orderByDesc('fecha')
+            ->get(['id', 'total_mes', 'nombre_archivo', 'documento', 'fecha', 'id_user']);
+
+        return response()->json(['ok' => true, 'data' => $sueldos]);
+    }
+
+    // POST /usuarios/asignar_sueldo
     public function asignarSueldo(Request $request)
     {
         $request->validate([
             'id_user' => 'required|exists:users,id',
-            'sueldo' => 'required|numeric|min:0',
-            'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'
+            'sueldo'  => 'required|numeric|min:0',
+            'fecha'   => 'required|date',
+            'archivo' => 'nullable|file|mimes:xlsx,xls,csv,pdf|max:20480',
         ]);
 
-        $sueldo = new Sueldos;
-        $sueldo->sueldos = $request->sueldo;
-        $sueldo->id_user = $request->id_user;
-        $sueldo->fecha = $request->fecha;
+        $sueldo            = new Sueldos();
+        $sueldo->total_mes = $request->sueldo;
+        $sueldo->id_user   = $request->id_user;
+        $sueldo->fecha     = $request->fecha;
 
-        // Si viene un archivo, lo guardamos
         if ($request->hasFile('archivo')) {
-            $nombreArchivo = time() . '_' . $request->file('archivo')->getClientOriginalName();
-            $ruta = $request->file('archivo')->storeAs('documentos_sueldos', $nombreArchivo, 'public');
-            $sueldo->documentos = $ruta; // Asegúrate que esta columna exista en tu tabla sueldos
+            $file                   = $request->file('archivo');
+            $nombre                 = time() . '_' . $file->getClientOriginalName();
+            $ruta                   = $file->storeAs('documentos_sueldos', $nombre, 'public');
+            $sueldo->nombre_archivo = $file->getClientOriginalName();
+            $sueldo->documento      = Storage::url($ruta);
         }
 
         $sueldo->save();
 
-        return response()->json(['mensaje' => 'Sueldo asignado correctamente']);
+        return response()->json(['ok' => true, 'registro' => $sueldo]);
     }
-    public function sueldosEdit($id){
-        $sueldos = Sueldos::where('id', $id)->first();
-        
-        return response()->json([
-            'sueldos' => $sueldos,
-        ]);
+
+    // GET /sueldo_editar/{id}
+    public function sueldosEdit($id)
+    {
+        $sueldo = Sueldos::findOrFail($id);
+
+        return response()->json(['sueldos' => $sueldo]);
     }
-    public function GuardarSueldosEdit(Request $request){
-    
-        $idsueldo = $request->id;
-        $sueldo_edit = Sueldos::where('id',$idsueldo)->first();
-        $sueldo_edit->sueldos = $request->sueldo;
-        // $sueldo_edit->id_user = $request->id_user;
-        $sueldo_edit->fecha = $request->fecha;
 
+    // POST /sueldos/editar
+    public function GuardarSueldosEdit(Request $request)
+    {
+        $sueldo            = Sueldos::findOrFail($request->id);
+        $sueldo->total_mes = $request->sueldo;
+        $sueldo->fecha     = $request->fecha;
 
-        // Si viene un nuevo archivo
         if ($request->hasFile('documento')) {
-            // Eliminar el anterior si existe
-            if ($sueldo_edit->documentos && Storage::exists($sueldo_edit->documentos)) {
-                Storage::delete($sueldo_edit->documentos);
+            // Eliminar archivo anterior si existe
+            if ($sueldo->documento) {
+                $old = str_replace('/storage/', '', $sueldo->documento);
+                Storage::disk('public')->delete($old);
             }
 
-            // Guardar el nuevo archivo
-            $nombreArchivoEdit = time() . '_' . $request->file('documento')->getClientOriginalName();
-            $ruta = $request->file('documento')->storeAs('documentos_sueldos', $nombreArchivoEdit ,'public');
-            $sueldo_edit->documentos = $ruta;
+            $file                   = $request->file('documento');
+            $nombre                 = time() . '_' . $file->getClientOriginalName();
+            $ruta                   = $file->storeAs('documentos_sueldos', $nombre, 'public');
+            $sueldo->nombre_archivo = $file->getClientOriginalName();
+            $sueldo->documento      = Storage::url($ruta);
         }
 
-        $sueldo_edit->save();
+        $sueldo->save();
 
-        return response()->json(['mensaje' => 'Sueldo editado correctamente', 'sueldo' => $sueldo_edit]);
-
+        return response()->json(['ok' => true, 'registro' => $sueldo]);
     }
 
+    // DELETE /sueldos/eliminar/{id}
+    public function eliminarSueldo($id)
+    {
+        $sueldo = Sueldos::findOrFail($id);
 
+        if ($sueldo->documento) {
+            $path = str_replace('/storage/', '', $sueldo->documento);
+            Storage::disk('public')->delete($path);
+        }
+
+        $sueldo->delete();
+
+        return response()->json(['ok' => true]);
+    }
 }

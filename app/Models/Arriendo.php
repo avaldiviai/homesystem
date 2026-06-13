@@ -16,13 +16,23 @@ class Arriendo extends Model
     protected $fillable = [
         'fecha_devolucion',
         'fecha_entrega',
+        'fecha_reajuste',    
         'valor_arriendo',
         'mes_garantia',
         'gastos_comunes',
-        'fecha_pago',
+        'valor_real',        
+        'reajuste_ipc',      
+        'estado',           
         'id_propiedad',
         'id_arrendatario',
         'id_comision',
+        'id_estadopagos',    
+    ];
+
+    protected $casts = [
+        'fecha_entrega'    => 'date',
+        'fecha_reajuste'   => 'date',
+        'fecha_devolucion' => 'date',
     ];
 
     public function propiedad() {
@@ -34,8 +44,7 @@ class Arriendo extends Model
     public function comision() {
         return $this->belongsTo('App\Models\Comision', 'id_comision');  
     }
-    public function contratos()
-    {
-        return $this->hasMany(Contrato::class, 'id_arriendo'); // Define la relación con Contrato
+    public function contratos() {
+        return $this->hasMany(Contrato::class, 'id_arriendo');
     }
 }
