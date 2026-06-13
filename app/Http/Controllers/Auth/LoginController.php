@@ -32,7 +32,7 @@ class LoginController extends Controller
         if (Auth::check()) {
             // Redirige según el id_cargo del usuario
             if (Auth::user()->id_cargo === 1) {
-                return '/dashboard'; // Superadmin
+                return '/plantilla'; // Superadmin
             }
 
             if (Auth::user()->id_cargo === 2) {
