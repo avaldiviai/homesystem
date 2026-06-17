@@ -1359,6 +1359,11 @@ if ($seccion === 'arriendo') {
             $nuevoArriendo->fecha_reajuste = $request->proximo_reajuste;
         $nuevoArriendo->save();
     }
+
+    if ($ciudad->estado_venta !== '0' && $ciudad->estado_venta !== 0) {
+        $ciudad->estado_venta = 0;
+        $ciudad->save();
+    }
 }
 
     // ── CARACTERÍSTICAS ────────────────────────────────────────────────────
@@ -1425,6 +1430,11 @@ if ($seccion === 'arrendatario') {
         $nuevoArriendo->id_arrendatario = $arrendatario->id;
         $nuevoArriendo->fecha_entrega   = now();
         $nuevoArriendo->save();
+    }
+
+    if ($ciudad->estado_venta !== '0' && $ciudad->estado_venta !== 0) {
+        $ciudad->estado_venta = 0;
+        $ciudad->save();
     }
 
     if ($request->hasFile('info_cliente')) {
