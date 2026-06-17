@@ -10,6 +10,7 @@ use App\Http\Controllers\PropietarioController;
 use App\Http\Controllers\ElementosController;
 use App\Http\Controllers\ArrendatarioController;
 use App\Http\Controllers\ArriendoController;
+use App\Http\Controllers\ArriendosTemporalesController;
 use App\Http\Controllers\PagosController;
 use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\PropiedadController;
@@ -55,10 +56,10 @@ Route::get('/plantilla', function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-        ///////////////////BUSCAR DATOS//////////////////////
+    ///////////////////BUSCAR DATOS//////////////////////
     Route::get('/api/arrendatario/{id}', [ContratoController::class, 'getArrendatario']);
     Route::get('/api/propietario/{id}', [ContratoController::class, 'getPropietario']);
-    
+
     ///////////// PROPIEDADES DETALLES /////////
     Route::get('/propiedadesDetalles-{id}',[PropiedadController::class,'propiedadesDetalles'])->name('admin.propiedadesDetalles');
     Route::post('/guardarTrabajo', [PropiedadController::class, 'guardarTrabajo']);
@@ -72,29 +73,29 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     Route::post('/comision/add_comision', [ComisionController::class, 'addComision']);
     Route::get('/comision/editar/{idComision}', [ComisionController::class, 'datosComision']);
     Route::post('/comision/add_editar_comision', [ComisionController::class, 'addEditComision']);
-    Route::delete('/comision/eliminar/{idComision}',[ComisionController::class,'eliminarComision']);
+    Route::delete('/comision/eliminar/{idComision}', [ComisionController::class, 'eliminarComision']);
 
     ////////// RUTAS PROPIETARIOS //////////
     Route::get('/propietarios', [PropietarioController::class, 'index']);
     Route::post('/propietariosadd', [PropietarioController::class, 'add']);
     Route::get('/propietarios/{id}', [PropietarioController::class, 'show']);
     Route::post('/propietarios/{id}', [PropietarioController::class, 'update'])->name('propietario.update');
-    Route::patch('/propietarioestado/{id}', [PropietarioController::class,'delete']);
-    Route::get('/Mostrar/cuenta/{id_cuenta}', [PropietarioController::class,'mostrarDatosBancarios']);
-    Route::get('/cuentas/editar_cuenta/{id_cuenta}', [PropietarioController::class,'showcuenta']);
+    Route::patch('/propietarioestado/{id}', [PropietarioController::class, 'delete']);
+    Route::get('/Mostrar/cuenta/{id_cuenta}', [PropietarioController::class, 'mostrarDatosBancarios']);
+    Route::get('/cuentas/editar_cuenta/{id_cuenta}', [PropietarioController::class, 'showcuenta']);
     Route::post('/cuentaEditar/guardar/{id}', [PropietarioController::class, 'updateCuenta'])->name('DatosBancario.update');
-    Route::delete('/cuenta/eliminar/{id_cuenta}',[PropietarioController::class,'eliminarcuenta']);
+    Route::delete('/cuenta/eliminar/{id_cuenta}', [PropietarioController::class, 'eliminarcuenta']);
     Route::post('/Nueva/cuenta2aad', [PropietarioController::class, 'addNuevaCuenta']);
     Route::post('/propietariosdelete/{id}', [PropietarioController::class, 'delete']);
 
     Route::get('/propietario/{id}/detalles', [PropietarioController::class, 'detalles'])->name('propietario.detalles');
-    
+
     ////////// RUTAS ELEMENTOS //////////
     Route::get('/elementos', [ElementosController::class, 'index']);
     Route::post('/Elementosadd', [ElementosController::class, 'add']);
     Route::get('/elemento/editar/{id_elemento}', [ElementosController::class, 'show']);
     Route::post('/elementos/guadar_elementos', [ElementosController::class, 'addelemento']);
-    Route::delete('/elemento/eliminar/{id_elemento}',[ElementosController::class,'deleteElement']);
+    Route::delete('/elemento/eliminar/{id_elemento}', [ElementosController::class, 'deleteElement']);
 
     ////////// RUTAS ARRENDATARIOS //////////
     Route::get('/arrendatarios', [ArrendatarioController::class, 'index']);
@@ -106,7 +107,7 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     ////////// RUTAS PROPIEDADES //////////
     Route::get('/propiedades', [PropiedadController::class, 'index']);
     Route::post('/propiedades', [PropiedadController::class, 'add']);
-    Route::get('/mostrar/archivo/{id_propiedad}', [PropiedadController::class,'mostrarArchivos']);
+    Route::get('/mostrar/archivo/{id_propiedad}', [PropiedadController::class, 'mostrarArchivos']);
     Route::post('/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
     Route::post('/imagen/cambiar/{ImagenId}', [PropiedadController::class, 'cambiarImagen']);
     Route::delete('/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
@@ -157,16 +158,16 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     ////////// RUTAS RRHH //////////
     // Vista principal equipo
     Route::get('/rrhh/equipo',                      [RrhhController::class, 'index'])->name('rrhh.equipo');
-    
+
     // CRUD Usuarios RRHH
     Route::get('/rrhh/usuario/{id}',               [RrhhController::class, 'show']);
     Route::post('/rrhh/usuario',                   [RrhhController::class, 'store']);
     Route::post('/rrhh/usuario/{id}',              [RrhhController::class, 'update']);   // POST con _method no es necesario; usamos POST directo para multipart
     Route::delete('/rrhh/usuario/{id}',            [RrhhController::class, 'destroy']);
-    
+
     // Archivos adjuntos
     Route::delete('/rrhh/archivo/{id}',            [RrhhController::class, 'destroyArchivo']);
-    
+
     // CRUD Cargos
     Route::get('/rrhh/cargos',                     [RrhhController::class, 'getCargos']);
     Route::post('/rrhh/cargo',                     [RrhhController::class, 'storeCargo']);
@@ -181,12 +182,12 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     Route::delete('/propiedadVenta/{id}', [PropiedadController::class, 'eliminarproVenta']);
     Route::get('/obtener/propietarioVenta', [PropiedadController::class, 'PropietariosAgregados']);
     // rutas detalles propiedad en venta
-    Route::get('/propiedadesVentaDetalles-{id}',[PropiedadController::class,'propiedadesVentaDetalles']);
+    Route::get('/propiedadesVentaDetalles-{id}', [PropiedadController::class, 'propiedadesVentaDetalles']);
     Route::post('/editarDetalles/Venta', [PropiedadController::class, 'edicionDetallesVenta']);
     Route::delete('/imagen/Venta/{idImg}', [PropiedadController::class, 'imgDelete']);
     Route::post('/portada/cambiar_img/Venta/{id}', [PropiedadController::class, 'cambiarImg']);
     Route::delete('/propietarioDelete/Venta/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
-    
+
     Route::post('/venderpropiedad{idPropiedad}', [PropiedadController::class, 'vender']);
 
 
@@ -208,19 +209,40 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     Route::get('/arriendos/editar/{idArriendo}', [ArriendoController::class, 'datosArriendo']);
     Route::post('/arriendos/add_editar_arriendos', [ArriendoController::class, 'addEditArriendo']);
     Route::post('/arriendos/eliminar', [ArriendoController::class, 'eliminarArriendo']);
-    Route::get('/Mostrar/Archivo/{id_contrato}', [ArriendoController::class,'mostrarArchivos']);
+    Route::get('/Mostrar/Archivo/{id_contrato}', [ArriendoController::class, 'mostrarArchivos']);
     Route::delete('/elimicontra/{contratoId}', [ArriendoController::class, 'destroy']);
     Route::post('/archivos_guardar/{idArriendo}', [ArriendoController::class, 'addArchivo_arriendo'])->name('archivos.guardar');
     Route::get('/propiedades/{id}/valor-arriendo', [ArriendoController::class, 'getValorArriendo']);
-    // Route::get('/propiedadesedit/{id}/valor-arriendo', [ArriendoController::class, 'getValorArriendo']);
+    Route::get('/propiedadesedit/{id}/valor-arriendo', [ArriendoController::class, 'getValorArriendo']);
 
+
+
+    // ///////////////////////  ARRIENDOS TEMPORALES  Y ASEOS ///////////////////////
+    Route::get('/arriendostemporales', [ArriendosTemporalesController::class, 'index']);
+    Route::post('/arriendostemporales/store', [ArriendosTemporalesController::class, 'storeArriendo'])->name('arriendos.store');
+    Route::post('/aseos/store', [ArriendosTemporalesController::class, 'storeAseo'])->name('aseos.store');
+    Route::get('/arriendos/listar', [ArriendosTemporalesController::class, 'listarArriendos']);
+    Route::get('/aseos/listar', [ArriendosTemporalesController::class, 'listarAseos']);
+
+    Route::get('/arriendos/{id}', [ArriendosTemporalesController::class, 'showArriendo']);
+    Route::get('/aseos/{id}', [ArriendosTemporalesController::class, 'showAseo']);
+    Route::post('/arriendos/update/{id}', [ArriendosTemporalesController::class, 'updateArriendosTemporales']);
+    Route::post('/aseos/update/{id}', [ArriendosTemporalesController::class, 'updateAseo']);
+
+    Route::delete('/arriendos/archivo/{id}', [ArriendosTemporalesController::class, 'eliminarArchivoArriendo']);
+    Route::delete('/aseos/archivo/{id}', [ArriendosTemporalesController::class, 'eliminarArchivoAseo']);
+
+    Route::delete('/arriendos/delete/{id}', [ArriendosTemporalesController::class, 'eliminarArriendo']);
+    Route::delete('/aseos/delete/{id}', [ArriendosTemporalesController::class, 'eliminarAseo']);
+
+    Route::get('/resumen-financiero',[ArriendosTemporalesController::class, 'resumenFinanciero']);
 
     ////////////////////////////////CARGO////////////////////////
     Route::get('/cargos', [CargoController::class, 'index']);
     Route::post('/cargos/add_cargo', [CargoController::class, 'addCargo']);
     Route::get('/cargo/editar/{idCargo}', [CargoController::class, 'datoscargo']);
     Route::post('/cargo/add_editar_cargo', [CargoController::class, 'addCargoEditar']);
-    Route::delete('/cargo/eliminar/{idCargo}',[CargoController::class,'eliminarCargo']);
+    Route::delete('/cargo/eliminar/{idCargo}', [CargoController::class, 'eliminarCargo']);
 
 
     ////////////////////////////////USUARIO////////////////////////
@@ -248,21 +270,21 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
 
 
     ////////////////////////////////Full Calendar/////////////////////////////
-    
+
     Route::get('/calendar', [EventController::class, 'index'])->name('calendar.index');
-    Route::get('/calendar/events', [EventController::class, 'getEvents'])->name('calendar.getEvents'); 
+    Route::get('/calendar/events', [EventController::class, 'getEvents'])->name('calendar.getEvents');
     Route::post('/calendar/events', [EventController::class, 'store']); // Crear un nuevo evento
     Route::delete('/calendar/events/{id}', [EventController::class, 'destroy']); // Eliminar un evento
 
     Route::post('calendar/eventos/actualizar', [EventController::class, 'update'])->name('event.update');
     Route::post('/deleteevento/{idevento}', [EventController::class, 'destroyfecha'])->name('event.destroy');
 
-    
+
     Route::post('/eventos/validar-fecha', [EventController::class, 'validarFecha']);
     Route::post('/eventos', [EventController::class, 'store']);
     Route::delete('/eventos/{id}', [EventController::class, 'destroy']);
 
-    Route::get('/editevent/{idevento}', [EventController::class, 'editeventos'])->name('editeventos'); 
+    Route::get('/editevent/{idevento}', [EventController::class, 'editeventos'])->name('editeventos');
     Route::post('/eventos/actualizar', [EventController::class, 'guardaredit'])->name('guardaredit'); // Crear un nuevo evento
 
 
@@ -278,12 +300,12 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     // RUTAS PLANILLAS EMPRESA
     // ────────────────────────────────────────────────────────────────────────────
 
- 
+
     // Vista principal
     Route::get('/plantilla', [PlanillaEmpresaController::class, 'index']);
-    
+
     // API JSON usada por el frontend
-    Route::get ('/planillas/listar',          [PlanillaEmpresaController::class, 'listar']);
+    Route::get('/planillas/listar',          [PlanillaEmpresaController::class, 'listar']);
     Route::post('/planillas/guardar',         [PlanillaEmpresaController::class, 'guardar']);
     Route::post('/planillas/editar',          [PlanillaEmpresaController::class, 'editar']);
     Route::delete('/planillas/eliminar/{id}', [PlanillaEmpresaController::class, 'eliminar']);
@@ -293,49 +315,49 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     Route::get('/verano', [VeranoController::class, 'index_verano'])->name('verano.verano');
     Route::post('/propiedades_verano', [VeranoController::class, 'Guardarverano'])->name('propiedades_verano.verano');
     Route::post('/propiedades_verano_detalles/{id}', [VeranoController::class, 'guardarDetalles']);
-    Route::get('/propiedadesVeranoDetalles-{id}',[VeranoController::class,'propiedadesVeraDetalles'])->name('admin.propiedadesVeranoDetalles');
+    Route::get('/propiedadesVeranoDetalles-{id}', [VeranoController::class, 'propiedadesVeraDetalles'])->name('admin.propiedadesVeranoDetalles');
     Route::post('/property/update/{id}', [VeranoController::class, 'update'])->name('property.update');
     Route::delete('/imagenes/{id}', [VeranoController::class, 'destroy'])->name('imagenes.eliminar');
-    Route::patch('/propiedadVeranoestado/{id}', [VeranoController::class,'deletePropiedadVera']);
+    Route::patch('/propiedadVeranoestado/{id}', [VeranoController::class, 'deletePropiedadVera']);
     Route::get('/obtenerVe/propietarioVeNombre', [VeranoController::class, 'PropietariosAgregadosVe']);
-    Route::delete('/propiedadverano/{idPropiedad}',[VeranoController::class,'deletepropiedad'])->name('admin.propiedadverano'); 
+    Route::delete('/propiedadverano/{idPropiedad}', [VeranoController::class, 'deletepropiedad'])->name('admin.propiedadverano');
     Route::delete('/propietarioVeranoDelete/{idPropietario}', [VeranoController::class, 'PropietarioVeraDelete']);
     Route::post('/portadaVera/cambiar_imgen/{id}', [VeranoController::class, 'cambiarImg'])->name('admin.propiedadesVeranoDetalles');
-    
+
     ////////////////////////////////Videos Verano/////////////////////////////
     Route::post('/propiedades_verano_video', [VeranoController::class, 'guardarVideoVerano']);
     Route::delete('/video-verano/{id}', [VeranoController::class, 'eliminarVideoVerano']);
-    Route::get('/stream-video/{path}', function($path) {
+    Route::get('/stream-video/{path}', function ($path) {
         $filePath = storage_path('app/public/' . $path);
-        
+
         if (!file_exists($filePath)) {
             abort(404);
         }
-        
+
         $fileSize = filesize($filePath);
         $mimeType = mime_content_type($filePath);
-        
+
         $start = 0;
         $end = $fileSize - 1;
-        
+
         if (isset($_SERVER['HTTP_RANGE'])) {
             preg_match('/bytes=(\d+)-(\d*)/', $_SERVER['HTTP_RANGE'], $matches);
             $start = intval($matches[1]);
             $end = isset($matches[2]) && $matches[2] !== '' ? intval($matches[2]) : $fileSize - 1;
         }
-        
+
         $length = $end - $start + 1;
-        
+
         $headers = [
             'Content-Type'   => $mimeType,
             'Content-Length' => $length,
             'Accept-Ranges'  => 'bytes',
             'Content-Range'  => "bytes $start-$end/$fileSize",
         ];
-        
+
         $statusCode = isset($_SERVER['HTTP_RANGE']) ? 206 : 200;
-        
-        return response()->stream(function() use ($filePath, $start, $length) {
+
+        return response()->stream(function () use ($filePath, $start, $length) {
             $handle = fopen($filePath, 'rb');
             fseek($handle, $start);
             $remaining = $length;
@@ -352,18 +374,18 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     ////////////////////////////////SERVICIOS/////////////////////////////
     Route::get('/servicios', [ServtecLineaBlancaController::class, 'index']);
 
-    Route::post('/agregarLN', [ServtecLineaBlancaController::class, 'agregarLN'])->name('servicios.agregarLN');   
-    Route::post('/agregarGas', [GasfiteriaController::class, 'agregarGas'])->name('servicios.agregarGas');    
-    Route::post('/agregarOMa', [ObrasMayoresController::class, 'agregarOMa'])->name('servicios.agregarOMa');   
-    Route::post('/agregarOMe', [ObrasMenoresController::class, 'agregarOMe'])->name('servicios.agregarOMe'); 
+    Route::post('/agregarLN', [ServtecLineaBlancaController::class, 'agregarLN'])->name('servicios.agregarLN');
+    Route::post('/agregarGas', [GasfiteriaController::class, 'agregarGas'])->name('servicios.agregarGas');
+    Route::post('/agregarOMa', [ObrasMayoresController::class, 'agregarOMa'])->name('servicios.agregarOMa');
+    Route::post('/agregarOMe', [ObrasMenoresController::class, 'agregarOMe'])->name('servicios.agregarOMe');
 
     ////////////////////////////////SERVICIOS/////////////////////////////
     Route::get('/servicios', [ServtecLineaBlancaController::class, 'index']);
 
-    Route::post('/agregarLN', [ServtecLineaBlancaController::class, 'agregarLN'])->name('servicios.agregarLN');   
-    Route::post('/agregarGas', [GasfiteriaController::class, 'agregarGas'])->name('servicios.agregarGas');    
-    Route::post('/agregarOMa', [ObrasMayoresController::class, 'agregarOMa'])->name('servicios.agregarOMa');   
-    Route::post('/agregarOMe', [ObrasMenoresController::class, 'agregarOMe'])->name('servicios.agregarOMe');   
+    Route::post('/agregarLN', [ServtecLineaBlancaController::class, 'agregarLN'])->name('servicios.agregarLN');
+    Route::post('/agregarGas', [GasfiteriaController::class, 'agregarGas'])->name('servicios.agregarGas');
+    Route::post('/agregarOMa', [ObrasMayoresController::class, 'agregarOMa'])->name('servicios.agregarOMa');
+    Route::post('/agregarOMe', [ObrasMenoresController::class, 'agregarOMe'])->name('servicios.agregarOMe');
 
 
     Route::get('/conseguirLN/{id}', [ServtecLineaBlancaController::class, 'conseguirLN'])->name('servicios.conseguirLN');
@@ -407,7 +429,7 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     Route::get('/verMaterial', [ServtecLineaBlancaController::class, 'verMaterial'])->name('servicios.verMaterial');
     Route::put('/reemplazarMaterial', [ServtecLineaBlancaController::class, 'reemplazarMaterial'])->name('servicios.reemplazarMaterial');
     Route::post('/eliminarMaterial', [ServtecLineaBlancaController::class, 'eliminarMaterial'])->name('servicios.eliminarMaterial');
-    
+
     // rutas de estado de servicios/
     Route::post('/cambiar-estado/{id}', [ServtecLineaBlancaController::class, 'cambiarEstado']);
     Route::post('/cambiar-estado2/{id}', [ServtecLineaBlancaController::class, 'cambiarEstado2']);
@@ -418,7 +440,7 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     //////////////////////////////// RUTAS PROPIEDADES AnO CORRIDO ///////////////////////////////////
     Route::get('/proanocorrido', [PropiedadController::class, 'indexanocorrido']);
     Route::post('/proanocorrido/add', [PropiedadController::class, 'addproanocorrido']);
-    Route::get('/proanocorrido/mostrar/archivo/{id_propiedad}', [PropiedadController::class,'mostrarArchivos']);
+    Route::get('/proanocorrido/mostrar/archivo/{id_propiedad}', [PropiedadController::class, 'mostrarArchivos']);
     Route::post('/proanocorrido/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
     Route::post('/proanocorrido/imagen/cambiar/{ImagenId}', [PropiedadController::class, 'cambiarImagen']);
     Route::delete('/proanocorrido/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
@@ -433,12 +455,12 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
 
     Route::delete('/proanocorrido/imagen/{idImg}', [PropiedadController::class, 'imgDelete']);
     Route::delete('/proanocorrido/video/{idVideo}', [PropiedadController::class, 'videoDelete']);
-    
+
     Route::post('/proanocorrido/portada/cambiar_img/{id}', [PropiedadController::class, 'cambiarImg'])->name('admin.propiedadesDetalles');
-    
+
     Route::delete('/proanocorrido/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
-    Route::get('/proanocorridopropiedadesDetalles-{id}',[PropiedadController::class,'proanocorridopropiedadesDetalles'])->name('admin.proanocorridopropiedadesDetalles');
-    
+    Route::get('/proanocorridopropiedadesDetalles-{id}', [PropiedadController::class, 'proanocorridopropiedadesDetalles'])->name('admin.proanocorridopropiedadesDetalles');
+
     Route::delete('/mantencion/{idImg}', [PropiedadController::class, 'mantenciondelete']);
     Route::post('/guardar/mantenciones', [PropiedadController::class, 'guardarMantenciones']);
 
@@ -451,27 +473,27 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
 
 Route::middleware(['auth', 'trabajador'])->group(function () {
 
-    Route::get('/trabajador/propiedadesDetallestrabajador-{id}',[PropiedadController::class,'trabajadorpropiedadesDetalles'])->name('trabajador.propiedadesDetalles');
+    Route::get('/trabajador/propiedadesDetallestrabajador-{id}', [PropiedadController::class, 'trabajadorpropiedadesDetalles'])->name('trabajador.propiedadesDetalles');
 
     // ////////// RUTAS PROPIEDADES //////////
     Route::get('/trabajador/propiedades', [PropiedadController::class, 'indexTrabajador']);
     Route::post('/trabajador/imagen/seccion/{id}', [PropiedadController::class, 'actualizarSeccionImagen']);
     Route::post('/trabajador/propiedades', [PropiedadController::class, 'add']);
-    Route::get('/trabajador/mostrar/archivo/{id_propiedad}', [PropiedadController::class,'mostrarArchivos']);
+    Route::get('/trabajador/mostrar/archivo/{id_propiedad}', [PropiedadController::class, 'mostrarArchivos']);
     Route::post('/trabajador/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
     Route::delete('/trabajador/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
     Route::delete('/trabajador/propiedad/{id}', [PropiedadController::class, 'eliminarpro']);
     Route::post('/trabajador/detallespropiedad/{id_propiedad}', [PropiedadController::class, 'addetalles'])->name('detallespropiedad.addetalles');
-    
+
     Route::get('/trabajador/obtener/propietarioNombre', [PropiedadController::class, 'PropietariosAgregados']);
-    
+
     Route::post('/trabajador/editarDetalles', [PropiedadController::class, 'edicionDetalles'])->name('propiedadesDetalles');
-    
+
     Route::delete('/trabajador/imagen/{idImg}', [PropiedadController::class, 'imgDelete']);
     Route::delete('/trabajador/video/{idVideo}', [PropiedadController::class, 'videoDelete']);
-    
+
     Route::post('/trabajador/portada/cambiar_img/{id}', [PropiedadController::class, 'cambiarImg'])->name('admin.propiedadesDetalles');
-    
+
     Route::delete('/trabajador/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
     Route::post('/trabajador/guardar/mantenciones', [PropiedadController::class, 'guardarMantenciones']);
     Route::delete('/trabajador/mantencion/{idImg}', [PropiedadController::class, 'mantenciondelete']);
@@ -481,20 +503,20 @@ Route::middleware(['auth', 'trabajador'])->group(function () {
     // Route::get('/arrendatarios/editar/{idArrendatario}', [ArrendatarioController::class, 'datosArrendatario']);
     // Route::post('/arrendatarios/add_editar_arrendatario', [ArrendatarioController::class, 'addEditArrendatario']);
     // Route::post('/arrendatarios/eliminar', [ArrendatarioController::class, 'eliminarArrendatario']);
-    
+
     // Route::post('/imagen/cambiar/{ImagenId}', [PropiedadController::class, 'cambiarImagen']);
     // Route::get('/propiedadestodo/{id}', [PropiedadController::class, 'edit']);
     // Route::post('/propiedad/update/', [PropiedadController::class, 'Proupdate']);
-    
+
     // ////////// RUTAS ELEMENTOS //////////
     Route::get('/trabajador/elementos', [ElementosController::class, 'indextrabajador']);
     Route::post('/trabajador/Elementosadd', [ElementosController::class, 'add']);
     Route::get('/trabajador/elemento/editar/{id_elemento}', [ElementosController::class, 'show']);
     Route::post('/trabajador/elementos/guadar_elementos', [ElementosController::class, 'addelemento']);
-    Route::delete('/trabajador/elemento/eliminar/{id_elemento}',[ElementosController::class,'deleteElement']);
+    Route::delete('/trabajador/elemento/eliminar/{id_elemento}', [ElementosController::class, 'deleteElement']);
 
 
-    
+
     ////////// RUTAS ARRIENDOS //////////
     Route::get('/trabajador/arriendos', [ArriendoController::class, 'indextrabajador']);
     Route::post('/trabajador/arriendos/add_arriendos', [ArriendoController::class, 'addArriendo'])->name('arriendos.addArriendo');
@@ -502,14 +524,14 @@ Route::middleware(['auth', 'trabajador'])->group(function () {
     Route::post('/trabajador/arriendos/add_editar_arriendos', [ArriendoController::class, 'addEditArriendo']);
     Route::post('/trabajador/arriendos/eliminar', [ArriendoController::class, 'eliminarArriendo']);
 
-    Route::get('/trabajador/Mostrar/Archivo/{id_contrato}', [ArriendoController::class,'mostrarArchivos']);
+    Route::get('/trabajador/Mostrar/Archivo/{id_contrato}', [ArriendoController::class, 'mostrarArchivos']);
 
     Route::delete('/trabajador/elimicontra/{contratoId}', [ArriendoController::class, 'destroy']);
     Route::post('/trabajador/archivos/guardar/{idArriendo}', [ArriendoController::class, 'addArchivo2'])->name('archivos.guardar');
 
-    
+
     //////////////////////////////// RUTAS INVENTARIO/////////////////////////////
-      
+
     Route::get('/trabajador/inventario', [InventarioController::class, 'indextrabajador'])->name('inventario.index');
     Route::post('/trabajador/inventario', [InventarioController::class, 'store']);
     Route::post('/trabajador/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
@@ -518,7 +540,7 @@ Route::middleware(['auth', 'trabajador'])->group(function () {
     //////////////////////////////// PROPIEDADES AÑO CORRIDO //////////////////////////
     Route::get('/trabajador/proanocorrido', [PropiedadController::class, 'indexanocorridotrabajador']);
     Route::post('/trabajador/proanocorrido/add', [PropiedadController::class, 'addproanocorrido']);
-    Route::get('/trabajador/proanocorrido/mostrar/archivo/{id_propiedad}', [PropiedadController::class,'mostrarArchivos']);
+    Route::get('/trabajador/proanocorrido/mostrar/archivo/{id_propiedad}', [PropiedadController::class, 'mostrarArchivos']);
     Route::post('/trabajador/proanocorrido/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
     Route::post('/trabajador/proanocorrido/imagen/cambiar/{ImagenId}', [PropiedadController::class, 'cambiarImagen']);
     Route::delete('/trabajador/proanocorrido/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
@@ -533,38 +555,37 @@ Route::middleware(['auth', 'trabajador'])->group(function () {
 
     Route::delete('/trabajador/proanocorrido/imagen/{idImg}', [PropiedadController::class, 'imgDelete']);
     Route::delete('/trabajador/proanocorrido/video/{idVideo}', [PropiedadController::class, 'videoDelete']);
-    
+
     Route::post('/trabajador/proanocorrido/portada/cambiar_img/{id}', [PropiedadController::class, 'cambiarImg'])->name('trabajador.propiedadesDetalles');
-    
+
     Route::delete('/trabajador/proanocorrido/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
-    Route::get('/trabajador/proanocorridopropiedadesDetallestrabajador-{id}',[PropiedadController::class,'proanocorridopropiedadesDetallestrabajador'])->name('trabajador.proanocorridopropiedadesDetallestrabajador');
-    
+    Route::get('/trabajador/proanocorridopropiedadesDetallestrabajador-{id}', [PropiedadController::class, 'proanocorridopropiedadesDetallestrabajador'])->name('trabajador.proanocorridopropiedadesDetallestrabajador');
 });
 
 
 //////////////////////////////////OBRERO///////////////////////////////////////////////////////////////
 Route::middleware(['auth', 'obrero'])->group(function () {
-    Route::get('/obrero/propiedadesDetallesObrero-{id}',[PropiedadController::class,'obreropropiedadesDetalles'])->name('obrero.propiedadesDetalles');
+    Route::get('/obrero/propiedadesDetallesObrero-{id}', [PropiedadController::class, 'obreropropiedadesDetalles'])->name('obrero.propiedadesDetalles');
 
 
     // ////////// RUTAS PROPIEDADES //////////
     Route::get('/obrero/propiedades', [PropiedadController::class, 'indexObrero']);
     Route::post('/obrero/propiedades', [PropiedadController::class, 'add']);
-    Route::get('/obrero/mostrar/archivo/{id_propiedad}', [PropiedadController::class,'mostrarArchivos']);
+    Route::get('/obrero/mostrar/archivo/{id_propiedad}', [PropiedadController::class, 'mostrarArchivos']);
     Route::post('/obrero/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
     Route::delete('/obrero/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
     Route::delete('/obrero/propiedad/{id}', [PropiedadController::class, 'eliminarpro']);
     Route::post('/obrero/detallespropiedad/{id_propiedad}', [PropiedadController::class, 'addetalles'])->name('detallespropiedad.addetalles');
     Route::post('/obrero/imagen/seccion/{id}', [PropiedadController::class, 'actualizarSeccionImagen']);
     Route::get('/obrero/obtener/propietarioNombre', [PropiedadController::class, 'PropietariosAgregados']);
-    
+
     Route::post('/obrero/editarDetalles', [PropiedadController::class, 'edicionDetalles'])->name('propiedadesDetalles');
-    
+
     Route::delete('/obrero/imagen/{idImg}', [PropiedadController::class, 'imgDelete']);
     Route::delete('/obrero/video/{idVideo}', [PropiedadController::class, 'videoDelete']);
-    
+
     Route::post('/obrero/portada/cambiar_img/{id}', [PropiedadController::class, 'cambiarImg'])->name('admin.propiedadesDetalles');
-    
+
     Route::delete('/obrero/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
 
     Route::delete('/obrero/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
@@ -583,14 +604,14 @@ Route::middleware(['auth', 'obrero'])->group(function () {
     Route::post('/obrero/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
     Route::delete('/obrero/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
 
-   
+
     ////////////////////////////////SERVICIOS/////////////////////////////
     Route::get('/obrero/servicios', [ServtecLineaBlancaController::class, 'indexObreroservi']);
 
-    Route::post('/obrero/agregarLN', [ServtecLineaBlancaController::class, 'agregarLN'])->name('servicios.agregarLN');   
-    Route::post('/obrero/agregarGas', [GasfiteriaController::class, 'agregarGas'])->name('servicios.agregarGas');    
-    Route::post('/obrero/agregarOMa', [ObrasMayoresController::class, 'agregarOMa'])->name('servicios.agregarOMa');   
-    Route::post('/obrero/agregarOMe', [ObrasMenoresController::class, 'agregarOMe'])->name('servicios.agregarOMe');   
+    Route::post('/obrero/agregarLN', [ServtecLineaBlancaController::class, 'agregarLN'])->name('servicios.agregarLN');
+    Route::post('/obrero/agregarGas', [GasfiteriaController::class, 'agregarGas'])->name('servicios.agregarGas');
+    Route::post('/obrero/agregarOMa', [ObrasMayoresController::class, 'agregarOMa'])->name('servicios.agregarOMa');
+    Route::post('/obrero/agregarOMe', [ObrasMenoresController::class, 'agregarOMe'])->name('servicios.agregarOMe');
 
 
     Route::get('/obrero/conseguirLN/{id}', [ServtecLineaBlancaController::class, 'conseguirLN'])->name('servicios.conseguirLN');
@@ -634,7 +655,7 @@ Route::middleware(['auth', 'obrero'])->group(function () {
     Route::get('/obrero/verMaterial', [ServtecLineaBlancaController::class, 'verMaterial'])->name('servicios.verMaterial');
     Route::put('/obrero/reemplazarMaterial', [ServtecLineaBlancaController::class, 'reemplazarMaterial'])->name('servicios.reemplazarMaterial');
     Route::post('/obrero/eliminarMaterial', [ServtecLineaBlancaController::class, 'eliminarMaterial'])->name('servicios.eliminarMaterial');
-    
+
     // rutas de estado de servicios/
     Route::post('/obrero/cambiar-estado/{id}', [ServtecLineaBlancaController::class, 'cambiarEstado']);
     Route::post('/obrero/cambiar-estado2/{id}', [ServtecLineaBlancaController::class, 'cambiarEstado2']);
@@ -647,10 +668,10 @@ Route::middleware(['auth', 'obrero'])->group(function () {
     Route::get('/obrero/verano', [VeranoController::class, 'index_verano_obrero'])->name('verano.verano');
     Route::post('/obrero/propiedades_verano', [VeranoController::class, 'Guardarverano'])->name('propiedades_verano.verano');
     Route::post('/obrero/propiedades_verano_detalles/{id}', [VeranoController::class, 'guardarDetalles']);
-    Route::get('/obrero/propiedadesVeranoDetalles-{id}',[VeranoController::class,'propiedadesVeraDetalles'])->name('admin.propiedadesVeranoDetalles');
+    Route::get('/obrero/propiedadesVeranoDetalles-{id}', [VeranoController::class, 'propiedadesVeraDetalles'])->name('admin.propiedadesVeranoDetalles');
     Route::post('/obrero/property/update/{id}', [VeranoController::class, 'update'])->name('property.update');
     Route::delete('/obrero/imagen/{id}', [VeranoController::class, 'destroy'])->name('imagenes.eliminar');
-    Route::patch('/obrero/propiedadVeranoestado/{id}', [VeranoController::class,'deletePropiedadVera']);
+    Route::patch('/obrero/propiedadVeranoestado/{id}', [VeranoController::class, 'deletePropiedadVera']);
     Route::get('/obrero/obtenerVe/propietarioVeNombre', [VeranoController::class, 'PropietariosAgregadosVe']);
     // Route::delete('/propiedadverano/{idPropiedad}',[VeranoController::class,'deletepropiedad'])->name('admin.propiedadverano'); 
     Route::delete('/obrero/propietarioVeranoDelete/{idPropietario}', [VeranoController::class, 'PropietarioVeraDelete']);
@@ -673,7 +694,7 @@ Route::middleware(['auth', 'obrero'])->group(function () {
     Route::get('/obrero/verMaterial', [ServtecLineaBlancaController::class, 'verMaterial'])->name('servicios.verMaterial');
     Route::put('/obrero/reemplazarMaterial', [ServtecLineaBlancaController::class, 'reemplazarMaterial'])->name('servicios.reemplazarMaterial');
     Route::post('/obrero/eliminarMaterial', [ServtecLineaBlancaController::class, 'eliminarMaterial'])->name('servicios.eliminarMaterial');
-    
+
     // ////////////////////////////////// PROPIEDADES DE VERANO ///////////////////////////
     // Route::get('/obrero/verano', [VeranoController::class, 'index_verano_obrero'])->name('verano.verano');
     // Route::post('/obrero/propiedades_verano', [VeranoController::class, 'Guardarverano'])->name('propiedades_verano.verano');
@@ -695,33 +716,34 @@ Route::middleware(['auth', 'obrero'])->group(function () {
     //  Route::delete('/obrero/propiedadVenta/{id}', [PropiedadController::class, 'eliminarproVenta']);
     //  // rutas detalles propiedad en venta
     //  Route::get('/obrero/propiedadesVentaDetalles-{id}',[PropiedadController::class,'propiedadesVentaDetalles']);
-     //////////////////////////////// PROPIEDADES AÑO CORRIDO //////////////////////////
-     Route::get('/obrero/proanocorrido', [PropiedadController::class, 'indexanocorridoobrero']);
-     Route::post('/obrero/proanocorrido/add', [PropiedadController::class, 'addproanocorrido']);
-     Route::get('/obrero/proanocorrido/mostrar/archivo/{id_propiedad}', [PropiedadController::class,'mostrarArchivos']);
-     Route::post('/obrero/proanocorrido/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
-     Route::post('/obrero/proanocorrido/imagen/cambiar/{ImagenId}', [PropiedadController::class, 'cambiarImagen']);
-     Route::delete('/obrero/proanocorrido/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
-     Route::delete('/obrero/proanocorrido/propiedad/{id}', [PropiedadController::class, 'eliminarpro']);
-     Route::post('/obrero/proanocorrido/detallespropiedad/{id_propiedad}', [PropiedadController::class, 'addetalles'])->name('detallespropiedad.addetalles');
-     // Route::get('/propiedadestodo/{id}', [PropiedadController::class, 'edit']);
-     // Route::post('/propiedad/update/', [PropiedadController::class, 'Proupdate']);
- 
-     Route::get('/obrero/proanocorrido/obtener/propietarioNombre', [PropiedadController::class, 'PropietariosAgregados']);
- 
-     Route::post('/obrero/proanocorrido/editarDetalles', [PropiedadController::class, 'edicionDetalles'])->name('propiedadesDetalles');
- 
-     Route::delete('/obrero/proanocorrido/imagen/{idImg}', [PropiedadController::class, 'imgDelete']);
-     Route::delete('/obrero/proanocorrido/video/{idVideo}', [PropiedadController::class, 'videoDelete']);
-     
-     Route::post('/obrero/proanocorrido/portada/cambiar_img/{id}', [PropiedadController::class, 'cambiarImg'])->name('obrero.propiedadesDetalles');
-     
-     Route::delete('/obrero/proanocorrido/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
-     Route::get('/obrero/proanocorridopropiedadesDetallesObrero-{id}',[PropiedadController::class,'proanocorridopropiedadesDetallesObrero'])->name('obrero.proanocorridopropiedadesDetallesObrero');
-     
-     Route::post('/guardar-mantencion', [PropiedadController::class,'guardarMantencion']
-);
+    //////////////////////////////// PROPIEDADES AÑO CORRIDO //////////////////////////
+    Route::get('/obrero/proanocorrido', [PropiedadController::class, 'indexanocorridoobrero']);
+    Route::post('/obrero/proanocorrido/add', [PropiedadController::class, 'addproanocorrido']);
+    Route::get('/obrero/proanocorrido/mostrar/archivo/{id_propiedad}', [PropiedadController::class, 'mostrarArchivos']);
+    Route::post('/obrero/proanocorrido/archivos/guardar/{idPropiedad}', [PropiedadController::class, 'addArchivo2'])->name('archivos.guardar');
+    Route::post('/obrero/proanocorrido/imagen/cambiar/{ImagenId}', [PropiedadController::class, 'cambiarImagen']);
+    Route::delete('/obrero/proanocorrido/elimiarchivo/{archivoId}', [PropiedadController::class, 'destroy']);
+    Route::delete('/obrero/proanocorrido/propiedad/{id}', [PropiedadController::class, 'eliminarpro']);
+    Route::post('/obrero/proanocorrido/detallespropiedad/{id_propiedad}', [PropiedadController::class, 'addetalles'])->name('detallespropiedad.addetalles');
+    // Route::get('/propiedadestodo/{id}', [PropiedadController::class, 'edit']);
+    // Route::post('/propiedad/update/', [PropiedadController::class, 'Proupdate']);
 
+    Route::get('/obrero/proanocorrido/obtener/propietarioNombre', [PropiedadController::class, 'PropietariosAgregados']);
+
+    Route::post('/obrero/proanocorrido/editarDetalles', [PropiedadController::class, 'edicionDetalles'])->name('propiedadesDetalles');
+
+    Route::delete('/obrero/proanocorrido/imagen/{idImg}', [PropiedadController::class, 'imgDelete']);
+    Route::delete('/obrero/proanocorrido/video/{idVideo}', [PropiedadController::class, 'videoDelete']);
+
+    Route::post('/obrero/proanocorrido/portada/cambiar_img/{id}', [PropiedadController::class, 'cambiarImg'])->name('obrero.propiedadesDetalles');
+
+    Route::delete('/obrero/proanocorrido/propietarioDelete/{idPropietario}', [PropiedadController::class, 'PropietarioDelete']);
+    Route::get('/obrero/proanocorridopropiedadesDetallesObrero-{id}', [PropiedadController::class, 'proanocorridopropiedadesDetallesObrero'])->name('obrero.proanocorridopropiedadesDetallesObrero');
+
+    Route::post(
+        '/guardar-mantencion',
+        [PropiedadController::class, 'guardarMantencion']
+    );
 });
 
 

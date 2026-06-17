@@ -65,8 +65,7 @@
                 </li>
 
                 <li class="nav-item mb-3">
-                    <a href="/arriendos" class="nav-link d-flex align-items-center">
-                        <i class="fa-solid fa-key me-2 text-warning"></i>
+                    <a href="/arriendostemporales" class="nav-link d-flex align-items-center">
                         <span>Arriendo Temporal</span>
                     </a>
                 </li>
