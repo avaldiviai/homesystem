@@ -1037,6 +1037,23 @@
         .pla-table tbody tr:hover td {
             background: #fafaf8;
         }
+
+        .btn-warning{
+            background-color: #E67E22 !important;
+            border-color: #E67E22 !important;
+            color: #fff !important;
+        }
+        .btn-warning.active{
+            background-color: #E67E22 !important;
+            border-color: #E67E22 !important;
+            color: #fff !important;
+        }
+
+        .btn-outline-warning{
+            background-color: transparent !important;
+            border-color: #E67E22 !important;
+            color: #E67E22 !important;
+        }
     </style>
 @endsection
 @section('javascript')
