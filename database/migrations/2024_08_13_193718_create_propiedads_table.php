@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('maps');
             $table->string('condominio');
             // $table->integer('num_estacionamiento');
-            $table->integer('num_torre');
-            $table->string('torre');
+            $table->integer('num_torre')->nullable();
+            $table->string('torre')->nullable();
             $table->text('descripcion')->nullable();
             $table->string('rol');
             $table->integer('numero_luz');
