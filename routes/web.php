@@ -61,7 +61,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     ///////////// PROPIEDADES DETALLES /////////
     Route::get('/propiedadesDetalles-{id}',[PropiedadController::class,'propiedadesDetalles'])->name('admin.propiedadesDetalles');
-
+    Route::post('/guardarTrabajo', [PropiedadController::class, 'guardarTrabajo']);
+    Route::post('/editarDetallesAnoCorrido',  [PropiedadController::class, 'edicionDetallesAnoCorrido']);
+Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionArriendoAnoCorrido']);
     ////////// RUTAS DASHBOARD //////////
     Route::get('/dashboard', [HomeController::class, 'index']);
 

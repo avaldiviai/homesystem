@@ -1163,22 +1163,25 @@ class PropiedadController extends Controller
             $query->select('id_propietario')->from('propietario_propiedades')->where('id_propiedad', $id);
         })->get();
 
-        // ── Arriendos activos ──────────────────────────────────────────────
         $arriendos = Arriendo::where('id_propiedad', $id)
             ->where('estado', 1)
             ->orderBy('fecha_entrega', 'desc')
             ->get();
 
-        // ── Arrendatario activo (para poblar los inputs de la vista) ───────
         $arriendoActivo = $arriendos->first();
         $arrendatario   = $arriendoActivo && $arriendoActivo->id_arrendatario
             ? Arrendatario::find($arriendoActivo->id_arrendatario)
             : null;
 
+        $trabajos = Mantenimiento::where('id_propiedad', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('detalleano', compact(
             'doc', 'comision', 'estados', 'arrendatario', 'mantenimiento',
             'arriendos', 'sub_bodega', 'sub_est', 'videos', 'new_Propietarios',
-            'detalles', 'imagen', 'propietarios', 'detallespropiedad', 'precios'
+            'detalles', 'imagen', 'propietarios', 'detallespropiedad', 'precios',
+            'trabajos'
         ));
     }
 
@@ -1201,22 +1204,24 @@ class PropiedadController extends Controller
             $query->select('id_propietario')->from('propietario_propiedades')->where('id_propiedad', $id);
         })->get();
 
-        // ── Arriendos activos ──────────────────────────────────────────────
         $arriendos = Arriendo::where('id_propiedad', $id)
             ->where('estado', 1)
             ->orderBy('fecha_entrega', 'desc')
             ->get();
 
-        // ── Arrendatario activo ────────────────────────────────────────────
         $arriendoActivo = $arriendos->first();
         $arrendatario   = $arriendoActivo && $arriendoActivo->id_arrendatario
             ? Arrendatario::find($arriendoActivo->id_arrendatario)
             : null;
 
+        $trabajos = Mantenimiento::where('id_propiedad', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('trabajador.detalleano', compact(
             'arriendos', 'comision', 'estados', 'doc', 'arrendatario', 'mantenimiento',
             'sub_bodega', 'sub_est', 'videos', 'new_Propietarios', 'detalles',
-            'imagen', 'propietarios', 'detallespropiedad', 'precios'
+            'imagen', 'propietarios', 'detallespropiedad', 'precios', 'trabajos'
         ));
     }
 
@@ -1282,11 +1287,15 @@ class PropiedadController extends Controller
 
     /////////////////// AÑO CORRIDO DETALLES — OBRERO ///////////////////////////////////////
     public function edicionDetallesAnoCorrido(Request $request)
-    {
-        $id_propiedad = $request->id_propiedad;
+{
+    Log::info('DATOS RECIBIDOS', $request->all());
 
-        // --- Propiedad ---
-        $ciudad = Propiedad::where('id', $id_propiedad)->first();
+    $id_propiedad = $request->id_propiedad;
+    $seccion      = $request->input('_seccion');
+    $ciudad       = Propiedad::findOrFail($id_propiedad);
+
+    // ── PROPIEDAD ──────────────────────────────────────────────────────────
+    if ($seccion === 'propiedad') {
         $ciudad->direccion     = $request->direccion;
         $ciudad->ciudad        = $request->ciudad;
         $ciudad->rol           = $request->rol;
@@ -1299,213 +1308,174 @@ class PropiedadController extends Controller
         $ciudad->numero_gas    = $request->numero_gas;
         $ciudad->save();
 
-        // --- Subdetalles estacionamiento ---
-        $sub_est = SubDetalles::where('id_propiedad', $id_propiedad)->where('tipo_detalle', 1)->first();
-        if ($sub_est) {
-            $sub_est->estacionamiento = $request->estacionamiento;
-            $sub_est->save();
-        }
-
-        // --- Subdetalles bodega ---
-        $sub_bodega = SubDetalles::where('id_propiedad', $id_propiedad)->where('tipo_detalle', 2)->first();
-        if ($sub_bodega) {
-            $sub_bodega->bodega = $request->bodega;
-            $sub_bodega->save();
-        }
-
-        // --- Características (DetallePropiedad) ---
-        $detallesEdit = DetallePropiedad::where('id_propiedad', $id_propiedad)->first();
-        if ($detallesEdit) {
-            $detallesEdit->dormitorios          = $request->dormitorios          ?? $detallesEdit->dormitorios;
-            $detallesEdit->banos                = $request->banos                ?? $detallesEdit->banos;
-            $detallesEdit->mt2_total            = $request->mt2_total            ?? $detallesEdit->mt2_total;
-            $detallesEdit->amoblado             = $request->amoblado             ?? $detallesEdit->amoblado;
-            $detallesEdit->elementos_entregados = $request->elementos_entregados ?? $detallesEdit->elementos_entregados;
-            $detallesEdit->observaciones        = $request->observaciones        ?? $detallesEdit->observaciones;
-            $detallesEdit->save();
-        }
-
-        // --- Precios / resumen arriendo ---
-        $preciosEdit = Precios::where('id_propiedad', $id_propiedad)->first();
-        if ($preciosEdit) {
-            if ($request->filled('valor_arriendo')) $preciosEdit->ano_corrido = $request->valor_arriendo;
-            $preciosEdit->save();
-        }
-
-        // --- Arriendo activo ---
-        $arriendoActivo = Arriendo::where('id_propiedad', $id_propiedad)->where('estado', 1)->first();
-
-        // --- Arrendatario + Arriendo ---
-        // Se guardan todos los campos del arrendatario en la tabla arrendatarios.
-        // fecha_pago va en arrendatarios (NO en arriendos).
-        if ($request->filled('nombre_arrendatario') || $request->filled('rut_arrendatario')
-            || $request->filled('fecha_pago') || $request->filled('telefono_arrendatario')
-            || $request->filled('correo_arrendatario') || $request->filled('profesion_arrendatario')
-            || $request->filled('fecha_inicio') || $request->filled('proximo_reajuste')) {
-
-            // Buscar arrendatario existente desde el arriendo activo
-            $arrendatario = null;
-            if ($arriendoActivo && $arriendoActivo->id_arrendatario) {
-                $arrendatario = Arrendatario::find($arriendoActivo->id_arrendatario);
-            }
-
-            // Si no existe, crear uno nuevo
-            if (!$arrendatario) {
-                $arrendatario = new Arrendatario();
-                $arrendatario->estado = 1;
-                $arrendatario->nombre = $request->input('nombre_arrendatario') ?: 'Sin nombre';
-            }
-
-            // Actualizar campos del arrendatario
-            if ($request->filled('nombre_arrendatario'))    $arrendatario->nombre      = $request->nombre_arrendatario;
-            if ($request->filled('rut_arrendatario'))       $arrendatario->rut         = $request->rut_arrendatario;
-            if ($request->filled('telefono_arrendatario'))  $arrendatario->telefono    = $request->telefono_arrendatario;
-            if ($request->filled('correo_arrendatario'))    $arrendatario->correo      = $request->correo_arrendatario;
-            if ($request->filled('profesion_arrendatario')) $arrendatario->profesion   = $request->profesion_arrendatario;
-            // fecha_pago se guarda en arrendatarios, no en arriendos
-            if ($request->filled('fecha_pago'))             $arrendatario->fecha_pago  = $request->fecha_pago;
-            $arrendatario->save();
-
-            // Crear o actualizar el arriendo activo
-            if (!$arriendoActivo) {
-                $arriendoActivo = new Arriendo();
-                $arriendoActivo->id_propiedad = $id_propiedad;
-                $arriendoActivo->estado       = 1;
-            }
-            $arriendoActivo->id_arrendatario = $arrendatario->id;
-            if ($request->filled('fecha_inicio'))     $arriendoActivo->fecha_entrega  = $request->fecha_inicio;
-            if ($request->filled('proximo_reajuste')) $arriendoActivo->fecha_reajuste = $request->proximo_reajuste;
-            if ($request->filled('gastos_comunes'))   $arriendoActivo->gastos_comunes = $request->gastos_comunes;
-            if ($request->filled('valor_real'))       $arriendoActivo->valor_real     = $request->valor_real;
-            // NO se guarda fecha_pago en arriendos
-            $arriendoActivo->save();
-        }
-
-        // --- Archivo info cliente ---
-        if ($request->hasFile('info_cliente')) {
-            $infoFile   = $request->file('info_cliente');
-            $infoName   = time() . '_' . $infoFile->getClientOriginalName();
-            $infoPath   = $infoFile->storeAs('archivospro', $infoName, 'public');
-            $archivoReg = ArchivoPropiedad::firstOrNew(['id_propiedad' => $ciudad->id]);
-            $archivoReg->id_propiedad = $ciudad->id;
-            $archivoReg->archivo      = '/storage/' . $infoPath;
-            $archivoReg->save();
-        }
-
-        // --- Documentos arrendatario (múltiples) ---
-        if ($request->hasFile('documentos_arrendatario')) {
-            foreach ($request->file('documentos_arrendatario') as $doc) {
-                $nuevoDoc               = new ArchivoPropiedad();
-                $nuevoDoc->id_propiedad = $ciudad->id;
-                $nuevoDoc->archivo      = '/storage/' . $doc->storeAs('archivospro', time() . '_' . $doc->getClientOriginalName(), 'public');
-                $nuevoDoc->save();
-            }
-        }
-
-        // --- Imágenes ---
-        if ($request->file('imagenes') != null) {
-            $seccion = $request->input('imagenes_seccion') ?: null;
-            foreach ($request->file('imagenes') as $imagenFile) {
-                $imageName  = time() . '_' . $imagenFile->getClientOriginalName();
-                $imagenPath = $imagenFile->storeAs('images', $imageName, 'public');
-                $imagen = new ImgPropiedad();
-                $imagen->nombre       = $ciudad->rol ?? $ciudad->direccion ?? 'sin-nombre';
-                $imagen->link         = '/storage/' . $imagenPath;
-                $imagen->id_propiedad = $ciudad->id;
-                $imagen->seccion      = $seccion;
-                $imagen->save();
-            }
-        }
-
-        // --- Video ---
-        if ($request->hasFile('videos')) {
-            $videoFile = $request->file('videos');
-            $ext       = $videoFile->getClientOriginalExtension() ?: 'mp4';
-            $videoPath = $videoFile->storeAs('videos', time() . '_video.' . $ext, 'public');
-            $video = new VidArriendo();
-            $video->video        = '/storage/' . $videoPath;
-            $video->id_propiedad = $ciudad->id;
-            $video->estado       = 1;
-            $video->save();
-        }
-
-        // --- Trabajos de mantenimiento ---
-        $trabajosJson = $request->input('trabajos');
-        if ($trabajosJson) {
-            $trabajos = json_decode($trabajosJson, true);
-            if (is_array($trabajos)) {
-                foreach ($trabajos as $i => $trabajo) {
-                    $rutaDoc    = null;
-                    $archivoKey = 'trabajo_archivo_' . $i;
-                    if ($request->hasFile($archivoKey)) {
-                        $doc      = $request->file($archivoKey);
-                        $docName  = time() . '_' . $doc->getClientOriginalName();
-                        $rutaDoc  = $doc->storeAs('mantenciones', $docName, 'public');
-                    }
-
-                    $envioCorreo = null;
-                    if (!empty($trabajo['proxima'])) {
-                        try {
-                            $envioCorreo = Carbon::parse($trabajo['proxima'])->subMonth()->toDateString();
-                        } catch (\Exception $e) {
-                            $envioCorreo = null;
-                        }
-                    }
-
-                    Mantenimiento::create([
-                        'id_propiedad'     => $id_propiedad,
-                        'nombre'           => $trabajo['tipo']          ?? null,
-                        'descripcion'      => $trabajo['descripcion']   ?? null,
-                        'fecha_mantencion' => $trabajo['fecha']         ?? null,
-                        'meses'            => $trabajo['meses']         ?? '0',
-                        'fecha_prox_man'   => $trabajo['proxima']       ?? null,
-                        'envio_correo'     => $envioCorreo,
-                        'doc'              => $rutaDoc,
-                        'persona_cargo'    => $trabajo['persona_cargo'] ?? null,
-                    ]);
-
-                    if ($request->hasFile('trabajo_fotos_' . $i)) {
-                        foreach ($request->file('trabajo_fotos_' . $i) as $foto) {
-                            $fotoName = time() . '_' . $foto->getClientOriginalName();
-                            $fotoPath = $foto->storeAs('mantenciones/fotos', $fotoName, 'public');
-                            $imgReg = new ArchivoPropiedad();
-                            $imgReg->id_propiedad = $ciudad->id;
-                            $imgReg->archivo      = '/storage/' . $fotoPath;
-                            $imgReg->save();
-                        }
-                    }
-
-                    if ($request->hasFile('trabajo_videos_' . $i)) {
-                        foreach ($request->file('trabajo_videos_' . $i) as $vid) {
-                            $vidName = time() . '_' . $vid->getClientOriginalName();
-                            $vidPath = $vid->storeAs('mantenciones/videos', $vidName, 'public');
-                            $vidReg = new ArchivoPropiedad();
-                            $vidReg->id_propiedad = $ciudad->id;
-                            $vidReg->archivo      = '/storage/' . $vidPath;
-                            $vidReg->save();
-                        }
-                    }
-                }
-            }
-        }
-
-        // --- Propietarios nuevos ---
         $PropietariosAgregados = json_decode($request->PropietariosAgregados, true);
         if (!empty($PropietariosAgregados)) {
             foreach ($PropietariosAgregados as $propietario) {
-                $new_Propietario = new Propietario_propiedades();
+                $new_Propietario                 = new Propietario_propiedades();
                 $new_Propietario->id_propiedad   = $ciudad->id;
                 $new_Propietario->id_propietario = $propietario['id'];
                 $new_Propietario->save();
             }
         }
-
-        return response()->json([
-            'success'           => true,
-            'propiedad_editada' => $ciudad,
-            'detalles_editados' => $detallesEdit
-        ]);
     }
+
+    // ── ARRIENDO ───────────────────────────────────────────────────────────
+    // ── ARRIENDO ───────────────────────────────────────────────────────────
+if ($seccion === 'arriendo') {
+    $preciosEdit = Precios::where('id_propiedad', $id_propiedad)->first();
+    if ($preciosEdit) {
+        $preciosEdit->ano_corrido = $request->valor_arriendo;
+        $preciosEdit->save();
+    }
+
+    $arriendoActivo = Arriendo::where('id_propiedad', $id_propiedad)
+        ->where('estado', 1)
+        ->first();
+
+    if ($arriendoActivo) {
+        $arriendoActivo->gastos_comunes = $request->gastos_comunes;
+        $arriendoActivo->valor_real     = $request->valor_real;
+        if ($request->filled('fecha_inicio'))
+            $arriendoActivo->fecha_entrega  = $request->fecha_inicio;
+        if ($request->filled('proximo_reajuste'))
+            $arriendoActivo->fecha_reajuste = $request->proximo_reajuste;
+        $arriendoActivo->save();
+
+    } elseif ($request->filled('fecha_inicio')) {
+        // Buscar arrendatario existente para esta propiedad
+        $arriendoPrevio = Arriendo::where('id_propiedad', $id_propiedad)
+            ->whereNotNull('id_arrendatario')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $nuevoArriendo                   = new Arriendo();
+        $nuevoArriendo->id_propiedad     = $id_propiedad;
+        $nuevoArriendo->estado           = 1;
+        $nuevoArriendo->fecha_entrega    = $request->fecha_inicio;
+        $nuevoArriendo->gastos_comunes   = $request->gastos_comunes;
+        $nuevoArriendo->valor_real       = $request->valor_real;
+        $nuevoArriendo->id_arrendatario  = $arriendoPrevio?->id_arrendatario ?? 0;
+        if ($request->filled('proximo_reajuste'))
+            $nuevoArriendo->fecha_reajuste = $request->proximo_reajuste;
+        $nuevoArriendo->save();
+    }
+}
+
+    // ── CARACTERÍSTICAS ────────────────────────────────────────────────────
+    if ($seccion === 'caracteristicas') {
+        $sub_est = SubDetalles::where('id_propiedad', $id_propiedad)
+            ->where('tipo_detalle', 1)->first();
+        if ($sub_est) {
+            $sub_est->estacionamiento = $request->estacionamiento;
+            $sub_est->save();
+        }
+
+        $sub_bodega = SubDetalles::where('id_propiedad', $id_propiedad)
+            ->where('tipo_detalle', 2)->first();
+        if ($sub_bodega) {
+            $sub_bodega->bodega = $request->bodega;
+            $sub_bodega->save();
+        }
+
+        $detallesEdit = DetallePropiedad::where('id_propiedad', $id_propiedad)->first();
+        if ($detallesEdit) {
+            $detallesEdit->dormitorios          = $request->dormitorios;
+            $detallesEdit->banos                = $request->banos;
+            $detallesEdit->mt2_total            = $request->mt2_total;
+            $detallesEdit->amoblado             = $request->amoblado;
+            $detallesEdit->elementos_entregados = $request->elementos_entregados;
+            $detallesEdit->observaciones        = $request->observaciones;
+            $detallesEdit->save();
+        }
+
+        $ciudad->tipo_vivienda = $request->tipo_vivienda;
+        $ciudad->save();
+    }
+
+    // ── ARRENDATARIO ───────────────────────────────────────────────────────
+if ($seccion === 'arrendatario') {
+    $arriendoActivo = Arriendo::where('id_propiedad', $id_propiedad)
+        ->where('estado', 1)->first();
+
+    $arrendatario = null;
+    if ($arriendoActivo && $arriendoActivo->id_arrendatario)
+        $arrendatario = Arrendatario::find($arriendoActivo->id_arrendatario);
+    if (!$arrendatario && $request->filled('rut_arrendatario'))
+        $arrendatario = Arrendatario::where('rut', $request->rut_arrendatario)->first();
+    if (!$arrendatario) {
+        $arrendatario         = new Arrendatario();
+        $arrendatario->estado = 1;
+    }
+
+    $arrendatario->nombre     = $request->nombre_arrendatario;
+    $arrendatario->rut        = $request->rut_arrendatario;
+    $arrendatario->telefono   = $request->telefono_arrendatario;
+    $arrendatario->correo     = $request->correo_arrendatario;
+    $arrendatario->profesion  = $request->profesion_arrendatario;
+    $arrendatario->fecha_pago = $request->fecha_pago;
+    $arrendatario->save();
+
+    if ($arriendoActivo) {
+        $arriendoActivo->id_arrendatario = $arrendatario->id;
+        $arriendoActivo->save();
+    } else {
+        $nuevoArriendo                  = new Arriendo();
+        $nuevoArriendo->id_propiedad    = $id_propiedad;
+        $nuevoArriendo->estado          = 1;
+        $nuevoArriendo->id_arrendatario = $arrendatario->id;
+        $nuevoArriendo->fecha_entrega   = now();
+        $nuevoArriendo->save();
+    }
+
+    if ($request->hasFile('info_cliente')) {
+        $infoFile                 = $request->file('info_cliente');
+        $infoPath                 = $infoFile->storeAs('archivospro', time() . '_' . $infoFile->getClientOriginalName(), 'public');
+        $archivoReg               = ArchivoPropiedad::firstOrNew(['id_propiedad' => $ciudad->id]);
+        $archivoReg->id_propiedad = $ciudad->id;
+        $archivoReg->archivo      = '/storage/' . $infoPath;
+        $archivoReg->save();
+    }
+
+    if ($request->hasFile('documentos_arrendatario')) {
+        foreach ($request->file('documentos_arrendatario') as $doc) {
+            $nuevoDoc               = new ArchivoPropiedad();
+            $nuevoDoc->id_propiedad = $ciudad->id;
+            $nuevoDoc->archivo      = '/storage/' . $doc->storeAs('archivospro', time() . '_' . $doc->getClientOriginalName(), 'public');
+            $nuevoDoc->save();
+        }
+    }
+}
+
+    // ── FOTOS / VIDEO ──────────────────────────────────────────────────────
+    if ($seccion === 'fotos') {
+        if ($request->hasFile('imagenes')) {
+            $seccionImg = $request->input('imagenes_seccion') ?: null;
+            foreach ($request->file('imagenes') as $imagenFile) {
+                $imageName  = time() . '_' . $imagenFile->getClientOriginalName();
+                $imagenPath = $imagenFile->storeAs('images', $imageName, 'public');
+                $imagen               = new ImgPropiedad();
+                $imagen->nombre       = $ciudad->rol ?? $ciudad->direccion ?? 'sin-nombre';
+                $imagen->link         = '/storage/' . $imagenPath;
+                $imagen->id_propiedad = $ciudad->id;
+                $imagen->seccion      = $seccionImg;
+                $imagen->save();
+            }
+        }
+
+        if ($request->hasFile('videos')) {
+            $videoFile = $request->file('videos');
+            $ext       = $videoFile->getClientOriginalExtension() ?: 'mp4';
+            $videoPath = $videoFile->storeAs('videos', time() . '_video.' . $ext, 'public');
+            $video               = new VidArriendo();
+            $video->video        = '/storage/' . $videoPath;
+            $video->id_propiedad = $ciudad->id;
+            $video->estado       = 1;
+            $video->save();
+        }
+    }
+
+    return response()->json(['success' => true]);
+}
 
     public function edicionDetallesObrero(Request $request)
     {
@@ -1801,4 +1771,67 @@ class PropiedadController extends Controller
         $img->save();
         return response()->json(['ok' => true, 'seccion' => $img->seccion]);
     }
+
+    public function guardarTrabajo(Request $request)
+    {
+        $rutaArchivo = null;
+        if ($request->hasFile('archivo_trabajo')) {
+            $archivo     = $request->file('archivo_trabajo');
+            $nombre      = time() . '_' . $archivo->getClientOriginalName();
+            $rutaArchivo = '/storage/' . $archivo->storeAs('mantenciones', $nombre, 'public');
+        }
+
+        $proxima     = $request->proxima_mantencion ?? null;
+        $envioCorreo = null;
+        if ($proxima) {
+            try {
+                $envioCorreo = Carbon::parse($proxima)->subMonth()->toDateString();
+            } catch (\Exception $e) {}
+        }
+
+        $trabajo = Mantenimiento::create([
+            'id_propiedad'     => $request->id_propiedad,
+            'nombre'           => $request->tipo_trabajo,
+            'descripcion'      => $request->descripcion_trabajo,
+            'fecha_mantencion' => $request->fecha_mantencion,
+            'fecha_prox_man'   => $proxima,
+            'meses'            => 0,
+            'envio_correo'     => $envioCorreo,
+            'doc'              => $rutaArchivo,
+            'persona_cargo'    => $request->persona_cargo,
+        ]);
+
+        return response()->json(['success' => true, 'data' => $trabajo]);
+    }
+
+    public function edicionArriendoAnoCorrido(Request $request)
+{
+    $id_propiedad = $request->id_propiedad;
+
+    // Precios
+    $preciosEdit = Precios::where('id_propiedad', $id_propiedad)->first();
+    if ($preciosEdit && $request->filled('valor_arriendo')) {
+        $preciosEdit->ano_corrido = $request->valor_arriendo;
+        $preciosEdit->save();
+    }
+
+    // Arriendo activo
+    $arriendoActivo = Arriendo::where('id_propiedad', $id_propiedad)
+        ->where('estado', 1)
+        ->first();
+
+    if ($arriendoActivo) {
+        $arriendoActivo->gastos_comunes = $request->gastos_comunes;
+        $arriendoActivo->valor_real     = $request->valor_real;
+        if ($request->filled('fecha_inicio'))
+            $arriendoActivo->fecha_entrega  = $request->fecha_inicio;
+        if ($request->filled('proximo_reajuste'))
+            $arriendoActivo->fecha_reajuste = $request->proximo_reajuste;
+        $arriendoActivo->save();
+    }
+    // Si no hay arriendo activo todavía: primero guarda arrendatario
+    // (que crea el arriendo), luego vuelve a guardar aquí.
+
+    return response()->json(['success' => true]);
+}
 }
