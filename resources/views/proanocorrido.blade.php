@@ -188,6 +188,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-4 mt-3">
+                                    <label for="tipoInput">Tipo Inmueble</label>
+                                    <select class="form-select" id="tipoInput" required>
+                                        <option value="" disabled selected>Seleccione un Tipo</option>
+                                        <option value="Casa">Casa</option>
+                                        <option value="Departamento">Departamento</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-4 mt-3">
                                     <label for="AnoCorridoInput">Precio Año Corrido</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="AnoCorridoInput"
@@ -214,15 +222,15 @@
                                     <input type="text" class="form-control" id="condominioInput"
                                         placeholder="Nombre del Condominio" required>
                                 </div>
-                                <div class="form-group col-lg-4">
+                                <div class="form-group col-lg-4" id="torreGroup">
                                     <label for="TorreInput">Torre</label>
                                     <input type="text" class="form-control" id="TorreInput"
                                         placeholder="Nombre de la torre" required>
                                 </div>
-                                <div class="form-group col-lg-4">
-                                    <label for="TorrenumeroInput">N° Departamento</label>
+                                <div class="form-group col-lg-4" id="numeroTorreGroup">
+                                    <label for="TorrenumeroInput">N° de Propiedad</label>
                                     <input type="text" class="form-control" id="TorrenumeroInput"
-                                        placeholder="Numero del Departamento" required>
+                                        placeholder="Numero de Propiedad">
                                 </div>
                                 <div class="form-group col-lg-4">
                                     <label for="rolInput">Rol</label>
@@ -236,14 +244,6 @@
                                         <option value="Amoblada">Amoblada</option>
                                         <option value="Sin Amoblar">Sin Amoblar</option>
                                         <option value="SemiAmoblado">SemiAmoblado</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-3 col-lg-4">
-                                    <label for="tipoInput">Tipo Inmueble</label>
-                                    <select class="form-select" id="tipoInput">
-                                        <option value="" disabled selected>Seleccione un Tipo</option>
-                                        <option value="Casa">Casa</option>
-                                        <option value="Departamento">Departamento</option>
                                     </select>
                                 </div>
                                 <div class="form-group mb-3 col-lg-12">
@@ -1259,6 +1259,19 @@
 
             let tipoMoneda = 'CLP';
 
+            function actualizarCamposTipo() {
+                var tipoSeleccionado = $("#tipoInput").val();
+                if (tipoSeleccionado === 'Casa') {
+                    $("#torreGroup").hide();
+                    $("#TorreInput").val('');
+                } else {
+                    $("#torreGroup").show();
+                }
+            }
+
+            $("#tipoInput").on('change', actualizarCamposTipo);
+            actualizarCamposTipo();
+
             // $("#switchUF").on("change", function() {
             //     tipoMoneda = this.checked ? 'UF' : 'CLP';
             // });
@@ -1312,13 +1325,18 @@
                     camposVacios = true;
                 }
 
+                if (!tipo) {
+                    mostrarError("#tipoInput");
+                    camposVacios = true;
+                }
+
                 if (!ano_corrido) {
                     mostrarError("#AnoCorridoInput");
                     camposVacios = true;
                 }
 
-                if (!num_torre) {
-                    mostrarError("#TorrenumeroInput");
+                if (tipo === 'Departamento' && !torre) {
+                    mostrarError("#TorreInput");
                     camposVacios = true;
                 }
 
@@ -1367,6 +1385,7 @@
                 formData.append('ano_corrido', ano_corrido);
                 formData.append('torre', torre);
                 formData.append('num_torre', num_torre);
+                formData.append('tipo', tipo);
 
                 formData.append('monto', monto);
                 formData.append('rol_est', rol_est);

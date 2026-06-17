@@ -15,14 +15,10 @@
                     <div style="height:3px; width:80px; background:#E67E22; margin:8px auto 0;"></div>
                 </div>
 
-                {{-- ══════════════════════════════════════════
-                     FILA SUPERIOR: Fotos/Video + Resumen Arriendo
-                ══════════════════════════════════════════ --}}
-                <div class="row g-3 mb-3">
-
-                    {{-- FOTOS / VIDEO --}}
-                    <div class="col-lg-7">
-                        <div class="card-seccion h-100">
+                {{-- FOTOS / VIDEO --}}
+                <div class="row g-3 align-items-start mb-3">
+                    <div class="col-xl-5 col-lg-5 col-md-6">
+                        <div class="card-seccion h-100 card-seccion-compacta">
                             <div class="card-seccion-header">
                                 <span><i class="fas fa-images me-2"></i>Fotos / Video</span>
                                 <div class="d-flex align-items-center gap-2">
@@ -36,39 +32,55 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-seccion-body">
+                            <div class="card-seccion-body p-3">
 
-                                {{-- Imagen principal --}}
-                                @if($imagen && $imagen->count() > 0)
-                                    <div class="mb-2 position-relative">
-                                        <img id="img-principal"
-                                             src="{{ asset($imagen->first()->link) }}"
-                                             class="rounded w-100"
-                                             style="height:280px; object-fit:cover; border:2px solid rgba(255,255,255,.2);"
-                                             alt="{{ $detalles->direccion }}">
-                                        <span id="img-principal-seccion" class="badge-seccion-img"></span>
-                                    </div>
-                                @else
-                                    <div class="sin-imagen mb-2">
-                                        <i class="fas fa-image fa-2x mb-1"></i>
-                                        <p class="mb-0 small">Sin imágenes aún</p>
-                                    </div>
-                                @endif
-
-                                {{-- Tabs secciones --}}
+                                {{-- TABS SECCIONES --}}
                                 <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                                     <div id="tabs-secciones" class="d-flex flex-wrap gap-1"></div>
                                 </div>
 
-                                {{-- Strip miniaturas --}}
-                                <div id="strip-miniaturas" class="d-flex gap-2 pb-1"
-                                     style="overflow-x:auto; min-height:75px;"></div>
-                                <div id="sin-imagenes-seccion" class="small text-center py-2"
-                                     style="display:none; color:rgba(255,255,255,.5);">
-                                    Sin imágenes en esta sección
+                                {{-- FILA PRINCIPAL: Imagen grande + Strip miniaturas vertical --}}
+                                <div class="d-flex gap-2 mb-3" style="min-height: 280px;">
+
+                                    {{-- Imagen principal --}}
+                                    <div class="position-relative flex-grow-1">
+                                        @if($imagen && $imagen->count() > 0)
+                                            <img id="img-principal"
+                                                 src="{{ asset($imagen->first()->link) }}"
+                                                 class="rounded w-100 h-100"
+                                                 style="object-fit:cover; border:2px solid rgba(255,255,255,.2); max-height:280px;"
+                                                 alt="{{ $detalles->direccion }}">
+                                            <span id="img-principal-seccion" class="badge-seccion-img"></span>
+                                            @if($videos->count() > 0)
+                                                <div class="img-video-overlay">
+                                                    <video controls loop muted autoplay playsinline>
+                                                        <source src="{{ asset($videos->first()->video) }}" type="video/mp4">
+                                                    </video>
+                                                    <a href="javascript:void(0)" data-id="{{ $videos->first()->id }}" class="delete-video btn-eliminar-flotante">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        @else
+                                            <div class="sin-imagen h-100">
+                                                <i class="fas fa-image fa-2x mb-1"></i>
+                                                <p class="mb-0 small">Sin imágenes aún</p>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- Strip miniaturas VERTICAL (derecha) --}}
+                                    <div id="strip-miniaturas"
+                                         style="display:flex; flex-direction:column; gap:6px; overflow-y:auto; overflow-x:hidden; width:95px; max-height:280px;">
+                                    </div>
+                                    <div id="sin-imagenes-seccion" class="small text-center py-2"
+                                         style="display:none; color:rgba(255,255,255,.5);">
+                                        Sin imágenes en esta sección
+                                    </div>
+
                                 </div>
 
-                                {{-- Panel subir fotos/video --}}
+                                {{-- Panel subir fotos/video (se muestra al editar) --}}
                                 <div id="panel-fotos-inline" style="display:none;" class="mt-3">
                                     <div class="row g-2">
                                         <div class="col-12">
@@ -105,30 +117,10 @@
                                     </div>
                                 </div>
 
-                                {{-- Videos --}}
-                                @if($videos->count() > 0)
-                                    <div class="mt-3">
-                                        <p class="label-campo mb-1"><i class="fas fa-video me-1"></i>Video</p>
-                                        @foreach($videos as $vid)
-                                            <div class="position-relative mb-2">
-                                                <video controls loop muted autoplay playsinline
-                                                       style="width:100%; height:180px; object-fit:cover; border-radius:.5rem;">
-                                                    <source src="{{ asset($vid->video) }}" type="video/mp4">
-                                                </video>
-                                                <a href="javascript:void(0)" data-id="{{$vid->id}}" class="delete-video btn-eliminar-flotante">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-
                             </div>
                         </div>
                     </div>
-
-                    {{-- RESUMEN ARRIENDO --}}
-                    <div class="col-lg-5">
+                    <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card-seccion h-100" id="card-arriendo">
                             <div class="card-seccion-header">
                                 <span><i class="fas fa-file-invoice-dollar me-2"></i>Resumen del Arriendo</span>
@@ -143,7 +135,7 @@
                                 <div id="view-arriendo">
                                     <div class="fila-dato">
                                         <span class="label-campo">Valor Actual Arriendo</span>
-                                        <span class="valor-dato resaltado" id="disp-valor-arriendo">${{ number_format($precios->ano_corrido ?? 0, 0, ',', '.') }}</span>
+                                        <span class="valor-dato resaltado" id="disp-valor-arriendo">${{ number_format((($precios->ano_corrido ?? 0) * 1000), 0, ',', '.') }}</span>
                                     </div>
                                     <div class="fila-dato">
                                         <span class="label-campo">Gastos Comunes</span>
@@ -717,15 +709,25 @@
 </script>
 
 @endsection
-
 @section('javascript')
 @parent
 <script>
+
+// ════════════════════════════════════
+// VARIABLES GLOBALES (scope global para que las funciones externas al ready puedan accederlas)
+// ════════════════════════════════════
+var imagenesData    = [];
+var secciones       = [];
+var seccionActiva   = 'todas';
+var imgReasignarId  = null;
+var ordenAlfabetico = false;
+
 $(document).ready(function () {
+
     $(document).on('input', '#m_gastos_comunes, #m_valor_real', function() {
-    var raw = $(this).val().replace(/[^0-9]/g, '');
-    if (raw) $(this).val('$' + Number(raw).toLocaleString('es-CL'));
-    else $(this).val('');
+        var raw = $(this).val().replace(/[^0-9]/g, '');
+        if (raw) $(this).val('$' + Number(raw).toLocaleString('es-CL'));
+        else $(this).val('');
     });
 
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
@@ -733,14 +735,8 @@ $(document).ready(function () {
     const ID_PROPIEDAD = {{ $detalles->id }};
 
     // ════════════════════════════════════
-    // SECCIONES IMÁGENES
+    // INICIALIZAR IMÁGENES DESDE PHP
     // ════════════════════════════════════
-    var imagenesData    = [];
-    var secciones       = [];
-    var seccionActiva   = 'todas';
-    var imgReasignarId  = null;
-    var ordenAlfabetico = false;
-
     try {
         var raw = document.getElementById('datos-imagenes-php');
         if (raw) imagenesData = JSON.parse(raw.textContent);
@@ -758,103 +754,9 @@ $(document).ready(function () {
         renderMiniaturas();
     });
 
-    function getImagenesOrdenadas() {
-        var lista = seccionActiva === 'todas' ? imagenesData.slice() : imagenesData.filter(function(i){ return i.seccion === seccionActiva; });
-        if (ordenAlfabetico) lista.sort(function(a, b){ return (a.seccion || '').localeCompare(b.seccion || ''); });
-        return lista;
-    }
-
-    function renderTabs() {
-        var $tabs = $('#tabs-secciones');
-        $tabs.empty();
-        $tabs.append($('<button type="button">').addClass('tab-sec ' + (seccionActiva === 'todas' ? 'tab-sec-activo' : '')).attr('data-sec','todas').text('Todas (' + imagenesData.length + ')'));
-        secciones.forEach(function(sec) {
-            var count = imagenesData.filter(function(i){ return i.seccion === sec; }).length;
-            var $btn = $('<button type="button">').addClass('tab-sec d-flex align-items-center gap-1 ' + (seccionActiva === sec ? 'tab-sec-activo' : '')).attr('data-sec', sec)
-                .html(sec + ' <span class="badge bg-dark text-white ms-1" style="font-size:.65rem;">' + count + '</span>');
-            if (count === 0) {
-                $btn.append($('<i class="fas fa-times ms-1" style="font-size:.65rem; cursor:pointer;">').on('click', function(e){
-                    e.stopPropagation();
-                    secciones.splice(secciones.indexOf(sec), 1);
-                    if (seccionActiva === sec) seccionActiva = 'todas';
-                    renderTabs(); actualizarSelectores();
-                }));
-            }
-            $tabs.append($btn);
-        });
-        $tabs.find('.tab-sec').on('click', function() {
-            seccionActiva = $(this).data('sec');
-            renderTabs(); renderMiniaturas();
-        });
-    }
-
-    function renderMiniaturas() {
-        var $strip = $('#strip-miniaturas');
-        $strip.empty();
-        var lista = getImagenesOrdenadas();
-        if (lista.length === 0) { $('#sin-imagenes-seccion').show(); return; }
-        $('#sin-imagenes-seccion').hide();
-        lista.forEach(function(img) {
-            var $wrap = $('<div class="position-relative flex-shrink-0" style="width:90px;">');
-            var $img = $('<img>').addClass('rounded miniatura-recorrido')
-                .attr({ src: img.src, 'data-src': img.src, 'data-id': img.id, 'data-seccion': img.seccion })
-                .css({ width:'90px', height:'65px', 'object-fit':'cover', cursor:'pointer', border:'2px solid transparent', borderRadius:'.4rem', transition:'border-color .2s' });
-            if (img.seccion) {
-                $wrap.append($('<span>').addClass('position-absolute badge bg-dark text-white')
-                    .css({ bottom:'3px', left:'3px', 'font-size':'.55rem', 'max-width':'80px', overflow:'hidden', 'text-overflow':'ellipsis', 'white-space':'nowrap' })
-                    .text(img.seccion));
-            }
-            var $bar = $('<div class="position-absolute d-flex gap-1">').css({ top:'3px', right:'3px', background:'rgba(255,255,255,.88)', 'border-radius':'50px', padding:'4px' });
-            $bar.append($('<a href="javascript:void(0)">').attr('data-id', img.id).addClass('portada d-flex align-items-center').html('<i class="fas fa-check" style="color:green;font-size:.65rem;"></i>'));
-            $bar.append($('<a href="javascript:void(0)">').addClass('btn-reasignar d-flex align-items-center').attr({'data-id': img.id, 'data-src': img.src, 'data-sec': img.seccion || ''}).html('<i class="fas fa-tag" style="color:#E67E22;font-size:.65rem;"></i>'));
-            $bar.append($('<a href="javascript:void(0)">').attr('data-id', img.id).addClass('delete-img d-flex align-items-center').html('<i class="fas fa-trash-alt" style="color:red;font-size:.65rem;"></i>'));
-            $bar.append($('<a>').attr({ href: img.src, download: '' }).addClass('d-flex align-items-center').html('<i class="fas fa-download" style="color:#007bff;font-size:.65rem;"></i>'));
-            $wrap.append($img).append($bar);
-            $strip.append($wrap);
-        });
-        if (lista.length > 0 && $('#img-principal').length) {
-            $('#img-principal').attr('src', lista[0].src);
-            $('#img-principal-seccion').text(lista[0].seccion ? '📁 ' + lista[0].seccion : '');
-        }
-    }
-
-    function actualizarSelectores() {
-        var $sel2 = $('#modal-select-seccion');
-        $sel2.empty().append('<option value="">— Sin sección —</option>');
-        secciones.forEach(function(sec) { $sel2.append($('<option>').val(sec).text(sec)); });
-        var $selSubir = $('#campo-seccion-subir');
-        if ($selSubir.length) {
-            $selSubir.empty().append('<option value="">— Sin sección —</option>');
-            secciones.forEach(function(sec) { $selSubir.append($('<option>').val(sec).text(sec)); });
-        }
-    }
-
-    $(document).on('click', '.miniatura-recorrido', function() {
-        var src = $(this).data('src'), sec = $(this).data('seccion') || '';
-        $('#img-principal').attr('src', src);
-        $('#img-principal-seccion').text(sec ? '📁 ' + sec : '');
-        $('.miniatura-recorrido').css('border-color', 'transparent');
-        $(this).css('border-color', '#fff');
-    });
-
-    $(document).on('click', '.btn-reasignar', function() {
-        imgReasignarId = $(this).data('id');
-        $('#modal-preview-img').attr('src', $(this).data('src'));
-        $('#modal-select-seccion').val($(this).data('sec') || '');
-        $('#modal-reasignar').css('display', 'flex');
-    });
-    $('#modal-btn-cancelar').on('click', function() { $('#modal-reasignar').hide(); imgReasignarId = null; });
-    $('#modal-btn-confirmar').on('click', function() {
-        if (imgReasignarId === null) return;
-        var nuevaSeccion = $('#modal-select-seccion').val();
-        var img = imagenesData.find(function(i){ return i.id === imgReasignarId; });
-        if (img) img.seccion = nuevaSeccion;
-        $.ajax({ url: '/imagen/seccion/' + imgReasignarId, type: 'POST', data: { seccion: nuevaSeccion, _token: $('meta[name="csrf-token"]').attr('content') } });
-        $('#modal-reasignar').hide(); imgReasignarId = null;
-        renderTabs(); renderMiniaturas();
-    });
-
-    renderTabs(); renderMiniaturas(); actualizarSelectores();
+    renderTabs();
+    renderMiniaturas();
+    actualizarSelectores();
 
     // ════════════════════════════════════
     // TRABAJOS DE MANTENIMIENTO — AJAX
@@ -964,6 +866,37 @@ $(document).ready(function () {
     });
 
     // ════════════════════════════════════
+    // MODAL REASIGNAR
+    // ════════════════════════════════════
+    $(document).on('click', '.btn-reasignar', function() {
+        imgReasignarId = $(this).data('id');
+        $('#modal-preview-img').attr('src', $(this).data('src'));
+        $('#modal-select-seccion').val($(this).data('sec') || '');
+        $('#modal-reasignar').css('display', 'flex');
+    });
+
+    $('#modal-btn-cancelar').on('click', function() {
+        $('#modal-reasignar').hide();
+        imgReasignarId = null;
+    });
+
+    $('#modal-btn-confirmar').on('click', function() {
+        if (imgReasignarId === null) return;
+        var nuevaSeccion = $('#modal-select-seccion').val();
+        var img = imagenesData.find(function(i){ return i.id === imgReasignarId; });
+        if (img) img.seccion = nuevaSeccion;
+        $.ajax({
+            url: '/imagen/seccion/' + imgReasignarId,
+            type: 'POST',
+            data: { seccion: nuevaSeccion, _token: $('meta[name="csrf-token"]').attr('content') }
+        });
+        $('#modal-reasignar').hide();
+        imgReasignarId = null;
+        renderTabs();
+        renderMiniaturas();
+    });
+
+    // ════════════════════════════════════
     // RUT FORMAT
     // ════════════════════════════════════
     $(document).on('input', '#m_rut_arr', function() {
@@ -972,7 +905,125 @@ $(document).ready(function () {
         $(this).val(val);
     });
 
+    // ════════════════════════════════════
+    // CLICK MINIATURAS
+    // ════════════════════════════════════
+    $(document).on('click', '.miniatura-recorrido', function() {
+        var src = $(this).data('src'), sec = $(this).data('seccion') || '';
+        $('#img-principal').attr('src', src);
+        $('#img-principal-seccion').text(sec ? '📁 ' + sec : '');
+        $('.miniatura-recorrido').css('border-color', 'transparent');
+        $(this).css('border-color', '#fff');
+    });
+
 });
+
+// ════════════════════════════════════
+// FUNCIONES DE IMÁGENES (scope global)
+// ════════════════════════════════════
+function getImagenesOrdenadas() {
+    var lista = seccionActiva === 'todas'
+        ? imagenesData.slice()
+        : imagenesData.filter(function(i){ return i.seccion === seccionActiva; });
+    if (ordenAlfabetico) lista.sort(function(a, b){ return (a.seccion || '').localeCompare(b.seccion || ''); });
+    return lista;
+}
+
+function renderTabs() {
+    var $tabs = $('#tabs-secciones');
+    $tabs.empty();
+    $tabs.append(
+        $('<button type="button">')
+            .addClass('tab-sec ' + (seccionActiva === 'todas' ? 'tab-sec-activo' : ''))
+            .attr('data-sec','todas')
+            .text('Todas (' + imagenesData.length + ')')
+    );
+    secciones.forEach(function(sec) {
+        var count = imagenesData.filter(function(i){ return i.seccion === sec; }).length;
+        var $btn = $('<button type="button">')
+            .addClass('tab-sec d-flex align-items-center gap-1 ' + (seccionActiva === sec ? 'tab-sec-activo' : ''))
+            .attr('data-sec', sec)
+            .html(sec + ' <span class="badge bg-dark text-white ms-1" style="font-size:.65rem;">' + count + '</span>');
+        if (count === 0) {
+            $btn.append(
+                $('<i class="fas fa-times ms-1" style="font-size:.65rem; cursor:pointer;">').on('click', function(e){
+                    e.stopPropagation();
+                    secciones.splice(secciones.indexOf(sec), 1);
+                    if (seccionActiva === sec) seccionActiva = 'todas';
+                    renderTabs();
+                    actualizarSelectores();
+                })
+            );
+        }
+        $tabs.append($btn);
+    });
+    $tabs.find('.tab-sec').on('click', function() {
+        seccionActiva = $(this).data('sec');
+        renderTabs();
+        renderMiniaturas();
+    });
+}
+
+function renderMiniaturas() {
+    var $strip = $('#strip-miniaturas');
+    $strip.empty();
+    var lista = getImagenesOrdenadas();
+    if (lista.length === 0) { $('#sin-imagenes-seccion').show(); return; }
+    $('#sin-imagenes-seccion').hide();
+
+    lista.forEach(function(img) {
+        var $wrap = $('<div class="position-relative flex-shrink-0">').css({ width: '85px' });
+
+        var $img = $('<img>').addClass('rounded miniatura-recorrido')
+            .attr({ src: img.src, 'data-src': img.src, 'data-id': img.id, 'data-seccion': img.seccion })
+            .css({
+                width: '85px',
+                height: '75px',
+                'object-fit': 'cover',
+                cursor: 'pointer',
+                border: '2px solid transparent',
+                borderRadius: '.4rem',
+                transition: 'border-color .2s'
+            });
+
+        if (img.seccion) {
+            $wrap.append(
+                $('<span>').addClass('position-absolute badge bg-dark text-white')
+                    .css({ bottom:'3px', left:'3px', 'font-size':'.5rem', 'max-width':'75px',
+                           overflow:'hidden', 'text-overflow':'ellipsis', 'white-space':'nowrap' })
+                    .text(img.seccion)
+            );
+        }
+
+        var $bar = $('<div class="position-absolute d-flex gap-1">').css({
+            top:'3px', right:'3px', background:'rgba(255,255,255,.88)',
+            'border-radius':'50px', padding:'3px'
+        });
+        $bar.append($('<a href="javascript:void(0)">').attr('data-id', img.id).addClass('portada d-flex align-items-center').html('<i class="fas fa-check" style="color:green;font-size:.6rem;"></i>'));
+        $bar.append($('<a href="javascript:void(0)">').addClass('btn-reasignar d-flex align-items-center').attr({'data-id': img.id, 'data-src': img.src, 'data-sec': img.seccion || ''}).html('<i class="fas fa-tag" style="color:#E67E22;font-size:.6rem;"></i>'));
+        $bar.append($('<a href="javascript:void(0)">').attr('data-id', img.id).addClass('delete-img d-flex align-items-center').html('<i class="fas fa-trash-alt" style="color:red;font-size:.6rem;"></i>'));
+
+        $wrap.append($img).append($bar);
+        $strip.append($wrap);
+    });
+
+    if (lista.length > 0 && $('#img-principal').length) {
+        $('#img-principal').attr('src', lista[0].src);
+        $('#img-principal-seccion').text(lista[0].seccion ? '📁 ' + lista[0].seccion : '');
+    }
+}
+
+function actualizarSelectores() {
+    var $sel2 = $('#modal-select-seccion');
+    $sel2.empty().append('<option value="">— Sin sección —</option>');
+    secciones.forEach(function(sec) { $sel2.append($('<option>').val(sec).text(sec)); });
+
+    var $selSubir = $('#campo-seccion-subir');
+    if ($selSubir.length) {
+        $selSubir.empty().append('<option value="">— Sin sección —</option>');
+        secciones.forEach(function(sec) { $selSubir.append($('<option>').val(sec).text(sec)); });
+    }
+}
 
 // ════════════════════════════════════
 // PROPIETARIOS INLINE
@@ -1003,10 +1054,6 @@ function toggleEdit(seccion) {
         $edit.slideDown(180);
         $btn.html('<i class="fas fa-times"></i>').attr('title', 'Cancelar');
         $btn.css('background', 'rgba(255,255,255,.45)');
-        if (seccion === 'fotos') {
-            toggleEditFotos();
-            return;
-        }
     }
 }
 
@@ -1030,14 +1077,20 @@ function toggleEditFotos() {
     } else {
         $panel.slideDown(180);
         $btn.html('<i class="fas fa-times"></i>').attr('title', 'Cancelar').css('background', 'rgba(255,255,255,.45)');
-        actualizarSelectoresFotos();
+        actualizarSelectores();
         bindDropAreaInline();
+
+        // ── FIX: usar variable global secciones ──
         $('#btn-crear-seccion').off('click').on('click', function() {
             var nombre = $('#nueva-seccion-input').val().trim();
             if (!nombre) return;
-            if (typeof secciones !== 'undefined' && secciones.indexOf(nombre) === -1) secciones.push(nombre);
+            if (secciones.indexOf(nombre) === -1) {
+                secciones.push(nombre);
+            }
             $('#nueva-seccion-input').val('');
-            actualizarSelectoresFotos();
+            actualizarSelectores();   // actualiza selects
+            renderTabs();             // muestra el nuevo tab
+            renderMiniaturas();       // refresca strip
         });
     }
 }
@@ -1046,16 +1099,6 @@ function cancelarEditFotos() {
     $('#panel-fotos-inline').slideUp(180);
     var $btn = $('#btn-edit-fotos');
     $btn.html('<i class="fas fa-pen"></i>').attr('title', 'Editar').css('background', 'rgba(255,255,255,.2)');
-}
-
-function actualizarSelectoresFotos() {
-    var $sel = $('#campo-seccion-subir');
-    if (!$sel.length) return;
-    $sel.empty().append('<option value="">— Sin sección —</option>');
-    if (typeof secciones !== 'undefined') secciones.forEach(function(s){ $sel.append($('<option>').val(s).text(s)); });
-    var $sel2 = $('#modal-select-seccion');
-    $sel2.empty().append('<option value="">— Sin sección —</option>');
-    if (typeof secciones !== 'undefined') secciones.forEach(function(s){ $sel2.append($('<option>').val(s).text(s)); });
 }
 
 function bindDropAreaInline() {
@@ -1095,14 +1138,15 @@ function handleFilesInline(files, preview) {
 function guardarSeccion(seccion) {
     var fd = new FormData();
     fd.append('id_propiedad', {{ $detalles->id }});
-    fd.append('_seccion', seccion); // le decimos al controller qué sección es
+    fd.append('_seccion', seccion);
 
     if (seccion === 'arriendo') {
         fd.append('valor_arriendo',   $('#m_valor_arriendo').val());
-        fd.append('gastos_comunes', $('#m_gastos_comunes').val().replace(/[^0-9]/g, ''));
-        fd.append('valor_real',     $('#m_valor_real').val().replace(/[^0-9]/g, ''));
+        fd.append('gastos_comunes',   $('#m_gastos_comunes').val().replace(/[^0-9]/g, ''));
+        fd.append('valor_real',       $('#m_valor_real').val().replace(/[^0-9]/g, ''));
         fd.append('fecha_inicio',     $('#m_fecha_inicio').val());
         fd.append('proximo_reajuste', $('#m_proximo_reajuste').val());
+
     } else if (seccion === 'propiedad') {
         fd.append('direccion',     $('#m_direccion').val());
         fd.append('ciudad',        $('#m_ciudad').val());
@@ -1115,6 +1159,7 @@ function guardarSeccion(seccion) {
         fd.append('empresa_gas',   $('#m_empresa_gas').val());
         fd.append('numero_gas',    $('#m_numero_gas').val());
         fd.append('PropietariosAgregados', JSON.stringify(_propietariosNuevos));
+
     } else if (seccion === 'caracteristicas') {
         fd.append('dormitorios',          $('#m_dormitorios').val());
         fd.append('banos',                $('#m_banos').val());
@@ -1125,6 +1170,7 @@ function guardarSeccion(seccion) {
         fd.append('amoblado',             $('#m_am_si').is(':checked') ? 'si' : 'no');
         fd.append('elementos_entregados', $('#m_elementos').val());
         fd.append('observaciones',        $('#m_observaciones').val());
+
     } else if (seccion === 'arrendatario') {
         fd.append('nombre_arrendatario',    $('#m_nombre_arr').val());
         fd.append('rut_arrendatario',       $('#m_rut_arr').val());
@@ -1136,6 +1182,7 @@ function guardarSeccion(seccion) {
         if (infoCliente) fd.append('info_cliente', infoCliente);
         var docs = $('#m_docs_arr')[0].files;
         for (var j = 0; j < docs.length; j++) fd.append('documentos_arrendatario[]', docs[j]);
+
     } else if (seccion === 'fotos') {
         fd.append('imagenes_seccion', $('#campo-seccion-subir').val());
         var imgFiles = $('#imagenes')[0] ? $('#imagenes')[0].files : [];
@@ -1146,7 +1193,7 @@ function guardarSeccion(seccion) {
 
     mostrarLoading(true);
 
-   $.ajax({
+    $.ajax({
         url: seccion === 'arriendo' ? '/editarArriendoAnoCorrido' : '/editarDetallesAnoCorrido',
         type: 'POST',
         data: fd,
@@ -1159,8 +1206,8 @@ function guardarSeccion(seccion) {
         // ── Actualizar DOM sin recargar ──
         if (seccion === 'arriendo') {
             var va = $('#m_valor_arriendo').val();
-            var gc = $('#m_gastos_comunes').val();
-            var vr = $('#m_valor_real').val();
+            var gc = $('#m_gastos_comunes').val().replace(/[^0-9]/g,'');
+            var vr = $('#m_valor_real').val().replace(/[^0-9]/g,'');
             var fi = $('#m_fecha_inicio').val();
             var pr = $('#m_proximo_reajuste').val();
             $('#disp-valor-arriendo').text('$' + Number(va).toLocaleString('es-CL'));
@@ -1213,6 +1260,11 @@ function guardarSeccion(seccion) {
             $('#disp-arr-prof').text($('#m_prof_arr').val() || '—');
             var dia = $('#m_fecha_pago').val();
             $('#disp-arr-pago').text(dia ? 'Día ' + dia : '—');
+
+        } else if (seccion === 'fotos') {
+            // Recargar para ver las imágenes nuevas en el strip
+            setTimeout(function() { location.reload(); }, 1200);
+            return;
         }
 
         if (seccion === 'fotos') {
@@ -1232,7 +1284,7 @@ function guardarSeccion(seccion) {
 // ════════════════════════════════════
 // LOADING HELPERS
 // ════════════════════════════════════
-function mostrarLoading(estado) {
+function mostrarLoading() {
     $('#loadingOverlay').css('display', 'flex');
     $('#overlay-spinner').show();
     $('#overlay-icono').hide();
@@ -1282,6 +1334,7 @@ function handleVideoDrop(event) {
         alert('Por favor, sube un archivo de video válido.');
     }
 }
+
 // ════════════════════════════════════
 // TRABAJOS — TOGGLE EDIT
 // ════════════════════════════════════
@@ -1357,10 +1410,8 @@ function eliminarTrabajo(id) {
         mostrarError('Error al eliminar el trabajo.');
     });
 }
-
 </script>
 @endsection
-
 @section('css')
 @parent
 <style>
@@ -1379,6 +1430,17 @@ function eliminarTrabajo(id) {
     background-color: var(--naranja);
     border-radius: var(--radio);
     overflow: hidden;
+    min-width: 0;
+}
+.card-seccion-body {
+    min-width: 0;
+}
+.card-seccion-compacta .card-seccion-body {
+    padding: .75rem .9rem;
+    min-height: 1px;
+}
+.card-seccion-compacta {
+    max-width: 680px;
 }
 
 /* ── HEADER ── */
@@ -1399,6 +1461,11 @@ function eliminarTrabajo(id) {
     background-color: rgba(255,255,255,.12);
     border-radius: 0 0 var(--radio) var(--radio);
     padding: 1rem 1.1rem;
+}
+#strip-miniaturas::-webkit-scrollbar { width: 4px; }
+#strip-miniaturas::-webkit-scrollbar-thumb { 
+    background: rgba(255,255,255,.3); 
+    border-radius: 10px; 
 }
 
 /* ── BOTONES ACCIÓN ── */
@@ -1520,6 +1587,38 @@ textarea.input-inline { resize:none; }
     position:absolute; bottom:8px; left:8px;
     background:rgba(0,0,0,.65); color:#fff;
     font-size:.72rem; padding:2px 8px; border-radius:50px;
+}
+.img-video-overlay {
+    position:absolute;
+    right:10px;
+    bottom:10px;
+    width:180px;
+    max-width:38%;
+    border-radius:.9rem;
+    overflow:hidden;
+    box-shadow:0 18px 32px rgba(0,0,0,.35);
+    background:#000;
+    z-index: 4;
+}
+.img-video-overlay video {
+    width:100%;
+    height:auto;
+    display:block;
+}
+.img-video-overlay .btn-eliminar-flotante {
+    position:absolute;
+    top:8px;
+    right:8px;
+    padding:7px 9px;
+    border-radius:50%;
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.65);
+    color:#fff;
+    text-decoration:none;
 }
 .sin-imagen {
     height:180px; background:rgba(0,0,0,.15); border-radius:.5rem;
