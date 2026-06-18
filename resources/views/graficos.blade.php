@@ -680,9 +680,9 @@ function agregarAño(vista) {
 }
 
 function confirmarAgregarAño() {
-    const input = document.getElementById('inputNuevoAño');
+    const input   = document.getElementById('inputNuevoAño');
     const errorEl = document.getElementById('errorNuevoAño');
-    const año = parseInt(input.value);
+    const año     = parseInt(input.value);
 
     errorEl.style.display = 'none';
 
@@ -697,23 +697,31 @@ function confirmarAgregarAño() {
         return;
     }
 
-    // Agregar al array y ordenar
-    añosDisponibles.push(año);
-    añosDisponibles.sort((a, b) => a - b);
+    fetch('{{ route("graficos.agregarAño") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+        body: JSON.stringify({ año }),
+    })
+    .then(r => r.json())
+    .then(() => {
+        $('#modalAgregarAño').modal('hide');
 
-    // Agregar botón al selector mensual
-    _agregarBtnAño('mensualAñoSelector', año, () => cambiarAño(año));
-    // Agregar botón al selector anual
-    _agregarBtnAño('anualAñoSelector', año, () => cargarAnual(año));
-
-    $('#modalAgregarAño').modal('hide');
-
-    // Navegar al nuevo año
-    if (_vistaDestino === 'mensual') {
-        cambiarAño(año);
-    } else {
-        cargarAnual(año);
-    }
+        if (_vistaDestino === 'mensual') {
+            cambiarAño(año); // recarga con ?año=XXXX
+        } else {
+            añosDisponibles.push(año);
+            añosDisponibles.sort((a, b) => a - b);
+            _agregarBtnAño('anualAñoSelector', año, () => cargarAnual(año));
+            cargarAnual(año);
+        }
+    })
+    .catch(() => {
+        errorEl.textContent = 'Error al guardar el año. Intenta de nuevo.';
+        errorEl.style.display = 'block';
+    });
 }
 
 function _agregarBtnAño(selectorId, año, fn) {

@@ -15,25 +15,24 @@
                         <div style="height:3px; width:80px; background:#E67E22; margin:8px auto 0;"></div>
                     </div>
 
-                    {{-- FOTOS / VIDEO --}}
-                    <div class="row g-3 align-items-start mb-3">
-                        <div class="col-xl-5 col-lg-5 col-md-6">
-                            <div class="card-seccion h-100 card-seccion-compacta">
-                                <div class="card-seccion-header">
-                                    <span><i class="fas fa-images me-2"></i>Fotos / Video</span>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="badge-orden" id="btn-orden-alfa" title="Orden Alfabético">
-                                            <i class="fas fa-sort-alpha-down me-1"></i>A–Z
-                                        </span>
-                                        <div class="btns-accion">
-                                            <button class="btn-edit" onclick="toggleEditFotos()" title="Editar"
-                                                id="btn-edit-fotos">
-                                                <i class="fas fa-pen"></i>
-                                            </button>
-                                        </div>
+                {{-- FOTOS / VIDEO --}}
+                <div class="row gx-2 gy-0 align-items-stretch mb-3">
+                    <div class="col-xl-5 col-lg-5 col-md-6 px-1">
+                        <div class="card-seccion h-100 card-seccion-compacta">
+                            <div class="card-seccion-header">
+                                <span><i class="fas fa-images me-2"></i>Fotos / Video</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge-orden" id="btn-orden-alfa" title="Orden Alfabético">
+                                        <i class="fas fa-sort-alpha-down me-1"></i>A–Z
+                                    </span>
+                                    <div class="btns-accion">
+                                        <button class="btn-edit" onclick="toggleEditFotos()" title="Editar" id="btn-edit-fotos">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="card-seccion-body p-3">
+                            </div>
+                            <div class="card-seccion-body p-3">
 
                                     {{-- TABS SECCIONES --}}
                                     <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
@@ -126,21 +125,19 @@
                                         </div>
                                     </div>
 
-                                </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-4 col-md-6">
-                            <div class="card-seccion h-100" id="card-arriendo">
-                                <div class="card-seccion-header">
-                                    <span><i class="fas fa-file-invoice-dollar me-2"></i>Resumen del Arriendo</span>
-                                    <div class="btns-accion">
-                                        <button class="btn-edit" onclick="toggleEdit('arriendo')" id="btn-edit-arriendo"
-                                            title="Editar"><i class="fas fa-pen"></i></button>
-                                        <button class="btn-del" onclick="confirmarEliminar('arriendo')"
-                                            title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-                                    </div>
+                    </div>
+                    <div class="col-xl-7 col-lg-7 col-md-6 px-1">
+                        <div class="card-seccion h-100" id="card-arriendo">
+                            <div class="card-seccion-header">
+                                <span><i class="fas fa-file-invoice-dollar me-2"></i>Resumen del Arriendo</span>
+                                <div class="btns-accion">
+                                    <button class="btn-edit" onclick="toggleEdit('arriendo')" id="btn-edit-arriendo" title="Editar"><i class="fas fa-pen"></i></button>
+                                    <button class="btn-del" onclick="confirmarEliminar('arriendo')" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                                 </div>
-                                <div class="card-seccion-body" id="body-arriendo">
+                            </div>
+                            <div class="card-seccion-body" id="body-arriendo">
 
                                     {{-- VISTA --}}
                                     <div id="view-arriendo">
@@ -224,21 +221,19 @@
                     {{-- ══════════════════════════════════════════
                      FILA MEDIA: Detalles Propiedad + Características
                 ══════════════════════════════════════════ --}}
-                    <div class="row g-3 mb-3">
+                <div class="row gx-2 gy-2 align-items-stretch mb-3">
 
-                        {{-- DETALLES DE LA PROPIEDAD --}}
-                        <div class="col-lg-8">
-                            <div class="card-seccion" id="card-propiedad">
-                                <div class="card-seccion-header">
-                                    <span><i class="fas fa-building me-2"></i>Detalle de la Propiedad</span>
-                                    <div class="btns-accion">
-                                        <button class="btn-edit" onclick="toggleEdit('propiedad')"
-                                            id="btn-edit-propiedad" title="Editar"><i class="fas fa-pen"></i></button>
-                                        <button class="btn-del" onclick="confirmarEliminar('propiedad')"
-                                            title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-                                    </div>
+                    {{-- DETALLES DE LA PROPIEDAD --}}
+                    <div class="col-lg-8">
+                        <div class="card-seccion h-100" id="card-propiedad">
+                            <div class="card-seccion-header">
+                                <span><i class="fas fa-building me-2"></i>Detalle de la Propiedad</span>
+                                <div class="btns-accion">
+                                    <button class="btn-edit" onclick="toggleEdit('propiedad')" id="btn-edit-propiedad" title="Editar"><i class="fas fa-pen"></i></button>
+                                    <button class="btn-del" onclick="confirmarEliminar('propiedad')" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                                 </div>
-                                <div class="card-seccion-body">
+                            </div>
+                            <div class="card-seccion-body">
 
                                     {{-- VISTA --}}
                                     <div id="view-propiedad">
@@ -396,20 +391,17 @@
                             </div>
                         </div>
 
-                        {{-- CARACTERÍSTICAS --}}
-                        <div class="col-lg-4">
-                            <div class="card-seccion" id="card-caracteristicas">
-                                <div class="card-seccion-header">
-                                    <span><i class="fas fa-list-check me-2"></i>Características</span>
-                                    <div class="btns-accion">
-                                        <button class="btn-edit" onclick="toggleEdit('caracteristicas')"
-                                            id="btn-edit-caracteristicas" title="Editar"><i
-                                                class="fas fa-pen"></i></button>
-                                        <button class="btn-del" onclick="confirmarEliminar('caracteristicas')"
-                                            title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-                                    </div>
+                    {{-- CARACTERÍSTICAS --}}
+                    <div class="col-lg-4">
+                        <div class="card-seccion h-100" id="card-caracteristicas">
+                            <div class="card-seccion-header">
+                                <span><i class="fas fa-list-check me-2"></i>Características</span>
+                                <div class="btns-accion">
+                                    <button class="btn-edit" onclick="toggleEdit('caracteristicas')" id="btn-edit-caracteristicas" title="Editar"><i class="fas fa-pen"></i></button>
+                                    <button class="btn-del" onclick="confirmarEliminar('caracteristicas')" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                                 </div>
-                                <div class="card-seccion-body">
+                            </div>
+                            <div class="card-seccion-body">
 
                                     {{-- VISTA --}}
                                     <div id="view-caracteristicas">
@@ -1733,26 +1725,24 @@
             --radio: .9rem;
         }
 
-        /* ── WRAPPER SECCIÓN ── */
-        .card-seccion {
-            background-color: var(--naranja);
-            border-radius: var(--radio);
-            overflow: hidden;
-            min-width: 0;
-        }
-
-        .card-seccion-body {
-            min-width: 0;
-        }
-
-        .card-seccion-compacta .card-seccion-body {
-            padding: .75rem .9rem;
-            min-height: 1px;
-        }
-
-        .card-seccion-compacta {
-            max-width: 680px;
-        }
+/* ── WRAPPER SECCIÓN ── */
+.card-seccion {
+    background-color: var(--naranja);
+    border-radius: var(--radio);
+    overflow: hidden;
+    min-width: 0;
+}
+.card-seccion-body {
+    min-width: 0;
+}
+.card-seccion-compacta .card-seccion-body {
+    padding: .75rem .9rem;
+    min-height: 1px;
+}
+.card-seccion-compacta {
+    max-width: none;
+    width: 100%;
+}
 
         /* ── HEADER ── */
         .card-seccion-header {
