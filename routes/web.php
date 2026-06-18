@@ -84,7 +84,8 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
     Route::get('/Mostrar/cuenta/{id_cuenta}', [PropietarioController::class, 'mostrarDatosBancarios']);
     Route::get('/cuentas/editar_cuenta/{id_cuenta}', [PropietarioController::class, 'showcuenta']);
     Route::post('/cuentaEditar/guardar/{id}', [PropietarioController::class, 'updateCuenta'])->name('DatosBancario.update');
-    Route::delete('/cuenta/eliminar/{id_cuenta}', [PropietarioController::class, 'eliminarcuenta']);
+    // Route::delete('/cuenta/eliminar/{id_cuenta}', [PropietarioController::class, 'eliminarcuenta']);
+    Route::delete('/datos-bancarios/{id}', [PropietarioController::class, 'destroycuenta'])->name('datosBancarios.destroy');
     Route::post('/Nueva/cuenta2aad', [PropietarioController::class, 'addNuevaCuenta']);
     Route::post('/propietariosdelete/{id}', [PropietarioController::class, 'delete']);
 

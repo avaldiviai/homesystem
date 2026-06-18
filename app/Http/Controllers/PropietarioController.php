@@ -17,7 +17,7 @@ class PropietarioController extends Controller
         $propietario = Propietario::where('estado', 1)->first();
 
 
-        return view('propietario', compact('propietarios','propietario'));
+        return view('propietario', compact('propietarios', 'propietario'));
     }
     public function add(Request $request)
     {
@@ -36,8 +36,8 @@ class PropietarioController extends Controller
 
         // Verificar si ya existe un propietario con el mismo RUT o correo
         $existe = Propietario::where('rut', $request->rut)
-                    ->orWhere('correo', $request->correo)
-                    ->first();
+            ->orWhere('correo', $request->correo)
+            ->first();
 
         if ($existe) {
             return response()->json([
@@ -76,17 +76,22 @@ class PropietarioController extends Controller
     // Editar Propietario
     public function show($idpropietario)
     {
-        $propietario = Propietario::where('id', $idpropietario)->first();
+        $propietario = Propietario::with('datosBancarios')
+            ->find($idpropietario);
+
         if (!$propietario) {
-            return response()->json(['message' => 'Propietario no encontrado'], 404);
+            return response()->json([
+                'message' => 'Propietario no encontrado'
+            ], 404);
         }
-        return response()->json($propietario, 200);
+
+        return response()->json($propietario);
     }
+
     public function update(Request $request, $id)
     {
+        $propietario = Propietario::findOrFail($id);
 
-        $propietario = Propietario::find($id);
-        // dd($propietario);
         $propietario->nombre = $request->nombre;
         $propietario->rut = $request->rut;
         $propietario->telefono = $request->telefono;
@@ -95,6 +100,26 @@ class PropietarioController extends Controller
         $propietario->ciudad = $request->ciudad;
 
         $propietario->save();
+
+        // Guardar únicamente las cuentas nuevas
+        if ($request->has('cuentas_nuevas')) {
+
+            foreach ($request->cuentas_nuevas as $cuenta) {
+
+                if (
+                    !empty($cuenta['nombre_banco']) &&
+                    !empty($cuenta['numero_cuenta'])
+                ) {
+
+                    DatosBancario::create([
+                        'id_propietario' => $propietario->id,
+                        'nombre_banco'   => $cuenta['nombre_banco'],
+                        'tipo_cuenta'    => $cuenta['tipo_cuenta'],
+                        'numero_cuenta'  => $cuenta['numero_cuenta']
+                    ]);
+                }
+            }
+        }
 
         return response()->json($propietario, 200);
     }
@@ -108,12 +133,22 @@ class PropietarioController extends Controller
         return response()->json(['success' => 'El estado del propietario se ha Borrado con éxito']);
     }
 
-    
+    public function destroycuenta($id)
+    {
+        $cuenta = DatosBancario::findOrFail($id);
+
+        $cuenta->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
 
     public function mostrarDatosBancarios($idpropietario)
     {
         $cunta_bancaria = DatosBancario::where('id_propietario', $idpropietario)->get();
-    
+
         $datosBancarios = [];
         foreach ($cunta_bancaria as $bancario) {
             $datosBancarios[] = [
@@ -123,74 +158,74 @@ class PropietarioController extends Controller
                 'tipo_cuenta' => $bancario->tipo_cuenta,
             ];
         }
-    
+
         return response()->json(['datosbancarios' => $datosBancarios]);
     }
-// Muestra en otro modal los datos de la cuenta para editar o agregar una nueva
+    // Muestra en otro modal los datos de la cuenta para editar o agregar una nueva
     public function showcuenta($id_cuenta)
     {
         $cuenta_bancaria = DatosBancario::where('id', $id_cuenta)->first();
 
-    if (!$cuenta_bancaria) {
-        return response()->json(['error' => 'Cuenta no encontrada'], 404);
+        if (!$cuenta_bancaria) {
+            return response()->json(['error' => 'Cuenta no encontrada'], 404);
+        }
+
+        return response()->json(['cuenta_bancaria' => $cuenta_bancaria]);
     }
 
-    return response()->json(['cuenta_bancaria' => $cuenta_bancaria]);
-}
-
-///Guardar la ediccion////
+    ///Guardar la ediccion////
     public function updateCuenta(Request $request, $id_cuenta)
     {
 
         $datosBancarios = DatosBancario::find($id_cuenta);
-    
+
         $datosBancarios->nombre_banco = $request->nombre_banco;
         $datosBancarios->numero_cuenta = $request->numero_cuenta;
         $datosBancarios->tipo_cuenta = $request->tipo_cuenta;
         // $datosBancarios->id_propietario = $request->id_propietario;
-     
+
         $datosBancarios->save();
 
         return response()->json($datosBancarios, 200);
     }
-///Eliminar la Cuenta Bancaria del propietario/////
+    ///Eliminar la Cuenta Bancaria del propietario/////
 
-public function eliminarcuenta(Request $request, $id)
+    public function eliminarcuenta(Request $request, $id)
     {
         $datosBancarios = DatosBancario::find($id)->delete();
-        return Response()->json(['cuenta'=>'Cuenta ah sido eliminado correctamente ']);       
+        return Response()->json(['cuenta' => 'Cuenta ah sido eliminado correctamente ']);
     }
-    
-/////Nueva CUENTA BANCARIA///////////7
 
-// public function addNuevaCuenta(Request $request)
-//     {
-//         $validator = DatosBancario::make($request->all(), [
-//             'id_propietario' => 'required|exists:propietarios,id', 
-//             'nombre_banco' => 'required',
-//             'numero_cuenta' => 'required',
-//             'tipo_cuenta' => 'required',
-        
+    /////Nueva CUENTA BANCARIA///////////7
 
-//         ]);
-        
-
-//         if ($validator->fails()) {
-//             return response()->json(['errors' => $validator->errors()], 422);
-//         }
-//         $new_cuenta = new DatosBancario();
-//         $new_cuenta->nombre_banco = $request->input('nombre_banco');
-//         $new_cuenta->numero_cuenta = $request->input('numero_cuenta');
-//         $new_cuenta->tipo_cuenta = $request->input('tipo_cuenta');
-//         $new_cuenta->id_propietario = $request->input('id_propietario');
-
-//         $new_cuenta->save();
-
-//         return response()->json(['message' => 'Datos agregados correctamente']);
-       
+    // public function addNuevaCuenta(Request $request)
+    //     {
+    //         $validator = DatosBancario::make($request->all(), [
+    //             'id_propietario' => 'required|exists:propietarios,id', 
+    //             'nombre_banco' => 'required',
+    //             'numero_cuenta' => 'required',
+    //             'tipo_cuenta' => 'required',
 
 
-//     }
+    //         ]);
+
+
+    //         if ($validator->fails()) {
+    //             return response()->json(['errors' => $validator->errors()], 422);
+    //         }
+    //         $new_cuenta = new DatosBancario();
+    //         $new_cuenta->nombre_banco = $request->input('nombre_banco');
+    //         $new_cuenta->numero_cuenta = $request->input('numero_cuenta');
+    //         $new_cuenta->tipo_cuenta = $request->input('tipo_cuenta');
+    //         $new_cuenta->id_propietario = $request->input('id_propietario');
+
+    //         $new_cuenta->save();
+
+    //         return response()->json(['message' => 'Datos agregados correctamente']);
+
+
+
+    //     }
 
     public function addNuevaCuenta(Request $request)
     {
@@ -199,8 +234,8 @@ public function eliminarcuenta(Request $request, $id)
         $new_cuenta->numero_cuenta = $request->numero_cuenta;
         $new_cuenta->tipo_cuenta = $request->tipo_cuenta;
         $new_cuenta->id_propietario = $request->id_propietario;
-    
-     
+
+
         $new_cuenta->save();
         return response()->json(['message' => 'Datos agregados correctamente']);
     }
@@ -238,5 +273,4 @@ public function eliminarcuenta(Request $request, $id)
 
         return view('propietario_detalles', compact('propietario', 'propiedades'));
     }
-
 }
