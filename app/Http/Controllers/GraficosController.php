@@ -228,9 +228,30 @@ class GraficosController extends Controller
 
     /** Años disponibles: desde 2026 hasta año actual + 1 */
     private function añosDisponibles(): array
-    {
-        $inicio = 2026;
-        $fin    = now()->year + 1;
-        return range($inicio, $fin);
-    }
+{
+    $base  = range(2026, now()->year + 1);
+    $enBD  = GraficoEmpresa::distinct()->pluck('año')->toArray();
+    $todos = array_unique(array_merge($base, $enBD));
+    sort($todos);
+    return $todos;
+}
+public function agregarAño(Request $request)
+{
+    $request->validate([
+        'año' => 'required|integer|min:2026|max:2099',
+    ]);
+
+    $año = (int) $request->año;
+
+    // Crear registro vacío en mes 1 para que el año quede en la BD
+    GraficoEmpresa::firstOrCreate(
+        ['año' => $año, 'mes' => 1],
+        [] // usa los defaults de la migración
+    );
+
+    return response()->json([
+        'ok'   => true,
+        'años' => $this->añosDisponibles(),
+    ]);
+}
 }

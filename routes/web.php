@@ -146,6 +146,9 @@ Route::post('/editarArriendoAnoCorrido',  [PropiedadController::class, 'edicionA
 
     Route::post('/graficos/guardar', [GraficosController::class, 'guardar'])
         ->name('graficos.guardar');
+        
+    Route::post('/graficos/agregar-año', [GraficosController::class, 'agregarAño'])
+    ->name('graficos.agregarAño');
 
     ////////// RUTAS PAGOS //////////
     Route::get('/pagos', [PagosController::class, 'index']);

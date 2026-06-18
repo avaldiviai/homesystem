@@ -9,7 +9,7 @@
                     {{-- Contenido --}}
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-12"
+                            <div class="col-lg-10"
                                 style="text-align: start; margin-top: 40px; margin-bottom: 20px; margin-start: 30px; color: white;">
                                 <h1 class="text-uppercase text-black">Propiedades Año Corrido</h1>
                             </div>

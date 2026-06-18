@@ -16,8 +16,8 @@
                 </div>
 
                 {{-- FOTOS / VIDEO --}}
-                <div class="row g-3 align-items-start mb-3">
-                    <div class="col-xl-5 col-lg-5 col-md-6">
+                <div class="row gx-2 gy-0 align-items-stretch mb-3">
+                    <div class="col-xl-5 col-lg-5 col-md-6 px-1">
                         <div class="card-seccion h-100 card-seccion-compacta">
                             <div class="card-seccion-header">
                                 <span><i class="fas fa-images me-2"></i>Fotos / Video</span>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
+                    <div class="col-xl-7 col-lg-7 col-md-6 px-1">
                         <div class="card-seccion h-100" id="card-arriendo">
                             <div class="card-seccion-header">
                                 <span><i class="fas fa-file-invoice-dollar me-2"></i>Resumen del Arriendo</span>
@@ -197,11 +197,11 @@
                 {{-- ══════════════════════════════════════════
                      FILA MEDIA: Detalles Propiedad + Características
                 ══════════════════════════════════════════ --}}
-                <div class="row g-3 mb-3">
+                <div class="row gx-2 gy-2 align-items-stretch mb-3">
 
                     {{-- DETALLES DE LA PROPIEDAD --}}
                     <div class="col-lg-8">
-                        <div class="card-seccion" id="card-propiedad">
+                        <div class="card-seccion h-100" id="card-propiedad">
                             <div class="card-seccion-header">
                                 <span><i class="fas fa-building me-2"></i>Detalle de la Propiedad</span>
                                 <div class="btns-accion">
@@ -307,7 +307,7 @@
 
                     {{-- CARACTERÍSTICAS --}}
                     <div class="col-lg-4">
-                        <div class="card-seccion" id="card-caracteristicas">
+                        <div class="card-seccion h-100" id="card-caracteristicas">
                             <div class="card-seccion-header">
                                 <span><i class="fas fa-list-check me-2"></i>Características</span>
                                 <div class="btns-accion">
@@ -1440,7 +1440,8 @@ function eliminarTrabajo(id) {
     min-height: 1px;
 }
 .card-seccion-compacta {
-    max-width: 680px;
+    max-width: none;
+    width: 100%;
 }
 
 /* ── HEADER ── */
