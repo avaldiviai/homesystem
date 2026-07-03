@@ -10,7 +10,7 @@
                 {{-- TÍTULO --}}
                 <div class="text-center mb-4">
                     <h1 class="fw-bold text-uppercase" style="color:#1a1a1a; letter-spacing:2px; font-size:1.6rem;">
-                        Detalles Año Corrido
+                        Hoja de Vida de la Propiedad
                     </h1>
                     <div style="height:3px; width:80px; background:#E67E22; margin:8px auto 0;"></div>
                 </div>
@@ -414,7 +414,7 @@
                                         <div class="col-md-2 col-6"><span class="label-campo">Teléfono</span><p class="valor-dato-lg" id="disp-arr-tel">{{ $arrendatario->telefono ?? '—' }}</p></div>
                                         <div class="col-md-2 col-6"><span class="label-campo">Correo</span><p class="valor-dato-lg" id="disp-arr-correo" style="font-size:.82rem; word-break:break-all;">{{ $arrendatario->correo ?? '—' }}</p></div>
                                         <div class="col-md-2 col-6"><span class="label-campo">Profesión</span><p class="valor-dato-lg" id="disp-arr-prof">{{ $arrendatario->profesion ?? '—' }}</p></div>
-                                        <div class="col-md-2 col-6"><span class="label-campo">Fecha de Pago</span><p class="valor-dato-lg" id="disp-arr-pago">Día {{ $arrendatario->fecha_pago ?? '—' }}</p></div>
+                                        <div class="col-md-2 col-6"><span class="label-campo">Día de Pago</span><p class="valor-dato-lg" id="disp-arr-pago">Día {{ $arrendatario->fecha_pago ?? '—' }}</p></div>
                                     </div>
                                     <div class="mt-3 pt-2" style="border-top:1px solid rgba(255,255,255,.15);">
                                         <p class="label-campo mb-2"><i class="fas fa-paperclip me-1"></i>Archivos</p>
@@ -453,12 +453,12 @@
                                             <input type="text" id="m_prof_arr" class="input-inline" value="{{ $arrendatario->profesion ?? '' }}">
                                         </div>
                                         <div class="col-md-4 col-6">
-                                            <label class="label-campo">Fecha de Pago</label>
+                                            <label class="label-campo">Día de Pago</label>
                                             <select id="m_fecha_pago" class="input-inline">
-                                                <option value="" disabled>Seleccione día</option>
-                                                @for($d = 1; $d <= 28; $d++)
-                                                    <option value="{{ $d }}" {{ ($arrendatario->fecha_pago ?? 0) == $d ? 'selected' : '' }}>Día {{ $d }}</option>
-                                                @endfor
+                                            <option value="" disabled>Seleccione día</option>
+                                            @for($d = 1; $d <= 28; $d++)
+                                                <option value="{{ $d }}" {{ ($arrendatario->fecha_pago ?? 0) == $d ? 'selected' : '' }}>{{ $d }}</option>
+                                            @endfor
                                             </select>
                                         </div>
                                     </div>
@@ -1593,8 +1593,10 @@ textarea.input-inline { resize:none; }
     position:absolute;
     right:10px;
     bottom:10px;
-    width:180px;
-    max-width:38%;
+    width:130px;
+    height:180px;      /* alto fijo, ya no depende del video */
+    max-width:35%;
+    max-height:65%;    /* nunca más de 2/3 de la foto principal */
     border-radius:.9rem;
     overflow:hidden;
     box-shadow:0 18px 32px rgba(0,0,0,.35);
@@ -1603,7 +1605,8 @@ textarea.input-inline { resize:none; }
 }
 .img-video-overlay video {
     width:100%;
-    height:auto;
+    height:100%;
+    object-fit: cover;   /* recorta el video para llenar el recuadro sin deformarlo */
     display:block;
 }
 .img-video-overlay .btn-eliminar-flotante {

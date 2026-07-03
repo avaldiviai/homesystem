@@ -274,7 +274,6 @@
                                 <div class="form-group col-lg-3">
                                     <label for="">Propietarios Agregados</label>
                                     <div id="lista-agregados" class="text-uppercase w-100">
-                                        <!-- Aquí se agregarán los propietarios -->
                                     </div>
 
                                 </div>
@@ -410,7 +409,7 @@
                                 <div class="col-lg-12">
                                     <div class="col-lg-4 sub bg-black px-3 py-2 rounded-pill shadow">
                                         <h5 class="m-0 text-white text-center">
-                                            Media y Documentos
+                                            Multimedia y Documentos
                                         </h5>
                                     </div>
                                 </div>

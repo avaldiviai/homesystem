@@ -413,7 +413,7 @@
 
                                         <div class="col-lg-4">
                                             <div class="form-group mb-3">
-                                                <label for="contribuciones" class="form-label"><b>Construcción</b></label>
+                                                <label for="contribuciones" class="form-label"><b>Contribuciones</b></label>
                                                 <div class="form-group">
                                                     <div class="form-check form-check-inline">
                                                         <input type="radio" class="form-check-input"

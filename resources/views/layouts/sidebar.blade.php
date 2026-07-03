@@ -23,7 +23,7 @@
 
                 <li class="nav-item mb-3">
                     <a href="/plantilla" class="nav-link d-flex align-items-center">
-                        <span>Plantilla de Empresa</span>
+                        <span>Planilla de Empresa</span>
                     </a>
                 </li>
 

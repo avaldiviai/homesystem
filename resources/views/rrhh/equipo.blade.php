@@ -610,7 +610,7 @@ function abrirModalUsuario(userId = null) {
     modoEdicion = !!userId;
     const titulo   = document.getElementById('tituloModalUsuario');
     const passNote = document.getElementById('passNote');
- 
+
     // Limpiar todos los campos
     ['userId','inputNombre','inputRut','inputEmail','inputDireccion',
      'inputPassword','inputBanco','inputNumeroCuenta'].forEach(id => {
@@ -622,33 +622,33 @@ function abrirModalUsuario(userId = null) {
     document.getElementById('inputArchivos').value   = '';
     document.getElementById('listaArchivosExistentes').style.display = 'none';
     document.getElementById('archivosExistentesList').innerHTML = '';
- 
+
     if (!userId) {
         titulo.textContent   = 'Agregar Colaborador';
         passNote.textContent = '(requerida)';
         abrirModal('overlayUsuario');
         return;
     }
- 
+
     // Modo edición: cargar datos del servidor
     titulo.textContent   = 'Editar Colaborador';
     passNote.textContent = '(dejar vacío para no cambiar)';
     document.getElementById('userId').value = userId;
- 
+
     fetch(`/rrhh/usuario/${userId}`, {
         headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' }
     })
     .then(r => r.json())
     .then(data => {
         const u = data.user;
- 
+
         // Datos personales
         document.getElementById('inputNombre').value    = u.name        || '';
         document.getElementById('inputRut').value       = u.rut         || '';
         document.getElementById('inputEmail').value     = u.email       || '';
         document.getElementById('inputDireccion').value = u.direccion   || '';
         document.getElementById('inputCargo').value     = u.id_cargo    || '';
- 
+
         // ── Datos bancarios ──────────────────────────────────────────────────
         if (data.datos_bancarios) {
             const db = data.datos_bancarios;
@@ -656,7 +656,7 @@ function abrirModalUsuario(userId = null) {
             document.getElementById('inputNumeroCuenta').value = db.numero_cuenta || '';
             document.getElementById('inputTipoCuenta').value   = db.tipo_cuenta   || '';
         }
- 
+
         // ── Archivos existentes ──────────────────────────────────────────────
         if (data.archivos && data.archivos.length > 0) {
             const lista = document.getElementById('archivosExistentesList');
@@ -680,13 +680,15 @@ function abrirModalUsuario(userId = null) {
             });
             document.getElementById('listaArchivosExistentes').style.display = 'block';
         }
- 
+
         abrirModal('overlayUsuario');
     })
     .catch(() => mostrarToast('Error al cargar datos del colaborador', 'error'));
 }
- 
 
+// ════════════════════════════════════
+// GUARDAR USUARIO (con manejo de errores detallado)
+// ════════════════════════════════════
 function guardarUsuario() {
     const userId = document.getElementById('userId').value;
     const nombre = document.getElementById('inputNombre').value.trim();
@@ -716,14 +718,35 @@ function guardarUsuario() {
 
     const url = modoEdicion ? `/rrhh/usuario/${userId}` : '/rrhh/usuario';
 
-    fetch(url, { method: 'POST', body: fd })
-    .then(r => r.json())
-    .then(data => {
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': CSRF,
+            'Accept': 'application/json'   // 👈 fuerza respuesta JSON en vez de redirect HTML
+        },
+        body: fd
+    })
+    .then(async r => {
+        const data = await r.json().catch(() => null);
+
+        if (!r.ok) {
+            let msg = data && data.message ? data.message : `Error ${r.status}`;
+            if (data && data.errors) {
+                msg = Object.values(data.errors).flat().join(' ');
+            }
+            console.error('Error del servidor:', data);
+            mostrarToast(msg, 'error');
+            return;
+        }
+
         cerrarModal('overlayUsuario');
         mostrarToast(data.message || 'Guardado correctamente');
         setTimeout(() => location.reload(), 1000);
     })
-    .catch(() => mostrarToast('Error al guardar el colaborador.', 'error'));
+    .catch(err => {
+        console.error('Error de red/parseo:', err);
+        mostrarToast('Error al guardar el colaborador.', 'error');
+    });
 }
 
 function eliminarUsuario(userId, nombre) {

@@ -350,7 +350,7 @@
                                 <div class="col-lg-12">
                                     <div class="col-lg-4 sub bg-black px-3 py-2 rounded-pill shadow">
                                         <h5 class="m-0 text-white text-center">
-                                            Media y Documentos
+                                            Multimedia y Documentos
                                         </h5>                            
                                     </div>
                                 </div>
