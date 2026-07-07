@@ -748,7 +748,9 @@ class PropiedadController extends Controller
         $new_propiedad_venta->numero_gas = $request->numerogas;
         $new_propiedad_venta->deuda_hipotecaria = $request->deuda_hipotecaria;
         $new_propiedad_venta->contribuciones = $request->contribuciones;
+        $new_propiedad_venta->monto_contribuciones = $request->monto_contribuciones;
         $new_propiedad_venta->derechos_aseo = $request->derechos_aseo;
+        $new_propiedad_venta->monto_derechos_aseo = $request->monto_derechos_aseo;
         $new_propiedad_venta->exclusividad = $request->exclusividad;
         $new_propiedad_venta->sello_verde = $request->sello_verde;
         $new_propiedad_venta->tipo_propiedad = 2;
@@ -924,6 +926,8 @@ class PropiedadController extends Controller
         $ciudad->institucion = $request->institucion ?? $ciudad->institucion;
         $ciudad->contribuciones = $request->contribuciones ?? $ciudad->contribuciones;
         $ciudad->derechos_aseo = $request->derechos_aseo ?? $ciudad->derechos_aseo;
+        $ciudad->monto_contribuciones = $request->monto_contribuciones ?? $ciudad->monto_contribuciones;
+        $ciudad->monto_derechos_aseo = $request->monto_derechos_aseo ?? $ciudad->monto_derechos_aseo;
         $ciudad->exclusividad = $request->exclusividad ?? $ciudad->exclusividad;
         $ciudad->sello_verde = $request->sello_verde ?? $ciudad->sello_verde;
         $ciudad->empresa_luz = $request->empresa_luz;

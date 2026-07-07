@@ -37,7 +37,9 @@ class Propiedad extends Model
         // Datos de Venta
         'deuda_hipotecaria',
         'contribuciones',
+        'monto_contribuciones',
         'derechos_aseo',
+         'derechos_aseo',
         'exclusividad',
         'sello_verde',
 

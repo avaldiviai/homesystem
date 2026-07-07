@@ -90,7 +90,7 @@
                                 <div class="pla-total-inner">
                                     <div class="pla-tlabel">Total Acumulado</div>
                                     <div class="pla-tvalue" id="tv-1" style="color:#E67E22;">$
-                                        {{ number_format($totalArriendos, 2) }}</div>
+                                        {{ number_format($totalArriendos, 0, ',', '.') }}</div>
                                     <div class="pla-tnota">Suma de Arriendos</div>
                                 </div>
                                 <div class="pla-to-chart">
@@ -161,7 +161,7 @@
                             <div class="pla-cell pla-cell--total">
                                 <div class="pla-total-inner">
                                     <div class="pla-tlabel">Total acumulado</div>
-                                    <div class="pla-tvalue" id="tv-2">$ {{ number_format($totalAseos, 2) }}</div>
+                                    <div class="pla-tvalue" id="tv-2">$ {{ number_format($totalAseos, 0, ',', '.') }}</div>
                                     <div class="pla-tnota">Suma de registros</div>
                                 </div>
                                 <div class="pla-to-chart">
