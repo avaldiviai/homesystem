@@ -24,6 +24,6 @@ class Propietario extends Model
     ];
     public function datosBancarios()
     {
-        return $this->hasMany(DatosBancario::class);
+        return $this->hasMany(DatosBancario::class, 'id_propietario');
     }
 }
